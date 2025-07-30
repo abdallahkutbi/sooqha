@@ -21,7 +21,7 @@ export function PageSizeButton({ currentSize, onSizeChange }: PageSizeButtonProp
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button data-style="ghost">
-          {currentPageSize.label}
+          {currentPageSize.name}
           <ChevronDownIcon className="ml-1 h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>

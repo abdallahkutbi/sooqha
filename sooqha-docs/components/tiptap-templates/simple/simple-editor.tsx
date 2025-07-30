@@ -85,21 +85,30 @@ const MainToolbarContent = ({
   onHighlighterClick,
   onLinkClick,
   isMobile,
+  pageSize,
+  onPageSizeChange,
 }: {
   onHighlighterClick: () => void
   onLinkClick: () => void
   isMobile: boolean
+  pageSize: string
+  onPageSizeChange: (size: string) => void
 }) => {
   return (
     <>
       <ToolbarGroup>
         <ExportButton />
       </ToolbarGroup>
-
+      
       <Spacer />
+      
+      <ToolbarSeparator />
 
       <ToolbarGroup>
-        <PageSizeButton currentSize="a4" onSizeChange={() => {}} />
+        <PageSizeButton 
+          currentSize={pageSize}
+          onSizeChange={onPageSizeChange}
+        />
       </ToolbarGroup>
 
       <ToolbarSeparator />
@@ -206,6 +215,7 @@ export function SimpleEditor() {
     "main" | "highlighter" | "link"
   >("main")
   const toolbarRef = React.useRef<HTMLDivElement>(null)
+  const [pageSize, setPageSize] = React.useState("a4");
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -281,6 +291,8 @@ export function SimpleEditor() {
               onHighlighterClick={() => setMobileView("highlighter")}
               onLinkClick={() => setMobileView("link")}
               isMobile={isMobile}
+              pageSize={pageSize}
+              onPageSizeChange={setPageSize}
             />
           ) : (
             <MobileToolbarContent
@@ -293,7 +305,7 @@ export function SimpleEditor() {
         <EditorContent
           editor={editor}
           role="presentation"
-          className="simple-editor-content"
+          className={`simple-editor-content page-size-${pageSize}`}
         />
       </EditorContext.Provider>
     </div>
