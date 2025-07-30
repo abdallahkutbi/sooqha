@@ -1,36 +1,106 @@
-import { Button } from "@/components/tiptap-ui-primitive/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/tiptap-ui-primitive/dropdown-menu";
-import { ChevronDownIcon } from "@/components/tiptap-icons/chevron-down-icon";
-import { ExportIcon } from "@/components/tiptap-icons/export-icon";
+"use client"
 
-export function ExportButton() {
-  const handleExport = (format: string) => {
-    // Your export logic here
-    console.log(`Exporting as ${format}`);
-  };
+import * as React from "react"
 
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button data-style="ghost">
-          <ExportIcon className="mr-2 h-4 w-4" />
-          <ChevronDownIcon className="ml-1 h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem onClick={() => handleExport('pdf')}>
-          Export as PDF
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleExport('docx')}>
-          Export as Word
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleExport('html')}>
-          Export as HTML
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleExport('markdown')}>
-          Export as Markdown
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
+// --- Icons ---
+import { ChevronDownIcon } from "@/components/tiptap-icons/chevron-down-icon"
+import { ExportIcon } from "@/components/tiptap-icons/export-icon"
+
+// --- UI Primitives ---
+import type { ButtonProps } from "@/components/tiptap-ui-primitive/button"
+import { Button, ButtonGroup } from "@/components/tiptap-ui-primitive/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/tiptap-ui-primitive/dropdown-menu"
+import { Card, CardBody } from "@/components/tiptap-ui-primitive/card"
+
+export interface ExportButtonProps extends Omit<ButtonProps, "type"> {
+  /**
+   * Whether to render the dropdown menu in a portal
+   * @default false
+   */
+  portal?: boolean
+  /**
+   * Callback for when the dropdown opens or closes
+   */
+  onOpenChange?: (isOpen: boolean) => void
 }
+
+/**
+ * Dropdown menu component for exporting documents in a Tiptap editor.
+ */
+export const ExportButton = React.forwardRef<
+  HTMLButtonElement,
+  ExportButtonProps
+>(
+  (
+    {
+      portal = false,
+      onOpenChange,
+      ...buttonProps
+    },
+    ref
+  ) => {
+    const [isOpen, setIsOpen] = React.useState(false)
+
+    const handleExport = (format: string) => {
+      // Your export logic here
+      console.log(`Exporting as ${format}`);
+    };
+
+    const handleOpenChange = React.useCallback(
+      (open: boolean) => {
+        setIsOpen(open)
+        onOpenChange?.(open)
+      },
+      [onOpenChange]
+    )
+
+    return (
+      <DropdownMenu open={isOpen} onOpenChange={handleOpenChange}>
+        <DropdownMenuTrigger asChild>
+          <Button
+            type="button"
+            data-style="ghost"
+            role="button"
+            tabIndex={-1}
+            aria-label="Export document"
+            tooltip="Export"
+            {...buttonProps}
+            ref={ref}
+          >
+            <ExportIcon className="tiptap-button-icon" />
+            Export
+            <ChevronDownIcon className="tiptap-button-dropdown-small" />
+          </Button>
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent align="start" portal={portal}>
+          <Card>
+            <CardBody>
+              <ButtonGroup>
+                <DropdownMenuItem onClick={() => handleExport('pdf')}>
+                  Export as PDF
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleExport('docx')}>
+                  Export as Word
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleExport('html')}>
+                  Export as HTML
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleExport('markdown')}>
+                  Export as Markdown
+                </DropdownMenuItem>
+              </ButtonGroup>
+            </CardBody>
+          </Card>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+)
+
+ExportButton.displayName = "ExportButton"

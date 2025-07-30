@@ -57,6 +57,7 @@ import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button"
 // In the MainToolbarContent component
 import { ExportButton } from "@/components/tiptap-ui/export-button/export-button";
 import { PageSizeButton } from "@/components/tiptap-ui/page-size-button/page-size-button";
+import { AIToggleButton } from "@/components/tiptap-ui/ai-toggle-button/ai-toggle-button";
 
 
 // --- Icons ---
@@ -73,6 +74,9 @@ import { useScrolling } from "@/hooks/use-scrolling"
 // --- Components ---
 import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle"
 
+// --- AI Side Panel ---
+import { AISidePanel } from "@/components/tiptap-ui-primitive/ai-side-panel"
+
 // --- Lib ---
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
 
@@ -87,12 +91,16 @@ const MainToolbarContent = ({
   isMobile,
   pageSize,
   onPageSizeChange,
+  isAIOpen,
+  onAIToggle,
 }: {
   onHighlighterClick: () => void
   onLinkClick: () => void
   isMobile: boolean
   pageSize: string
   onPageSizeChange: (size: string) => void
+  isAIOpen: boolean
+  onAIToggle: () => void
 }) => {
   return (
     <>
@@ -173,6 +181,10 @@ const MainToolbarContent = ({
       {isMobile && <ToolbarSeparator />}
 
       <ToolbarGroup>
+        <AIToggleButton 
+          isOpen={isAIOpen}
+          onToggle={onAIToggle}
+        />
         <ThemeToggle />
       </ToolbarGroup>
     </>
@@ -216,6 +228,11 @@ export function SimpleEditor() {
   >("main")
   const toolbarRef = React.useRef<HTMLDivElement>(null)
   const [pageSize, setPageSize] = React.useState("a4");
+  const [isAIOpen, setIsAIOpen] = React.useState(false);
+  
+  React.useEffect(() => {
+    console.log('isAIOpen state changed:', isAIOpen);
+  }, [isAIOpen]);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -293,6 +310,8 @@ export function SimpleEditor() {
               isMobile={isMobile}
               pageSize={pageSize}
               onPageSizeChange={setPageSize}
+              isAIOpen={isAIOpen}
+              onAIToggle={() => setIsAIOpen(!isAIOpen)}
             />
           ) : (
             <MobileToolbarContent
@@ -306,6 +325,14 @@ export function SimpleEditor() {
           editor={editor}
           role="presentation"
           className={`simple-editor-content page-size-${pageSize}`}
+        />
+
+        {/* AI Side Panel */}
+        <AISidePanel
+          editor={editor}
+          isOpen={isAIOpen}
+          onToggle={() => setIsAIOpen(!isAIOpen)}
+          pageSize={pageSize}
         />
       </EditorContext.Provider>
     </div>
