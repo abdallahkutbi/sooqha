@@ -192,8 +192,8 @@
 
   /* Global colors - Light mode */
   --tt-bg-color: var(--white);
-  --tt-border-color: var(--tt-gray-light-a-200);
-  --tt-border-color-tint: var(--tt-gray-light-a-100);
+  --tt-border-color: var(--tt-gray-light-500);        /* Main border - consistent with AI panel */
+  --tt-border-color-tint: var(--tt-gray-light-400);   /* Subtle border - slightly lighter */
   --tt-sidebar-bg-color: var(--tt-gray-light-100);
   --tt-scrollbar-color: var(--tt-gray-light-a-200);
   --tt-cursor-color: var(--tt-brand-color-500);

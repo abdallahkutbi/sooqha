@@ -1,10 +1,10 @@
 .tiptap.ProseMirror {
   --tt-inline-code-bg-color: var(--tt-gray-light-a-100);
   --tt-inline-code-text-color: var(--tt-gray-light-a-700);
-  --tt-inline-code-border-color: var(--tt-gray-light-a-200);
+  --tt-inline-code-border-color: var(--tt-border-color-tint);
   --tt-codeblock-bg: var(--tt-gray-light-a-50);
   --tt-codeblock-text: var(--tt-gray-light-a-800);
-  --tt-codeblock-border: var(--tt-gray-light-a-200);
+  --tt-codeblock-border: var(--tt-border-color-tint);
 
   .dark & {
     --tt-inline-code-bg-color: var(--tt-gray-dark-a-100);
