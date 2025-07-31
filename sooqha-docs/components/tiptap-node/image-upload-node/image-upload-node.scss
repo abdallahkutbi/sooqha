@@ -117,7 +117,7 @@
     &.drag-active {
       border-color: var(--tiptap-image-upload-border-active);
       background-color: rgba(
-        var(--tiptap-image-upload-active-rgb, 0, 123, 255),
+        var(--tiptap-image-upload-active-rgb, 74, 92, 106),
         0.05
       );
     }
@@ -125,7 +125,7 @@
     &.drag-over {
       border-color: var(--tiptap-image-upload-border-active);
       background-color: rgba(
-        var(--tiptap-image-upload-active-rgb, 0, 123, 255),
+        var(--tiptap-image-upload-active-rgb, 74, 92, 106),
         0.1
       );
     }

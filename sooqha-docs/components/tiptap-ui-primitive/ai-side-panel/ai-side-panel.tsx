@@ -33,8 +33,6 @@ export function AISidePanel({
 }: AISidePanelProps) {
   const {
     width,
-    handleResizeStart,
-    handleDoubleClick,
     messages,
     inputValue,
     setInputValue,
@@ -51,21 +49,12 @@ export function AISidePanel({
     return null
   }
 
-  console.log('AISidePanel render:', { isOpen, width });
-
   return (
     <div
       className={`ai-side-panel-container ${isOpen ? 'is-open' : ''}`}
       style={{ width: `${width}px` }}
     >
-      {/* Resize Handle */}
-      <div
-        className="ai-side-panel-resize-handle"
-        onMouseDown={handleResizeStart}
-        onDoubleClick={handleDoubleClick}
-      />
-
-      {/* Panel Card */}
+      {/* Panel Card - No resize handle */}
       <div className="ai-side-panel-card">
         {/* Header */}
         <div className="ai-side-panel-header">

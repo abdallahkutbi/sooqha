@@ -5,20 +5,12 @@
      ===================== */
 
      /* Variables */
-     :root {
-      --ai-panel-bg-color: var(--tt-color-background);
-      --ai-panel-border-color: var(--tt-gray-light-a-100);
-      --ai-panel-shadow: var(--tt-shadow-elevated-md);
-     }
-
      .ai-side-panel {
       --ai-panel-bg-color: var(--tt-color-background);
       --ai-panel-border-color: var(--tt-color-border);
       --ai-panel-shadow: var(--tt-shadow-elevated-md);
 
-
       /* Dark Mode */
-    
       .dark & {
         --ai-panel-bg-color: var(--black);
         --ai-panel-border-color: var(--tt-gray-dark-a-50);
@@ -28,36 +20,33 @@
       &-container {
         position: fixed;
         right: 0;
-        top: 2.75rem; /* 44px - toolbar height */
-        width: 20rem; /* 320px - default width */
+        top: 2.75rem;
+        // Remove fixed width - let component control it
         height: calc(100vh - 2.75rem);
         z-index: 50;
         transform: translateX(100%);
-        transition: transform 300ms ease-in-out, width 150ms ease-in-out;
+        opacity: 0;
+        transition: all 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
         overscroll-behavior: contain;
         -webkit-overflow-scrolling: touch;
-        font-family: "Inter", sans-serif; /* Match body font */
-        border-top-left-radius: 1rem;
-        border-top-right-radius: 0.5rem;
-        border-bottom-left-radius: 1rem;
-        border-bottom-right-radius: 0.5rem;
-        background-color: var(--ai-panel-bg-color);
-        border: 1px solid rgba(209, 213, 219, 0.3);
+        font-family: "Inter", sans-serif;
         border-top-left-radius: 1rem;
         border-top-right-radius: 0;
         border-bottom-left-radius: 1rem;
         border-bottom-right-radius: 0;
-    
+        background-color: var(--ai-panel-bg-color);
+        border: 1px solid var(--ai-panel-border-color);
+        backdrop-filter: blur(5px);
+
         &.is-open {
           transform: translateX(0);
+          opacity: 1;
         }
 
         &.is-resizing {
           transition: none; /* Disable transitions during resize for smooth dragging */
           user-select: none;
         }
-
-        backdrop-filter: blur(5px);
       }
 
       /* Resize Handle */
@@ -73,20 +62,20 @@
         z-index: 10;
 
         &:hover {
-          background-color: var(--tt-blue-light-200);
+          background-color: var(--tt-brand-color-200);
         }
 
         &:active {
-          background-color: var(--tt-blue-light-400);
+          background-color: var(--tt-brand-color-400);
         }
 
         .dark & {
           &:hover {
-            background-color: var(--tt-blue-dark-700);
+            background-color: var(--tt-brand-color-700);
           }
 
           &:active {
-            background-color: var(--tt-blue-dark-500);
+            background-color: var(--tt-brand-color-500);
           }
         }
 
@@ -197,14 +186,14 @@
           align-items: flex-end;
 
           .ai-side-panel-message-content {
-            background-color: var(--tt-blue-light-100);
-            color: var(--tt-blue-light-900);
+            background-color: var(--tt-brand-color-100);
+            color: var(--tt-brand-color-900);
             border-radius: 1rem 1rem 0.25rem 1rem;
             max-width: 80%;
 
             .dark & {
-              background-color: var(--tt-blue-dark-800);
-              color: var(--tt-blue-dark-100);
+              background-color: var(--tt-brand-color-800);
+              color: var(--tt-brand-color-100);
             }
           }
         }
@@ -249,7 +238,7 @@
         display: flex;
         gap: 2rem;
         align-items: flex-end;
-        border: 1px solid rgba(209, 213, 219, 0.3);
+        border: 1px solid var(--ai-panel-border-color);
         border-radius: 1rem;
         padding: 1rem;
 
@@ -294,5 +283,39 @@
     right: 1rem;
     left: 1rem;
     border-radius: 1rem;
+  }
+}
+
+// Keyframe animations
+@keyframes slideInDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }

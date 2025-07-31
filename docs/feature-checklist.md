@@ -3,9 +3,11 @@
 ## 🎨 Design & UX Features
 
 ### Core Layout & Interface
-- [ ] **three-column responsive layout** (desktop: editor + AI panel + file for contex to the left, mobile: stacked)
-        font selection doropdown, insert table,  and more tools button
--       Header. does the ai panel and the ai button, export button, page size button. all use the right primitve files
+- [ ] **Three-column responsive layout** (desktop: editor + AI panel + file context to the left, mobile: stacked)
+- [ ] **Comprehensive toolbar** with font style selection dropdown, font size, font color, line spacing, insert table, and more tools
+- [ ] **File upload functionality** in AI text input
+- [ ] **Header integration** - AI panel, AI button, export button, page size button all use the right primitive UI components
+- [ ] **Folder and file sidebar** for document management
 - [ ] **Clean, minimal UI** with ample whitespace
 - [ ] **Dark/light mode toggle** with modern theme
 - [ ] **Keyboard-first interactions** throughout the app
