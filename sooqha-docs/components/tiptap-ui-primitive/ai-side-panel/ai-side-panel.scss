@@ -6,13 +6,13 @@
 
      /* Variables */
      .ai-side-panel-container {
-      --ai-panel-bg-color: var(--tt-color-background);
+      --ai-panel-bg-color: var(--tt-bg-color);  /* Same as document content background */
       --ai-panel-border-color: var(--tt-border-color-tint);  /* Subtle border - same as simple editor */
       --ai-panel-shadow: var(--tt-shadow-elevated-md);
 
       /* Dark Mode */
       .dark & {
-        --ai-panel-bg-color: var(--black);
+        --ai-panel-bg-color: var(--tt-bg-color);  /* Same as document content background */
         --ai-panel-border-color: var(--tt-border-color-tint);  /* Lighter border for dark theme */
       }
      }
