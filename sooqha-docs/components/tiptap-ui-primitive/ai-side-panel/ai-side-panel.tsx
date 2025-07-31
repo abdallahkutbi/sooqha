@@ -45,10 +45,6 @@ export function AISidePanel({
     ...config,
   })
 
-  if (!isOpen) {
-    return null
-  }
-
   return (
     <div
       className={`ai-side-panel-container ${isOpen ? 'is-open' : ''}`}
