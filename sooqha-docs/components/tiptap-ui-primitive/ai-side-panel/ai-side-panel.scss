@@ -7,7 +7,7 @@
      /* Variables */
      .ai-side-panel {
       --ai-panel-bg-color: var(--tt-color-background);
-      --ai-panel-border-color: var(--tt-color-border);
+      --ai-panel-border-color: var(--tt-border-color-tint);
       --ai-panel-shadow: var(--tt-shadow-elevated-md);
 
       /* Dark Mode */
@@ -35,71 +35,12 @@
         border-bottom-left-radius: 1rem;
         border-bottom-right-radius: 0;
         background-color: var(--ai-panel-bg-color);
-        border: 1px solid var(--ai-panel-border-color);
+        border: 1px solid var(--tt-border-color-tint);
         backdrop-filter: blur(5px);
 
         &.is-open {
           transform: translateX(0);
           opacity: 1;
-        }
-
-        &.is-resizing {
-          transition: none; /* Disable transitions during resize for smooth dragging */
-          user-select: none;
-        }
-      }
-
-      /* Resize Handle */
-      &-resize-handle {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 4px;
-        height: 100%;
-        cursor: col-resize;
-        background: transparent;
-        transition: background-color 150ms ease-in-out;
-        z-index: 10;
-
-        &:hover {
-          background-color: var(--tt-brand-color-200);
-        }
-
-        &:active {
-          background-color: var(--tt-brand-color-400);
-        }
-
-        .dark & {
-          &:hover {
-            background-color: var(--tt-brand-color-700);
-          }
-
-          &:active {
-            background-color: var(--tt-brand-color-500);
-          }
-        }
-
-        /* Visual indicator for resize area */
-        &::before {
-          content: '';
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-          width: 2px;
-          height: 40px;
-          background-color: var(--tt-gray-light-300);
-          border-radius: 1px;
-          opacity: 0;
-          transition: opacity 150ms ease-in-out;
-        }
-
-        &:hover::before {
-          opacity: 1;
-        }
-
-        .dark &::before {
-          background-color: var(--tt-gray-dark-600);
         }
       }
 
@@ -111,6 +52,7 @@
         background-color: var(--ai-panel-bg-color);
         border-radius: inherit;
         overflow: hidden;
+        border: 1px solid var(--ai-panel-border-color);
         
       }
 
@@ -120,7 +62,7 @@
         align-items: center;
         justify-content: space-between;
         padding: 1rem;
-        border-bottom: 1px solid var(--ai-panel-border-color);
+        border-bottom: 1px solid var(--tt-border-color-tint);
         background-color: var(--ai-panel-bg-color);
 
         h3 {
