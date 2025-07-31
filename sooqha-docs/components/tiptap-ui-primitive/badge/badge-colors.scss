@@ -4,8 +4,8 @@
   **************************************************/
 
   /* Light mode */
-  --tt-badge-border-color: var(--tt-gray-light-a-200);
-  --tt-badge-border-color-subdued: var(--tt-gray-light-a-200);
+  --tt-badge-border-color: var(--tt-border-color-tint);
+  --tt-badge-border-color-subdued: var(--tt-border-color-tint);
   --tt-badge-border-color-emphasized: var(--tt-gray-light-a-600);
   --tt-badge-text-color: var(--tt-gray-light-a-500);
   --tt-badge-text-color-subdued: var(
@@ -55,8 +55,8 @@
 
   &[data-style="ghost"] {
     /* Light mode */
-    --tt-badge-border-color: var(--tt-gray-light-a-200);
-    --tt-badge-border-color-subdued: var(--tt-gray-light-a-200);
+      --tt-badge-border-color: var(--tt-border-color-tint);
+  --tt-badge-border-color-subdued: var(--tt-border-color-tint);
     --tt-badge-border-color-emphasized: var(--tt-gray-light-a-600);
     --tt-badge-text-color: var(--tt-gray-light-a-500);
     --tt-badge-text-color-subdued: var(
@@ -107,8 +107,8 @@
 
   &[data-style="gray"] {
     /* Light mode */
-    --tt-badge-border-color: var(--tt-gray-light-a-200);
-    --tt-badge-border-color-subdued: var(--tt-gray-light-a-200);
+      --tt-badge-border-color: var(--tt-border-color-tint);
+  --tt-badge-border-color-subdued: var(--tt-border-color-tint);
     --tt-badge-border-color-emphasized: var(--tt-gray-light-a-500);
     --tt-badge-text-color: var(--tt-gray-light-a-500);
     --tt-badge-text-color-subdued: var(
