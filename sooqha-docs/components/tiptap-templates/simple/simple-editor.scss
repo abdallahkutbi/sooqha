@@ -1,78 +1,161 @@
+/* =====================
+   SIMPLE EDITOR STYLES
+   =====================
+   
+   This file contains the core styling for the Simple Editor component.
+   The editor provides a document-style writing experience with:
+   - Professional typography (Inter UI + DM Sans content)
+   - Responsive design (mobile/desktop optimized)
+   - Theme support (light/dark modes)
+   - Document-style layout with bordered content area
+   
+   Layout Structure:
+   - Toolbar (fixed top)
+   - Writing area (centered document with border)
+   - AI side panel (slide-in from right)
+*/
+
+/* Import Google Fonts for professional typography */
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
+/* =====================
+   GLOBAL VARIABLES & THEME
+   ===================== */
+
 body {
+  /* Toolbar height used for spacing calculations */
   --tt-toolbar-height: 44px;
+  
+  /* Theme text color for light mode */
   --tt-theme-text: var(--tt-gray-light-900);
 
+  /* Dark mode theme text color override */
   .dark & {
     --tt-theme-text: var(--tt-gray-dark-900);
   }
 }
 
+/* =====================
+   BASE TYPOGRAPHY & LAYOUT
+   ===================== */
+
 body {
+  /* Inter font for UI elements (toolbar, buttons, etc.) */
   font-family: "Inter", sans-serif;
+  
+  /* Dynamic text color that adapts to light/dark theme */
   color: var(--tt-theme-text);
+  
+  /* Font rendering optimizations */
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+  
+  /* Remove default padding */
   padding: 0;
 }
 
+/* Ensure full-height layout for the app container */
 html,
 body,
 #root,
 #app {
   height: 100%;
+  /* Background adapts to theme (white/black) */
   background-color: var(--tt-bg-color);
 }
 
+/* =====================
+   CUSTOM SCROLLBAR STYLING
+   ===================== */
+
+/* WebKit browsers (Chrome, Safari, Edge) scrollbar width */
 ::-webkit-scrollbar {
-  width: 0.25rem;
+  width: 0.25rem; /* Thin scrollbar for clean appearance */
 }
 
+/* Firefox scrollbar styling */
 * {
   scrollbar-width: thin;
+  /* Scrollbar track transparent, thumb uses theme color */
   scrollbar-color: var(--tt-scrollbar-color) transparent;
 }
 
+/* WebKit scrollbar thumb (the draggable part) */
 ::-webkit-scrollbar-thumb {
   background-color: var(--tt-scrollbar-color);
-  border-radius: 9999px;
+  border-radius: 9999px; /* Fully rounded edges */
 }
 
+/* WebKit scrollbar track (background area) */
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: transparent; /* Invisible track */
 }
 
+/* =====================
+   EDITOR CONTENT TYPOGRAPHY
+   ===================== */
+
+/* TipTap editor content uses DM Sans for better readability */
 .tiptap.ProseMirror {
   font-family: "DM Sans", sans-serif;
 }
 
+/* =====================
+   MAIN LAYOUT STRUCTURE
+   ===================== */
+
+/* Root wrapper for the entire Simple Editor component */
 .simple-editor-wrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Vertical stack: toolbar → content */
 }
 
+/* =====================
+   DOCUMENT CONTENT AREA
+   ===================== */
+
+/* Container for the writing area - creates document-like appearance */
 .simple-editor-content {
-  max-width: 648px;
+  /* Document width constraints for optimal reading */
+  max-width: 648px; /* ~8.5" at 96 DPI for A4-like width */
   width: 100%;
+  
+  /* Center the document horizontally */
   margin: 0 auto;
+  
+  /* Fill available vertical space */
   height: 100%;
   display: flex;
   flex-direction: column;
   flex: 1;
-  border: 1px solid var(--tt-border-color-tint); /* Design system border */
-
-
+  
+  /* Subtle border to create document appearance */
+  border: 1px solid var(--tt-border-color-tint); /* Consistent with design system */
 }
 
+/* =====================
+   WRITING AREA STYLING
+   ===================== */
+
+/* The actual editable content area where users type */
 .simple-editor-content .tiptap.ProseMirror.simple-editor {
-  flex: 1;
+  flex: 1; /* Take all available space in the content container */
+  
+  /* Generous padding for comfortable writing experience */
+  /* Top/sides: 3rem for document margins */
+  /* Bottom: 30vh to ensure comfortable scrolling space */
   padding: 3rem 3rem 30vh;
 }
 
+/* =====================
+   MOBILE RESPONSIVE DESIGN
+   ===================== */
+
+/* Reduce padding on mobile devices for more writing space */
 @media screen and (max-width: 480px) {
   .simple-editor-content .tiptap.ProseMirror.simple-editor {
+    /* Smaller margins on mobile while maintaining readability */
     padding: 1rem 1.5rem 30vh;
   }
 }

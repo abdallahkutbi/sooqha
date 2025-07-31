@@ -1,98 +1,162 @@
+/*
+ * SIMPLE EDITOR COMPONENT
+ * ======================
+ * 
+ * A professional document-style rich text editor built with TipTap.
+ * Features:
+ * - Document-style layout with bordered content area
+ * - Comprehensive formatting toolbar (headings, lists, text styling)
+ * - AI-powered writing assistance with side panel
+ * - Responsive design (mobile/desktop optimized)
+ * - Image upload with drag & drop
+ * - Export functionality (PDF, Word, etc.)
+ * - Page size controls (A4, Letter, etc.)
+ * - Theme support (light/dark modes)
+ * 
+ * Component Structure:
+ * - MainToolbarContent: Desktop toolbar with all formatting options
+ * - MobileToolbarContent: Mobile toolbar with context switching
+ * - SimpleEditor: Main component orchestrating everything
+ * 
+ * Layout:
+ * ┌─────────────────────────────────────────┐
+ * │              TOOLBAR (Fixed)            │
+ * ├─────────────────────┬───────────────────┤
+ * │    WRITING AREA     │   AI SIDE PANEL   │
+ * │   (Centered Doc)    │  (Slide Panel)    │
+ * └─────────────────────┴───────────────────┘
+ */
+
 "use client"
 
+// ===== REACT & CORE IMPORTS =====
 import * as React from "react"
 import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
 
-// --- Tiptap Core Extensions ---
-import { StarterKit } from "@tiptap/starter-kit"
-import { Image } from "@tiptap/extension-image"
-import { TaskItem, TaskList } from "@tiptap/extension-list"
-import { TextAlign } from "@tiptap/extension-text-align"
-import { Typography } from "@tiptap/extension-typography"
-import { Highlight } from "@tiptap/extension-highlight"
-import { Subscript } from "@tiptap/extension-subscript"
-import { Superscript } from "@tiptap/extension-superscript"
-import { Selection } from "@tiptap/extensions"
+// ===== TIPTAP CORE EXTENSIONS =====
+// These provide the fundamental editing capabilities
+import { StarterKit } from "@tiptap/starter-kit" // Basic editor functionality
+import { Image } from "@tiptap/extension-image" // Image rendering
+import { TaskItem, TaskList } from "@tiptap/extension-list" // Checkbox lists
+import { TextAlign } from "@tiptap/extension-text-align" // Text alignment
+import { Typography } from "@tiptap/extension-typography" // Smart typography
+import { Highlight } from "@tiptap/extension-highlight" // Text highlighting
+import { Subscript } from "@tiptap/extension-subscript" // Subscript text
+import { Superscript } from "@tiptap/extension-superscript" // Superscript text
+import { Selection } from "@tiptap/extensions" // Selection management
 
-// --- UI Primitives ---
-import { Button } from "@/components/tiptap-ui-primitive/button"
-import { Spacer } from "@/components/tiptap-ui-primitive/spacer"
+// ===== UI PRIMITIVE COMPONENTS =====
+// Base UI building blocks for the editor interface
+import { Button } from "@/components/tiptap-ui-primitive/button" // Styled buttons
+import { Spacer } from "@/components/tiptap-ui-primitive/spacer" // Layout spacing
 import {
-  Toolbar,
-  ToolbarGroup,
-  ToolbarSeparator,
+  Toolbar,        // Main toolbar container
+  ToolbarGroup,   // Groups related toolbar items
+  ToolbarSeparator, // Visual separators between groups
 } from "@/components/tiptap-ui-primitive/toolbar"
 
-// --- Tiptap Node ---
-import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension"
-import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension"
-import "@/components/tiptap-node/blockquote-node/blockquote-node.scss"
-import "@/components/tiptap-node/code-block-node/code-block-node.scss"
-import "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node.scss"
-import "@/components/tiptap-node/list-node/list-node.scss"
-import "@/components/tiptap-node/image-node/image-node.scss"
-import "@/components/tiptap-node/heading-node/heading-node.scss"
-import "@/components/tiptap-node/paragraph-node/paragraph-node.scss"
+// ===== TIPTAP CUSTOM NODES =====
+// Custom node extensions for enhanced functionality
+import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension" // Drag & drop image uploads
+import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension" // HR dividers
 
-// --- Tiptap UI ---
-import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu"
-import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button"
-import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu"
-import { BlockquoteButton } from "@/components/tiptap-ui/blockquote-button"
-import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button"
+// ===== NODE STYLING IMPORTS =====
+// SCSS imports for custom node appearance
+import "@/components/tiptap-node/blockquote-node/blockquote-node.scss" // Quote block styling
+import "@/components/tiptap-node/code-block-node/code-block-node.scss" // Code block styling
+import "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node.scss" // HR styling
+import "@/components/tiptap-node/list-node/list-node.scss" // List styling (bullets, numbers, tasks)
+import "@/components/tiptap-node/image-node/image-node.scss" // Image styling
+import "@/components/tiptap-node/heading-node/heading-node.scss" // Heading styling
+import "@/components/tiptap-node/paragraph-node/paragraph-node.scss" // Paragraph styling
+
+// ===== TIPTAP UI COMPONENTS =====
+// High-level UI components that combine primitives for specific editor functionality
+
+import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu" // H1-H6 selector
+import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button" // Image upload trigger
+import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu" // List type selector
+import { BlockquoteButton } from "@/components/tiptap-ui/blockquote-button" // Quote formatting
+import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button" // Code block creation
+
+// Color highlighting components with desktop/mobile variants
 import {
-  ColorHighlightPopover,
-  ColorHighlightPopoverContent,
-  ColorHighlightPopoverButton,
+  ColorHighlightPopover,        // Desktop popover with color picker
+  ColorHighlightPopoverContent, // Mobile color picker content
+  ColorHighlightPopoverButton,  // Mobile trigger button
 } from "@/components/tiptap-ui/color-highlight-popover"
+
+// Link creation components with desktop/mobile variants
 import {
-  LinkPopover,
-  LinkContent,
-  LinkButton,
+  LinkPopover,   // Desktop link popover
+  LinkContent,   // Mobile link creation content
+  LinkButton,    // Mobile link trigger button
 } from "@/components/tiptap-ui/link-popover"
-import { MarkButton } from "@/components/tiptap-ui/mark-button"
-import { TextAlignButton } from "@/components/tiptap-ui/text-align-button"
-import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button"
 
-// In the MainToolbarContent component
-import { ExportButton } from "@/components/tiptap-ui/export-button/export-button";
-import { PageSizeButton } from "@/components/tiptap-ui/page-size-button/page-size-button";
-import { AIToggleButton } from "@/components/tiptap-ui/ai-toggle-button/ai-toggle-button";
+import { MarkButton } from "@/components/tiptap-ui/mark-button" // Text formatting (bold, italic, etc.)
+import { TextAlignButton } from "@/components/tiptap-ui/text-align-button" // Text alignment controls
+import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button" // History navigation
+
+// ===== TOOLBAR FEATURE COMPONENTS =====
+import { ExportButton } from "@/components/tiptap-ui/export-button/export-button" // Document export functionality
+import { PageSizeButton } from "@/components/tiptap-ui/page-size-button/page-size-button" // Page size controls (A4, Letter, etc.)
+import { AIToggleButton } from "@/components/tiptap-ui/ai-toggle-button/ai-toggle-button" // AI panel toggle
 
 
-// --- Icons ---
-import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon"
-import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon"
-import { LinkIcon } from "@/components/tiptap-icons/link-icon"
+// ===== ICON COMPONENTS =====
+// SVG icon components for mobile toolbar navigation
+import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon" // Back navigation
+import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon" // Highlight tool indicator
+import { LinkIcon } from "@/components/tiptap-icons/link-icon" // Link tool indicator
 
-// --- Hooks ---
-import { useIsMobile } from "@/hooks/use-mobile"
-import { useWindowSize } from "@/hooks/use-window-size"
-import { useCursorVisibility } from "@/hooks/use-cursor-visibility"
-import { useScrolling } from "@/hooks/use-scrolling"
+// ===== CUSTOM HOOKS =====
+// React hooks for responsive behavior and editor state
+import { useIsMobile } from "@/hooks/use-mobile" // Mobile device detection
+import { useWindowSize } from "@/hooks/use-window-size" // Window dimensions tracking
+import { useCursorVisibility } from "@/hooks/use-cursor-visibility" // Cursor position for mobile toolbar
+import { useScrolling } from "@/hooks/use-scrolling" // Scroll state detection
 
-// --- Components ---
-import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle"
+// ===== TEMPLATE-SPECIFIC COMPONENTS =====
+import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle" // Light/dark mode toggle
 
-// --- AI Side Panel ---
-import { AISidePanel } from "@/components/tiptap-ui-primitive/ai-side-panel"
+// ===== AI INTEGRATION =====
+import { AISidePanel } from "@/components/tiptap-ui-primitive/ai-side-panel" // AI assistant panel
 
-// --- Lib ---
-import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
+// ===== UTILITY FUNCTIONS =====
+import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils" // Image upload handling
 
-// --- Styles ---
-import "@/components/tiptap-templates/simple/simple-editor.scss"
+// ===== STYLING =====
+import "@/components/tiptap-templates/simple/simple-editor.scss" // Component-specific styles
 
-import content from "@/components/tiptap-templates/simple/data/content.json"
+// ===== DEFAULT CONTENT =====
+import content from "@/components/tiptap-templates/simple/data/content.json" // Initial editor content
 
+/*
+ * MAIN TOOLBAR CONTENT COMPONENT
+ * =============================
+ * 
+ * Desktop toolbar that displays all formatting options in a single horizontal bar.
+ * On mobile, this switches to context-sensitive toolbars for better usability.
+ * 
+ * Toolbar Structure (left to right):
+ * 1. Export tools
+ * 2. Page size controls
+ * 3. History (undo/redo)
+ * 4. Content structure (headings, lists, quotes, code)
+ * 5. Text formatting (bold, italic, strike, code, underline, highlight, links)
+ * 6. Special formatting (superscript, subscript)
+ * 7. Text alignment (left, center, right, justify)
+ * 8. Media insertion (images)
+ * 9. AI tools and theme toggle
+ */
 const MainToolbarContent = ({
-  onHighlighterClick,
-  onLinkClick,
-  isMobile,
-  pageSize,
-  onPageSizeChange,
-  isAIOpen,
-  onAIToggle,
+  onHighlighterClick,  // Mobile: Navigate to highlighter toolbar
+  onLinkClick,         // Mobile: Navigate to link toolbar
+  isMobile,            // Device type for responsive behavior
+  pageSize,            // Current page size (A4, Letter, etc.)
+  onPageSizeChange,    // Page size change handler
+  isAIOpen,            // AI panel open state
+  onAIToggle,          // AI panel toggle handler
 }: {
   onHighlighterClick: () => void
   onLinkClick: () => void
@@ -104,102 +168,139 @@ const MainToolbarContent = ({
 }) => {
   return (
     <>
+      {/* === DOCUMENT ACTIONS GROUP === */}
       <ToolbarGroup>
-        <ExportButton />
+        <ExportButton /> {/* PDF, Word, etc. export functionality */}
       </ToolbarGroup>
       
-      <Spacer />
+      <Spacer /> {/* Push remaining content to the right */}
       
       <ToolbarSeparator />
 
+      {/* === PAGE LAYOUT GROUP === */}
       <ToolbarGroup>
         <PageSizeButton 
           currentSize={pageSize}
           onSizeChange={onPageSizeChange}
-        />
+        /> {/* A4, Letter, Legal page size selection */}
       </ToolbarGroup>
 
       <ToolbarSeparator />
 
+      {/* === HISTORY NAVIGATION GROUP === */}
       <ToolbarGroup>
-        <UndoRedoButton action="undo" />
-        <UndoRedoButton action="redo" />
+        <UndoRedoButton action="undo" /> {/* Undo last action */}
+        <UndoRedoButton action="redo" /> {/* Redo last undone action */}
       </ToolbarGroup>
 
       <ToolbarSeparator />
 
+      {/* === CONTENT STRUCTURE GROUP === */}
       <ToolbarGroup>
+        {/* Heading level selector (H1-H4) */}
         <HeadingDropdownMenu levels={[1, 2, 3, 4]} portal={isMobile} />
+        
+        {/* List type selector (bullets, numbers, tasks) */}
         <ListDropdownMenu
           types={["bulletList", "orderedList", "taskList"]}
           portal={isMobile}
         />
-        <BlockquoteButton />
-        <CodeBlockButton />
+        
+        <BlockquoteButton />  {/* Quote block formatting */}
+        <CodeBlockButton />   {/* Code block creation */}
       </ToolbarGroup>
 
       <ToolbarSeparator />
 
+      {/* === TEXT FORMATTING GROUP === */}
       <ToolbarGroup>
-        <MarkButton type="bold" />
-        <MarkButton type="italic" />
-        <MarkButton type="strike" />
-        <MarkButton type="code" />
-        <MarkButton type="underline" />
+        {/* Basic text styling */}
+        <MarkButton type="bold" />      {/* **Bold** text */}
+        <MarkButton type="italic" />    {/* *Italic* text */}
+        <MarkButton type="strike" />    {/* ~~Strikethrough~~ text */}
+        <MarkButton type="code" />      {/* `Inline code` */}
+        <MarkButton type="underline" /> {/* Underlined text */}
+        
+        {/* Advanced formatting with desktop/mobile variants */}
         {!isMobile ? (
           <ColorHighlightPopover />
         ) : (
           <ColorHighlightPopoverButton onClick={onHighlighterClick} />
         )}
-        {!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
+        
+        {!isMobile ? (
+          <LinkPopover />
+        ) : (
+          <LinkButton onClick={onLinkClick} />
+        )}
       </ToolbarGroup>
 
       <ToolbarSeparator />
 
+      {/* === SPECIAL FORMATTING GROUP === */}
       <ToolbarGroup>
-        <MarkButton type="superscript" />
-        <MarkButton type="subscript" />
+        <MarkButton type="superscript" /> {/* X² superscript text */}
+        <MarkButton type="subscript" />   {/* X₂ subscript text */}
       </ToolbarGroup>
 
       <ToolbarSeparator />
 
+      {/* === TEXT ALIGNMENT GROUP === */}
       <ToolbarGroup>
-        <TextAlignButton align="left" />
-        <TextAlignButton align="center" />
-        <TextAlignButton align="right" />
-        <TextAlignButton align="justify" />
+        <TextAlignButton align="left" />    {/* Left-align text */}
+        <TextAlignButton align="center" />  {/* Center-align text */}
+        <TextAlignButton align="right" />   {/* Right-align text */}
+        <TextAlignButton align="justify" /> {/* Justify text */}
       </ToolbarGroup>
 
       <ToolbarSeparator />
 
+      {/* === MEDIA INSERTION GROUP === */}
       <ToolbarGroup>
-        <ImageUploadButton text="Add" />
+        <ImageUploadButton text="Add" /> {/* Drag & drop image upload */}
       </ToolbarGroup>
 
-      <Spacer />
+      <Spacer /> {/* Push AI and theme controls to far right */}
 
+      {/* Mobile-only separator before final group */}
       {isMobile && <ToolbarSeparator />}
 
+      {/* === AI & SETTINGS GROUP === */}
       <ToolbarGroup>
         <AIToggleButton 
           isOpen={isAIOpen}
           onToggle={onAIToggle}
-        />
-        <ThemeToggle />
+        /> {/* AI writing assistant panel toggle */}
+        <ThemeToggle /> {/* Light/dark mode toggle */}
       </ToolbarGroup>
     </>
   )
 }
 
+/*
+ * MOBILE TOOLBAR CONTENT COMPONENT
+ * ================================
+ * 
+ * Mobile-specific toolbar that replaces the main toolbar when users
+ * navigate to specific tools (highlighter or link creation).
+ * This provides a focused, touch-friendly interface for complex operations.
+ * 
+ * Features:
+ * - Back navigation to return to main toolbar
+ * - Context-specific tool content
+ * - Touch-optimized button sizes
+ */
 const MobileToolbarContent = ({
-  type,
-  onBack,
+  type,    // Which tool is active: "highlighter" or "link"
+  onBack,  // Navigate back to main toolbar
 }: {
   type: "highlighter" | "link"
   onBack: () => void
 }) => (
   <>
+    {/* === NAVIGATION GROUP === */}
     <ToolbarGroup>
+      {/* Back button with current tool indicator */}
       <Button data-style="ghost" onClick={onBack}>
         <ArrowLeftIcon className="tiptap-button-icon" />
         {type === "highlighter" ? (
@@ -212,6 +313,7 @@ const MobileToolbarContent = ({
 
     <ToolbarSeparator />
 
+    {/* === TOOL-SPECIFIC CONTENT === */}
     {type === "highlighter" ? (
       <ColorHighlightPopoverContent />
     ) : (
@@ -220,82 +322,158 @@ const MobileToolbarContent = ({
   </>
 )
 
+/*
+ * SIMPLE EDITOR MAIN COMPONENT
+ * ============================
+ * 
+ * The main editor component that orchestrates the entire document editing experience.
+ * This component handles:
+ * 
+ * 1. **Editor State Management**
+ *    - TipTap editor instance with all extensions
+ *    - Document content and formatting state
+ *    - Undo/redo history
+ * 
+ * 2. **Responsive UI State**
+ *    - Mobile vs desktop behavior
+ *    - Toolbar context switching on mobile
+ *    - Window size and cursor position tracking
+ * 
+ * 3. **Feature State**
+ *    - AI panel visibility
+ *    - Page size settings
+ *    - Theme management
+ * 
+ * 4. **Layout Coordination**
+ *    - Toolbar positioning (fixed/floating)
+ *    - Content area sizing
+ *    - AI panel integration
+ */
 export function SimpleEditor() {
-  const isMobile = useIsMobile()
-  const windowSize = useWindowSize()
-  const [mobileView, setMobileView] = React.useState<
-    "main" | "highlighter" | "link"
-  >("main")
-  const toolbarRef = React.useRef<HTMLDivElement>(null)
-  const [pageSize, setPageSize] = React.useState("a4");
-  const [isAIOpen, setIsAIOpen] = React.useState(false);
+  // ===== RESPONSIVE BEHAVIOR HOOKS =====
+  const isMobile = useIsMobile()       // Detect mobile devices for UI adaptation
+  const windowSize = useWindowSize()   // Track window dimensions for layout calculations
   
+  // ===== MOBILE UI STATE =====
+  // Controls which toolbar is shown on mobile devices
+  const [mobileView, setMobileView] = React.useState<
+    "main" | "highlighter" | "link"  // main: default toolbar, others: context-specific
+  >("main")
+  
+  // ===== REFS FOR DOM MANIPULATION =====
+  const toolbarRef = React.useRef<HTMLDivElement>(null) // Reference for toolbar height calculations
+  
+  // ===== DOCUMENT SETTINGS STATE =====
+  const [pageSize, setPageSize] = React.useState("a4")        // Document page size (A4, Letter, etc.)
+  const [isAIOpen, setIsAIOpen] = React.useState(false)       // AI assistant panel visibility
+  
+  // ===== DEBUG LOGGING =====
+  // Track AI panel state changes for debugging
   React.useEffect(() => {
     console.log('isAIOpen state changed:', isAIOpen);
   }, [isAIOpen]);
 
+  // ===== TIPTAP EDITOR CONFIGURATION =====
   const editor = useEditor({
-    immediatelyRender: false,
-    shouldRerenderOnTransaction: false,
+    // Performance optimizations
+    immediatelyRender: false,        // Defer initial render for better performance
+    shouldRerenderOnTransaction: false, // Optimize re-rendering behavior
+    
+    // Editor DOM properties
     editorProps: {
       attributes: {
+        // Disable browser autocomplete features for cleaner editing
         autocomplete: "off",
-        autocorrect: "off",
+        autocorrect: "off", 
         autocapitalize: "off",
+        
+        // Accessibility label for screen readers
         "aria-label": "Main content area, start typing to enter text.",
+        
+        // CSS class for styling the editing area
         class: "simple-editor",
       },
     },
+    
+    // TipTap extensions that provide editor functionality
     extensions: [
+      // ===== CORE FUNCTIONALITY =====
       StarterKit.configure({
-        horizontalRule: false,
+        horizontalRule: false, // Disable default HR (we use custom)
         link: {
-          openOnClick: false,
-          enableClickSelection: true,
+          openOnClick: false,        // Links don't open automatically
+          enableClickSelection: true, // Allow clicking to select links
         },
       }),
-      HorizontalRule,
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
-      TaskList,
-      TaskItem.configure({ nested: true }),
-      Highlight.configure({ multicolor: true }),
-      Image,
-      Typography,
-      Superscript,
-      Subscript,
-      Selection,
-      ImageUploadNode.configure({
-        accept: "image/*",
-        maxSize: MAX_FILE_SIZE,
-        limit: 3,
-        upload: handleImageUpload,
-        onError: (error) => console.error("Upload failed:", error),
+      
+      // ===== CUSTOM NODES =====
+      HorizontalRule,              // Custom horizontal rule implementation
+      
+      // ===== TEXT FORMATTING =====
+      TextAlign.configure({ 
+        types: ["heading", "paragraph"] // Apply alignment to headings and paragraphs
       }),
+      Highlight.configure({ 
+        multicolor: true           // Enable multiple highlight colors
+      }),
+      Typography,                  // Smart typography (quotes, dashes, etc.)
+      Superscript,                 // X² formatting
+      Subscript,                   // X₂ formatting
+      
+      // ===== LISTS =====
+      TaskList,                    // Checkbox task lists
+      TaskItem.configure({ 
+        nested: true               // Allow nested task items
+      }),
+      
+      // ===== MEDIA =====
+      Image,                       // Basic image support
+      ImageUploadNode.configure({  // Enhanced image upload with drag & drop
+        accept: "image/*",         // Accept all image types
+        maxSize: MAX_FILE_SIZE,    // File size limit
+        limit: 3,                  // Maximum 3 images at once
+        upload: handleImageUpload, // Custom upload handler
+        onError: (error) => console.error("Upload failed:", error), // Error handling
+      }),
+      
+      // ===== EDITOR ENHANCEMENTS =====
+      Selection,                   // Selection management and events
     ],
-    content,
+    
+    // ===== INITIAL CONTENT =====
+    content, // Load default content from JSON file
   })
 
-  const isScrolling = useScrolling()
-  const rect = useCursorVisibility({
+  // ===== UI BEHAVIOR HOOKS =====
+  const isScrolling = useScrolling()   // Track scroll state for mobile toolbar hiding
+  const rect = useCursorVisibility({   // Track cursor position for mobile toolbar positioning
     editor,
-    overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
+    overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0, // Account for toolbar height
   })
 
+  // ===== RESPONSIVE BEHAVIOR EFFECTS =====
+  // Reset mobile toolbar view when switching to desktop
   React.useEffect(() => {
     if (!isMobile && mobileView !== "main") {
-      setMobileView("main")
+      setMobileView("main") // Always show main toolbar on desktop
     }
   }, [isMobile, mobileView])
 
+  // ===== RENDER =====
   return (
-    <div className="simple-editor-wrapper">
+    <div className="simple-editor-wrapper"> {/* Root container with flexbox layout */}
+      {/* Provide editor instance to all child components */}
       <EditorContext.Provider value={{ editor }}>
+        
+        {/* === DYNAMIC TOOLBAR === */}
         <Toolbar
-          ref={toolbarRef}
+          ref={toolbarRef} // Reference for height calculations
           style={{
+            // Hide toolbar while scrolling on mobile for better UX
             ...(isScrolling && isMobile
               ? { opacity: 0, transition: "opacity 0.1s ease-in-out" }
               : {}),
+            // Position toolbar above cursor on mobile
             ...(isMobile
               ? {
                   bottom: `calc(100% - ${windowSize.height - rect.y}px)`,
@@ -303,10 +481,12 @@ export function SimpleEditor() {
               : {}),
           }}
         >
+          {/* Conditional toolbar content based on mobile view state */}
           {mobileView === "main" ? (
+            // Desktop toolbar or mobile main toolbar
             <MainToolbarContent
-              onHighlighterClick={() => setMobileView("highlighter")}
-              onLinkClick={() => setMobileView("link")}
+              onHighlighterClick={() => setMobileView("highlighter")} // Navigate to color picker
+              onLinkClick={() => setMobileView("link")}               // Navigate to link creator
               isMobile={isMobile}
               pageSize={pageSize}
               onPageSizeChange={setPageSize}
@@ -314,25 +494,27 @@ export function SimpleEditor() {
               onAIToggle={() => setIsAIOpen(!isAIOpen)}
             />
           ) : (
+            // Mobile context-specific toolbar (highlighter or link)
             <MobileToolbarContent
               type={mobileView === "highlighter" ? "highlighter" : "link"}
-              onBack={() => setMobileView("main")}
+              onBack={() => setMobileView("main")} // Return to main toolbar
             />
           )}
         </Toolbar>
 
+        {/* === MAIN EDITOR CONTENT === */}
         <EditorContent
           editor={editor}
-          role="presentation"
-          className={`simple-editor-content page-size-${pageSize}`}
+          role="presentation" // Accessibility role
+          className={`simple-editor-content page-size-${pageSize}`} // Dynamic page size class
         />
 
-        {/* AI Side Panel */}
+        {/* === AI ASSISTANT PANEL === */}
         <AISidePanel
-          editor={editor}
-          isOpen={isAIOpen}
-          onToggle={() => setIsAIOpen(!isAIOpen)}
-          pageSize={pageSize}
+          editor={editor}           // Pass editor for content analysis
+          isOpen={isAIOpen}         // Panel visibility state
+          onToggle={() => setIsAIOpen(!isAIOpen)} // Toggle handler
+          pageSize={pageSize}       // Pass page size for layout coordination
         />
       </EditorContext.Provider>
     </div>
