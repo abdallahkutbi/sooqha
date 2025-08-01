@@ -100,7 +100,7 @@ import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button" // Hist
 // ===== TOOLBAR FEATURE COMPONENTS =====
 import { ExportButton } from "@/components/tiptap-ui/export-button/export-button" // Document export functionality
 import { PageSizeButton } from "@/components/tiptap-ui/page-size-button/page-size-button" // Page size controls (A4, Letter, etc.)
-import { AIToggleButton } from "@/components/tiptap-ui/ai-toggle-button/ai-toggle-button" // AI panel toggle
+// AI toggle button will be added here when ready
 import { FileExplorerButton, FileExplorerPanel } from "@/components/tiptap-ui/file-explorer-panel" // File explorer toggle and panel
 
 
@@ -121,7 +121,7 @@ import { useScrolling } from "@/hooks/use-scrolling" // Scroll state detection
 import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle" // Light/dark mode toggle
 
 // ===== AI INTEGRATION =====
-import { AISidePanel } from "@/components/tiptap-ui-primitive/ai-side-panel" // AI assistant panel
+import { AiPanelButton, AiPanel } from "@/components/tiptap-ui/ai-panel" // AI assistant panel
 
 // ===== UTILITY FUNCTIONS =====
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils" // Image upload handling
@@ -266,7 +266,7 @@ const MainToolbarContent = ({
 
       {/* === MEDIA INSERTION GROUP === */}
       <ToolbarGroup>
-        <ImageUploadButton text="Add" /> {/* Drag & drop image upload */}
+        <ImageUploadButton /> {/* Drag & drop image upload */}
       </ToolbarGroup>
 
       <Spacer /> {/* Push AI and theme controls to far right */}
@@ -276,7 +276,7 @@ const MainToolbarContent = ({
 
       {/* === AI & SETTINGS GROUP === */}
       <ToolbarGroup>
-        <AIToggleButton 
+        <AiPanelButton
           isOpen={isAIOpen}
           onToggle={onAIToggle}
         /> {/* AI writing assistant panel toggle */}
@@ -379,10 +379,7 @@ export function SimpleEditor() {
   const [isDragging, setIsDragging] = React.useState(false)   // Track drag state for z-index management
   
   // ===== DEBUG LOGGING =====
-  // Track AI panel state changes for debugging
-  React.useEffect(() => {
-    console.log('isAIOpen state changed:', isAIOpen);
-  }, [isAIOpen]);
+  // AI panel debugging will be added here when ready
 
   // Track file explorer panel state changes for debugging
   React.useEffect(() => {
@@ -563,12 +560,45 @@ export function SimpleEditor() {
         </div>
 
         {/* === AI ASSISTANT PANEL === */}
-        <AISidePanel
-          editor={editor}           // Pass editor for content analysis
-          isOpen={isAIOpen}         // Panel visibility state
-          onToggle={() => setIsAIOpen(!isAIOpen)} // Toggle handler
-          pageSize={pageSize}       // Pass page size for layout coordination
-        />
+        {/* === AI ASSISTANT PANEL === */}
+        <div 
+          className={`fixed right-0 transition-transform duration-300 ease-out ${
+            isAIOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+          style={{ 
+            top: 'var(--tt-toolbar-height)',
+            height: 'calc(100vh - var(--tt-toolbar-height))',
+            width: '320px',
+            zIndex: 40
+          }}
+        >
+          <AiPanel
+            editor={editor}           // Pass editor for content analysis
+            height="100%"             // Full height
+            width="100%"              // Fill container width
+            panelClassName="tt-ai-panel--attached" // Attach to right edge
+            onCommand={(command) => {
+              console.log('AI command executed:', command.name);
+              // You can add AI command logic here
+            }}
+            onInsert={(content) => {
+              console.log('Inserting AI content:', content);
+              // Content is automatically inserted by the hook
+            }}
+            onReplace={(content) => {
+              console.log('Replacing with AI content:', content);
+              // Content is automatically replaced by the hook
+            }}
+            onRetry={() => {
+              console.log('Retrying AI request');
+              // You can add retry logic here
+            }}
+            onPromptSubmit={(prompt) => {
+              console.log('AI prompt submitted:', prompt);
+              // You can add AI prompt handling here
+            }}
+          />
+        </div>
       </EditorContext.Provider>
     </div>
   )

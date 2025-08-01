@@ -12,7 +12,7 @@
    Layout Structure:
    - Toolbar (fixed top)
    - Writing area (centered document with border)
-   - AI side panel (slide-in from right)
+   - AI panel (will be added when ready)
 */
 
 /* Import Google Fonts for professional typography */
@@ -129,9 +129,12 @@ body,
   
   /* Center the document horizontally */
   margin: 0 auto;
+  margin-top: 75px; /* Add top margin to move document down */
   
   /* Fill available vertical space */
-  height: 100%;
+  height: 800px; /* Set a fixed height instead of 100% */
+  /* or */
+  max-height: 800px; /* Limit maximum height */
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -139,6 +142,37 @@ body,
   /* Subtle border to create document appearance */
   border: 1px solid var(--tt-border-color-tint); /* Consistent with design system */
   box-shadow: var(--tt-shadow-elevated-md);
+  margin-bottom: 200px; /* Add bottom margin to reduce height */
+  /* or */
+  padding-bottom: 200px; /* Add bottom padding */
+}
+
+/* =====================
+   PAGE SIZE VARIATIONS
+   ===================== */
+
+/* A4 Page Size (210mm × 297mm) */
+.simple-editor-content.page-size-a4 {
+  min-height: 297mm;  /* A4 height */
+  max-width: 210mm;   /* A4 width */
+}
+
+/* Letter Page Size (8.5" × 11") */
+.simple-editor-content.page-size-letter {
+  min-height: 11in;   /* Letter height */
+  max-width: 8.5in;   /* Letter width */
+}
+
+/* Legal Page Size (8.5" × 14") */
+.simple-editor-content.page-size-legal {
+  min-height: 14in;   /* Legal height */
+  max-width: 8.5in;   /* Legal width */
+}
+
+/* Custom Page Size (user-defined) */
+.simple-editor-content.page-size-custom {
+  min-height: 297mm;  /* Default to A4 height */
+  max-width: 210mm;   /* Default to A4 width */
 }
 
 /* =====================
