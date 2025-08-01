@@ -217,6 +217,7 @@
   overflow-x: hidden;
   min-height: 100;
   position: relative;
+  margin-top: -1.5rem; /* Move up by 8px */
 }
 
 .tt-file-explorer-tree {
@@ -252,8 +253,8 @@
   }
 
   &--selected {
-    background-color: var(--tt-brand-color-700);
-    color: var(--tt-brand-color-50);
+    background-color: var(--tt-gray-light-300);
+    color: var(--tt-gray-light-800);
 
     .dark & {
       background-color: var(--tt-brand-color-600);
@@ -261,7 +262,7 @@
     }
 
     &:hover {
-      background-color: var(--tt-brand-color-600);
+      background-color: var(--tt-gray-light-400);
       
       .dark & {
         background-color: var(--tt-brand-color-500);
