@@ -39,8 +39,8 @@
     border-bottom: none;
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
     height: 100%;
-    overflow-y: auto;
     position: relative;
+    /* Remove overflow-y: auto to let inner content area handle scrolling */
 
     .dark & {
       box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
@@ -265,7 +265,8 @@
 }
 
 .tt-file-explorer-tree {
-  padding: 0.25rem 0;
+  padding: 0; /* Remove padding to eliminate gap */
+  margin: 0;  /* Ensure no margin */
 }
 
 /* File Tree Items */
@@ -280,6 +281,12 @@
   min-height: 1.5rem;
   overflow: hidden; /* Prevent horizontal overflow */
   width: 100%; /* Ensure full width usage */
+
+  /* Remove any spacing on first item to eliminate gap */
+  &:first-child {
+    margin-top: 0;
+    padding-top: 0.25rem; /* Keep consistent padding */
+  }
 
   &:hover {
     background-color: var(--tt-gray-light-100);
@@ -428,7 +435,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   transition: color var(--tt-transition-duration-default) var(--tt-transition-easing-default);
-  max-width: 0; /* Prevents flex item from growing beyond container */
+  /* FIXED: Remove max-width: 0 that was hiding all text */
   min-width: 0; /* Allows flex item to shrink */
 
   .dark & {

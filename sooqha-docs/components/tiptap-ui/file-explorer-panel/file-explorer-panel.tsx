@@ -394,6 +394,10 @@ const FileExplorerContent: React.FC<{
       processed = limitVisibleNodes(processed, 10)
     }
     
+    // Debug: Log processed data to check file names
+    console.log('📁 File Explorer - processedData:', processed);
+    console.log('📁 File Explorer - first item name:', processed[0]?.name);
+    
     return processed
   }, [data, searchTerm, sortType])
 
