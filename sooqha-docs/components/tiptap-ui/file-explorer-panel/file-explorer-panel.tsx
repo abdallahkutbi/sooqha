@@ -1,5 +1,8 @@
 import * as React from "react"
 
+// --- Styles ---
+import "./file-explorer-panel.scss"
+
 // --- Hooks ---
 import { useFileExplorerPanel } from "./use-file-explorer-panel"
 import { useTiptapEditor } from "@/hooks/use-tiptap-editor"
