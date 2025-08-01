@@ -22,7 +22,7 @@
   box-shadow: var(--tt-shadow-elevated-md);
   transition: all var(--tt-transition-duration-default) var(--tt-transition-easing-default);
   height: 100%;
-  min-height: 300px;
+  min-height: 7600px;
   max-height: 100vh;
 
   /* Dark mode adjustments */
@@ -53,25 +53,6 @@
     min-height: 100vh;
   }
 
-  /* Side panel variant */
-  &.tt-file-explorer-panel--side {
-    height: auto;
-    min-height: 300px;
-    max-height: calc(100vh - 2rem);
-    border-radius: var(--tt-radius-md);
-    resize: vertical;
-    overflow: hidden;
-  }
-
-  /* Compact variant for smaller screens */
-  &.tt-file-explorer-panel--compact {
-    min-height: 200px;
-    max-height: 50vh;
-
-    .tt-file-explorer-header {
-      padding: 0.5rem;
-    }
-
     .tt-file-explorer-title {
       font-size: 0.7rem;
     }
@@ -85,7 +66,7 @@
       font-size: 0.7rem;
     }
   }
-}
+
 
 /* Header Section */
 .tt-file-explorer-header {
