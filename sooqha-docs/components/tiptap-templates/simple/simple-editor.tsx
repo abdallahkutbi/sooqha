@@ -389,10 +389,7 @@ export function SimpleEditor() {
     console.log('isFileExplorerOpen state changed:', isFileExplorerOpen);
   }, [isFileExplorerOpen]);
 
-  // Track drag state changes for debugging
-  React.useEffect(() => {
-    console.log('🎯 isDragging state changed:', isDragging, isDragging ? '(z-index: 100)' : '(z-index: 40)');
-  }, [isDragging]);
+
 
   // ===== TIPTAP EDITOR CONFIGURATION =====
   const editor = useEditor({
@@ -544,11 +541,8 @@ export function SimpleEditor() {
             top: 'var(--tt-toolbar-height)',
             height: 'calc(100vh - var(--tt-toolbar-height))',
             width: '320px',
-            zIndex: isDragging ? 100 : 40,  // Boost z-index during drag
-            // Visual debug indicator
-            boxShadow: isDragging ? '0 0 20px 5px rgba(255, 0, 0, 0.5)' : undefined
+            zIndex: isDragging ? 100 : 40  // Boost z-index during drag
           }}
-          data-debug={`isOpen: ${isFileExplorerOpen}, isDragging: ${isDragging}, z-index: ${isDragging ? '100' : '40'}`}
         >
           <FileExplorerPanel
             editor={editor}           // Pass editor for integration
@@ -563,14 +557,8 @@ export function SimpleEditor() {
               console.log('Moved file:', draggedId, 'to:', targetId);
               // You can add file move logic here
             }}
-            onDragStart={() => {
-              console.log('🚀 Drag started - boosting z-index to 100');
-              setIsDragging(true);
-            }}   // Boost z-index during drag
-            onDragEnd={() => {
-              console.log('🏁 Drag ended - resetting z-index to 40');
-              setIsDragging(false);
-            }}    // Reset z-index after drag
+            onDragStart={() => setIsDragging(true)}   // Boost z-index during drag
+            onDragEnd={() => setIsDragging(false)}    // Reset z-index after drag
           />
         </div>
 

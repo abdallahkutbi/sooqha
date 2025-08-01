@@ -122,6 +122,9 @@ body,
   max-width: 648px; /* ~8.5" at 96 DPI for A4-like width */
   width: 100%;
   
+  /* Space for fixed toolbar so content isn't hidden behind it */
+  padding-top: calc(var(--tt-toolbar-height) + 0.5rem);
+  
   /* Center the document horizontally */
   margin: 0 auto;
   
