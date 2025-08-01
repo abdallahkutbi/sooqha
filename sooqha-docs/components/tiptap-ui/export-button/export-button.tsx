@@ -73,7 +73,6 @@ export const ExportButton = React.forwardRef<
             ref={ref}
           >
             <ExportIcon className="tiptap-button-icon" />
-            Export
             <ChevronDownIcon className="tiptap-button-dropdown-small" />
           </Button>
         </DropdownMenuTrigger>

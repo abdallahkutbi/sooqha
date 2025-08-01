@@ -2,6 +2,13 @@
 
 ## 🎨 Design & UX Features
 
+
+page 2 whould have options such empty docs, and your recent docs. and a sidebar dashboard
+
+
+
+
+
 ### Core Layout & Interface
 - [ ] **Three-column responsive layout** (desktop: editor + AI panel + file context to the left, mobile: stacked)
 - [ ] **Comprehensive toolbar** with font style selection dropdown, font size, font color, line spacing, insert table, and more tools

@@ -118,6 +118,7 @@ body,
 /* Container for the writing area - creates document-like appearance */
 .simple-editor-content {
   /* Document width constraints for optimal reading */
+  padding: 0.5rem;
   max-width: 648px; /* ~8.5" at 96 DPI for A4-like width */
   width: 100%;
   
@@ -132,6 +133,7 @@ body,
   
   /* Subtle border to create document appearance */
   border: 1px solid var(--tt-border-color-tint); /* Consistent with design system */
+  box-shadow: var(--tt-shadow-elevated-md);
 }
 
 /* =====================
@@ -159,5 +161,12 @@ body,
     padding: 1rem 1.5rem 30vh;
   }
 }
+
+/* =====================
+   COMPONENT IMPORTS
+   ===================== */
+
+/* Import File Explorer Panel styles */
+@import "../../tiptap-ui/file-explorer-panel/file-explorer-panel.scss";
 
 

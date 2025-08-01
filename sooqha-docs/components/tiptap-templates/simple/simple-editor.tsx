@@ -101,6 +101,7 @@ import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button" // Hist
 import { ExportButton } from "@/components/tiptap-ui/export-button/export-button" // Document export functionality
 import { PageSizeButton } from "@/components/tiptap-ui/page-size-button/page-size-button" // Page size controls (A4, Letter, etc.)
 import { AIToggleButton } from "@/components/tiptap-ui/ai-toggle-button/ai-toggle-button" // AI panel toggle
+import { FileExplorerButton, FileExplorerPanel } from "@/components/tiptap-ui/file-explorer-panel" // File explorer toggle and panel
 
 
 // ===== ICON COMPONENTS =====
@@ -157,6 +158,8 @@ const MainToolbarContent = ({
   onPageSizeChange,    // Page size change handler
   isAIOpen,            // AI panel open state
   onAIToggle,          // AI panel toggle handler
+  isFileExplorerOpen,  // File explorer panel open state
+  onFileExplorerToggle, // File explorer panel toggle handler
 }: {
   onHighlighterClick: () => void
   onLinkClick: () => void
@@ -165,11 +168,17 @@ const MainToolbarContent = ({
   onPageSizeChange: (size: string) => void
   isAIOpen: boolean
   onAIToggle: () => void
+  isFileExplorerOpen: boolean
+  onFileExplorerToggle: () => void
 }) => {
   return (
     <>
       {/* === DOCUMENT ACTIONS GROUP === */}
       <ToolbarGroup>
+        <FileExplorerButton
+          isOpen={isFileExplorerOpen}
+          onToggle={onFileExplorerToggle}
+        /> {/* File explorer toggle */}
         <ExportButton /> {/* PDF, Word, etc. export functionality */}
       </ToolbarGroup>
       
@@ -366,12 +375,19 @@ export function SimpleEditor() {
   // ===== DOCUMENT SETTINGS STATE =====
   const [pageSize, setPageSize] = React.useState("a4")        // Document page size (A4, Letter, etc.)
   const [isAIOpen, setIsAIOpen] = React.useState(false)       // AI assistant panel visibility
+  const [isFileExplorerOpen, setIsFileExplorerOpen] = React.useState(false) // File explorer panel visibility
+  const [isDragging, setIsDragging] = React.useState(false)   // Track drag state for z-index management
   
   // ===== DEBUG LOGGING =====
   // Track AI panel state changes for debugging
   React.useEffect(() => {
     console.log('isAIOpen state changed:', isAIOpen);
   }, [isAIOpen]);
+
+  // Track file explorer panel state changes for debugging
+  React.useEffect(() => {
+    console.log('isFileExplorerOpen state changed:', isFileExplorerOpen);
+  }, [isFileExplorerOpen]);
 
   // ===== TIPTAP EDITOR CONFIGURATION =====
   const editor = useEditor({
@@ -451,6 +467,8 @@ export function SimpleEditor() {
     overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0, // Account for toolbar height
   })
 
+
+
   // ===== RESPONSIVE BEHAVIOR EFFECTS =====
   // Reset mobile toolbar view when switching to desktop
   React.useEffect(() => {
@@ -468,6 +486,7 @@ export function SimpleEditor() {
         {/* === DYNAMIC TOOLBAR === */}
         <Toolbar
           ref={toolbarRef} // Reference for height calculations
+          className={isDragging ? "pointer-events-none" : ""}  // Disable pointer events during drag
           style={{
             // Hide toolbar while scrolling on mobile for better UX
             ...(isScrolling && isMobile
@@ -492,6 +511,8 @@ export function SimpleEditor() {
               onPageSizeChange={setPageSize}
               isAIOpen={isAIOpen}
               onAIToggle={() => setIsAIOpen(!isAIOpen)}
+              isFileExplorerOpen={isFileExplorerOpen}
+              onFileExplorerToggle={() => setIsFileExplorerOpen(!isFileExplorerOpen)}
             />
           ) : (
             // Mobile context-specific toolbar (highlighter or link)
@@ -508,6 +529,37 @@ export function SimpleEditor() {
           role="presentation" // Accessibility role
           className={`simple-editor-content page-size-${pageSize}`} // Dynamic page size class
         />
+
+        {/* === FILE EXPLORER PANEL (OVERLAY) === */}
+        <div 
+          className={`fixed left-0 transition-transform duration-300 ease-out ${
+            isFileExplorerOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
+          style={{ 
+            top: 'var(--tt-toolbar-height)',
+            height: 'calc(100vh - var(--tt-toolbar-height))',
+            width: '320px',
+            zIndex: isDragging ? 100 : 40  // Boost z-index during drag
+          }}
+          data-debug={`isOpen: ${isFileExplorerOpen}, isDragging: ${isDragging}`}
+        >
+          <FileExplorerPanel
+            editor={editor}           // Pass editor for integration
+            height="100%"             // Full height
+            width="100%"              // Fill container width
+            panelClassName="tt-file-explorer-panel--attached" // Attach to left edge
+            onSelect={(node) => {
+              console.log('Selected file:', node);
+              // You can add file selection logic here
+            }}
+            onMove={(draggedId, targetId) => {
+              console.log('Moved file:', draggedId, 'to:', targetId);
+              // You can add file move logic here
+            }}
+            onDragStart={() => setIsDragging(true)}   // Boost z-index during drag
+            onDragEnd={() => setIsDragging(false)}    // Reset z-index after drag
+          />
+        </div>
 
         {/* === AI ASSISTANT PANEL === */}
         <AISidePanel
