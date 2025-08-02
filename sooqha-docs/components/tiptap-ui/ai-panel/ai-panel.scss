@@ -862,8 +862,15 @@
 }
 
 /* Focus styles for accessibility */
+.tt-ai-panel-tab:focus-visible,
+.tt-ai-panel-settings-button:focus-visible {
+  outline: 2px solid var(--tt-brand-color-500);
+  outline-offset: 2px;
+  border-radius: var(--tt-radius-xs);
+}
+
 .tt-ai-panel-agent:focus-visible {
   outline: 2px solid var(--tt-brand-color-500);
   outline-offset: -2px;
   border-radius: var(--tt-radius-sm);
-} 
+}
