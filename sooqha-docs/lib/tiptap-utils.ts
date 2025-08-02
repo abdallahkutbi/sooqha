@@ -52,7 +52,7 @@ export const formatShortcutKey = (
 /**
  * Parses a shortcut key string into an array of formatted key symbols
  * @param shortcutKeys - The string of shortcut keys (e.g., "ctrl-alt-shift")
- * @param delimiter - The delimiter used to split the keys (default: "-")
+ * @param delimiter - The delimiter used to split the keys (default: "+")
  * @param capitalize - Whether to capitalize the keys (default: true)
  * @returns Array of formatted shortcut key symbols
  */
