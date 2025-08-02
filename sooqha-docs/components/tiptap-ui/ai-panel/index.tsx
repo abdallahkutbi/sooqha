@@ -1,5 +1,5 @@
 export { AiPanel } from "./ai-panel"
-export type { AiPanelProps, AiMessage, AgentCommand, AiPanelVariant } from "./ai-panel"
+export type { AiPanelProps, AiMessage, AgentCommand } from "./ai-panel"
 export { AiPanelButton } from "./ai-panel-button"
 export type { AiPanelButtonProps } from "./ai-panel-button"
 export { useAiPanel } from "./use-ai-panel"

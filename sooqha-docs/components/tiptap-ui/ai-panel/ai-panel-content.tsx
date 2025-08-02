@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { ChatInput } from "./chat-input"
 import { AiMessageList } from "./ai-message-list"
 import { AgentList } from "./agent-list"
-import type { AiMessage, AgentCommand, AiPanelVariant } from "./ai-panel"
+import type { AiMessage, AgentCommand } from "./ai-panel"
 
 export interface AiPanelContentProps {
   messages: AiMessage[]
@@ -20,7 +20,7 @@ export interface AiPanelContentProps {
   panelClassName?: string
   height?: string
   width?: string
-  variant?: AiPanelVariant
+  variant?: "side" | "full-height" | "attached" | "compact"
   isProcessing?: boolean
   currentPrompt?: string
   onPromptSubmit?: (prompt: string) => void
@@ -42,9 +42,22 @@ export const AiPanelContent: React.FC<AiPanelContentProps> = ({
   currentPrompt,
   onPromptSubmit,
 }) => {
+  const [mounted, setMounted] = React.useState(false)
+  
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const [selectedMessageId, setSelectedMessageId] = React.useState<string>()
-  const [promptInput, setPromptInput] = React.useState(currentPrompt || "")
+  const [promptInput, setPromptInput] = React.useState("")
   const [activeTab, setActiveTab] = React.useState<"chat" | "agent">("chat")
+
+  // Initialize prompt input after mount to avoid hydration mismatch
+  React.useEffect(() => {
+    if (currentPrompt) {
+      setPromptInput(currentPrompt)
+    }
+  }, [currentPrompt])
 
   const chatTabRef = React.useRef<HTMLButtonElement>(null)
   const agentTabRef = React.useRef<HTMLButtonElement>(null)
@@ -65,6 +78,11 @@ export const AiPanelContent: React.FC<AiPanelContentProps> = ({
   const handleSelectMessage = (message: AiMessage) => {
     setSelectedMessageId(message.id)
     onSelectMessage?.(message)
+  }
+
+  // Don't render until mounted
+  if (!mounted) {
+    return <div className="tt-ai-panel" style={{ height, width, maxWidth: "100%" }} />
   }
 
   return (

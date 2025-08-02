@@ -110,26 +110,36 @@ export function useAiPanel(config: UseAiPanelConfig) {
     onPromptSubmit,
   } = config
 
-  // AI messages state management
-  const [aiMessages, setAiMessages] = React.useState<AiMessage[]>(() => {
-    try {
-      return Array.isArray(messages) ? messages : []
-    } catch (error) {
-      console.warn('Error initializing AI messages:', error)
-      return []
-    }
-  })
+  // AI messages state management with hydration-safe initialization
+  const [aiMessages, setAiMessages] = React.useState<AiMessage[]>([])
+  const [isInitialized, setIsInitialized] = React.useState(false)
 
-  // Update messages when prop changes
+  // Initialize messages after mount to prevent hydration mismatch
   React.useEffect(() => {
-    try {
-      if (messages && Array.isArray(messages) && messages.length !== aiMessages.length) {
-        setAiMessages(messages)
+    if (!isInitialized) {
+      try {
+        const safeMessages = Array.isArray(messages) ? messages : []
+        setAiMessages(safeMessages)
+        setIsInitialized(true)
+      } catch (error) {
+        console.warn('Error initializing AI messages:', error)
+        setIsInitialized(true)
       }
-    } catch (error) {
-      console.warn('Error updating AI messages:', error)
     }
-  }, [messages, aiMessages.length])
+  }, [messages, isInitialized])
+
+  // Update messages when prop changes (after initialization)
+  React.useEffect(() => {
+    if (isInitialized) {
+      try {
+        if (messages && Array.isArray(messages) && messages.length !== aiMessages.length) {
+          setAiMessages(messages)
+        }
+      } catch (error) {
+        console.warn('Error updating AI messages:', error)
+      }
+    }
+  }, [messages, aiMessages.length, isInitialized])
 
   // Panel visibility logic
   const isVisible = React.useMemo(() => {

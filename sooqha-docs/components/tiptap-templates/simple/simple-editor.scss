@@ -1,207 +1,343 @@
-/* =====================
-   SIMPLE EDITOR STYLES
-   =====================
-   
-   This file contains the core styling for the Simple Editor component.
-   The editor provides a document-style writing experience with:
-   - Professional typography (Inter UI + DM Sans content)
-   - Responsive design (mobile/desktop optimized)
-   - Theme support (light/dark modes)
-   - Document-style layout with bordered content area
-   
-   Layout Structure:
-   - Toolbar (fixed top)
-   - Writing area (centered document with border)
-   - AI panel (will be added when ready)
-*/
-
-/* Import Google Fonts for professional typography */
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
-
-
+/*
+ * SIMPLE EDITOR STYLES
+ * ====================
+ * 
+ * Professional document-style rich text editor styling.
+ * Features:
+ * - Document-style layout with bordered content area
+ * - Comprehensive formatting toolbar
+ * - AI-powered writing assistance with side panel
+ * - Responsive design (mobile/desktop optimized)
+ * - Theme support (light/dark modes)
+ * 
+ * Typography:
+ * - Uses standardized font variables for consistency
+ * - Primary font for UI elements
+ * - Secondary font for headings
+ * - Monospace font for code blocks
+ */
 
 /* =====================
-   GLOBAL VARIABLES & THEME
-   ===================== */
+     EDITOR CONTAINER
+     ===================== */
 
-body {
-  /* Toolbar height used for spacing calculations */
-  --tt-toolbar-height: 44px;
-  
-  /* Theme text color for light mode */
-  --tt-theme-text: var(--tt-gray-light-900);
-
-  /* Dark mode theme text color override */
-  .dark & {
-    --tt-theme-text: var(--tt-gray-dark-900);
-  }
-}
-
-/* =====================
-   BASE TYPOGRAPHY & LAYOUT
-   ===================== */
-
-body {
-  /* Inter font for UI elements (toolbar, buttons, etc.) */
-  font-family: "Inter", sans-serif;
-  
-  /* Dynamic text color that adapts to light/dark theme */
-  color: var(--tt-theme-text);
-  
-  /* Font rendering optimizations */
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-style: normal;
-  
-  /* Remove default padding */
-  padding: 0;
-}
-
-/* Ensure full-height layout for the app container */
-html,
-body,
-#root,
-#app {
-  height: 100%;
-  /* Background adapts to theme (white/black) */
-  background-color: var(--tt-bg-color);
-}
-
-/* =====================
-   CUSTOM SCROLLBAR STYLING
-   ===================== */
-
-/* WebKit browsers (Chrome, Safari, Edge) scrollbar width */
-::-webkit-scrollbar {
-  width: 0.25rem; /* Thin scrollbar for clean appearance */
-}
-
-/* Firefox scrollbar styling */
-* {
-  scrollbar-width: thin;
-  /* Scrollbar track transparent, thumb uses theme color */
-  scrollbar-color: var(--tt-scrollbar-color) transparent;
-}
-
-/* WebKit scrollbar thumb (the draggable part) */
-::-webkit-scrollbar-thumb {
-  background-color: var(--tt-scrollbar-color);
-  border-radius: 9999px; /* Fully rounded edges */
-}
-
-/* WebKit scrollbar track (background area) */
-::-webkit-scrollbar-track {
-  background: transparent; /* Invisible track */
-}
-
-/* =====================
-   EDITOR CONTENT TYPOGRAPHY
-   ===================== */
-
-/* TipTap editor content uses DM Sans for better readability */
-.tiptap.ProseMirror {
-  font-family: "DM Sans", sans-serif;
-}
-
-/* =====================
-   MAIN LAYOUT STRUCTURE
-   ===================== */
-
-/* Root wrapper for the entire Simple Editor component */
 .simple-editor-wrapper {
-  display: flex;
-  flex-direction: column; /* Vertical stack: toolbar → content */
-}
-
-/* =====================
-   DOCUMENT CONTENT AREA
-   ===================== */
-
-/* Container for the writing area - creates document-like appearance */
-.simple-editor-content {
-  /* Document width constraints for optimal reading */
-  padding: 0.5rem;
-  max-width: 648px; /* ~8.5" at 96 DPI for A4-like width */
-  width: 100%;
-  
-  /* Space for fixed toolbar so content isn't hidden behind it */
-  padding-top: calc(var(--tt-toolbar-height) + 0.5rem);
-  
-  /* Center the document horizontally */
-  margin: 0 auto;
-  margin-top: 75px; /* Add top margin to move document down */
-  
-  /* Fill available vertical space */
-  height: 800px; /* Set a fixed height instead of 100% */
-  /* or */
-  max-height: 800px; /* Limit maximum height */
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--tt-bg-color);
   display: flex;
   flex-direction: column;
+  font-family: var(--tt-font-family-primary);
+}
+
+/* =====================
+     TOOLBAR STYLING
+     ===================== */
+
+.tt-toolbar {
+  flex-shrink: 0;
+  margin-bottom: 1rem;
+  font-family: var(--tt-font-family-primary);
+}
+
+/* =====================
+     CONTENT AREA
+     ===================== */
+
+.page-layout-wrapper {
   flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 2rem;
+  font-family: var(--tt-font-family-primary);
   
-  /* Subtle border to create document appearance */
-  border: 1px solid var(--tt-border-color-tint); /* Consistent with design system */
-  box-shadow: var(--tt-shadow-elevated-md);
-  margin-bottom: 200px; /* Add bottom margin to reduce height */
-  /* or */
-  padding-bottom: 200px; /* Add bottom padding */
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+.simple-editor-content:first-child {
+  margin-top: 1rem;
 }
 
 /* =====================
-   PAGE SIZE VARIATIONS
-   ===================== */
+     MULTI-PAGE EDITOR
+     ===================== */
 
-/* A4 Page Size (210mm × 297mm) */
-.simple-editor-content.page-size-a4 {
-  min-height: 297mm;  /* A4 height */
-  max-width: 210mm;   /* A4 width */
-}
-
-/* Letter Page Size (8.5" × 11") */
-.simple-editor-content.page-size-letter {
-  min-height: 11in;   /* Letter height */
-  max-width: 8.5in;   /* Letter width */
-}
-
-/* Legal Page Size (8.5" × 14") */
-.simple-editor-content.page-size-legal {
-  min-height: 14in;   /* Legal height */
-  max-width: 8.5in;   /* Legal width */
-}
-
-/* Custom Page Size (user-defined) */
-.simple-editor-content.page-size-custom {
-  min-height: 297mm;  /* Default to A4 height */
-  max-width: 210mm;   /* Default to A4 width */
-}
-
-/* =====================
-   WRITING AREA STYLING
-   ===================== */
-
-/* The actual editable content area where users type */
-.simple-editor-content .tiptap.ProseMirror.simple-editor {
-  flex: 1; /* Take all available space in the content container */
+.multi-page-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-family: var(--tt-font-family-primary);
   
-  /* Generous padding for comfortable writing experience */
-  /* Top/sides: 3rem for document margins */
-  /* Bottom: 30vh to ensure comfortable scrolling space */
-  padding: 3rem 3rem 30vh;
-}
-
-/* =====================
-   MOBILE RESPONSIVE DESIGN
-   ===================== */
-
-/* Reduce padding on mobile devices for more writing space */
-@media screen and (max-width: 480px) {
-  .simple-editor-content .tiptap.ProseMirror.simple-editor {
-    /* Smaller margins on mobile while maintaining readability */
-    padding: 1rem 1.5rem 30vh;
+  .page-container {
+    position: relative;
+    margin: 0 auto;
+    
+    .page-content {
+      position: relative;
+      overflow: hidden;
+      
+      .page-html-content {
+        min-height: 100%;
+        box-sizing: border-box;
+        font-family: var(--tt-font-family-primary);
+      }
+      
+      &[data-overflow="true"] {
+        min-height: 100%;
+        box-sizing: border-box;
+      }
+    }
+    
+    .page-number {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      font-size: var(--tt-font-size-sm);
+      color: var(--tt-text-muted);
+      font-family: var(--tt-font-family-secondary);
+      font-weight: var(--tt-font-weight-medium);
+    }
+    
+    .add-page-button {
+      position: absolute;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0.5rem 1rem;
+      background: var(--tt-brand-color-500);
+      color: white;
+      border: none;
+      border-radius: var(--tt-radius-md);
+      cursor: pointer;
+      font-family: var(--tt-font-family-primary);
+      font-weight: var(--tt-font-weight-medium);
+      transition: all 150ms ease;
+      
+      &:hover {
+        background: var(--tt-brand-color-600);
+      }
+      
+      .dark & {
+        background: var(--tt-brand-color-400);
+        
+        &:hover {
+          background: var(--tt-brand-color-500);
+        }
+      }
+    }
+    
+    &.last-page {
+      .add-page-button {
+        display: block;
+      }
+    }
   }
 }
 
 /* =====================
-   COMPONENT IMPORTS
-   ===================== */
+     PAGE BREAK ENHANCEMENTS
+     ===================== */
+
+.ProseMirror [data-type="page-break"] {
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0;
+  background: linear-gradient(135deg, var(--tt-gray-light-50) 0%, var(--tt-gray-light-100) 100%);
+  border-radius: var(--tt-radius-md);
+  position: relative;
+  font-family: var(--tt-font-family-secondary);
+  font-weight: var(--tt-font-weight-medium);
+  
+  .dark & {
+    background: linear-gradient(135deg, var(--tt-gray-dark-100) 0%, var(--tt-gray-dark-200) 100%);
+  }
+  
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--tt-gray-light-300) 0px,
+      var(--tt-gray-light-300) 8px,
+      transparent 8px,
+      transparent 16px
+    );
+    transform: translateY(-50%);
+    
+    .dark & {
+      background: repeating-linear-gradient(
+        90deg,
+        var(--tt-gray-dark-400) 0px,
+        var(--tt-gray-dark-400) 8px,
+        transparent 8px,
+        transparent 16px
+      );
+    }
+  }
+  
+  &::after {
+    content: "Page Break";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--tt-bg-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--tt-radius-sm);
+    font-size: var(--tt-font-size-sm);
+    color: var(--tt-text-muted);
+    border: 1px solid var(--tt-border-color);
+    box-shadow: var(--tt-shadow-sm);
+    
+    .dark & {
+      background: var(--tt-bg-color);
+      border-color: var(--tt-border-color);
+    }
+  }
+  
+  &:hover {
+    background: linear-gradient(135deg, var(--tt-gray-light-100) 0%, var(--tt-gray-light-200) 100%);
+    
+    .dark & {
+      background: linear-gradient(135deg, var(--tt-gray-dark-200) 0%, var(--tt-gray-dark-300) 100%);
+    }
+  }
+  
+  &:focus {
+    outline: 2px solid var(--tt-brand-color-500);
+    outline-offset: 2px;
+    
+    .dark & {
+      outline-color: var(--tt-brand-color-400);
+    }
+  }
+}
+
+.page-separator {
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--tt-gray-light-300) 0px,
+    var(--tt-gray-light-300) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  margin: 2rem 0;
+  display: block;
+  
+  .dark & {
+    background: repeating-linear-gradient(
+      90deg,
+      var(--tt-gray-dark-400) 0px,
+      var(--tt-gray-dark-400) 8px,
+      transparent 8px,
+      transparent 16px
+    );
+  }
+  
+  &::before,
+  &::after {
+    display: none;
+  }
+}
+
+/* =====================
+     STATUS BAR STYLING
+     ===================== */
+
+.status-bar {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--tt-border-color);
+  border-radius: var(--tt-radius-md);
+  padding: 0.5rem 0.75rem;
+  font-size: var(--tt-font-size-sm);
+  color: var(--tt-text-muted);
+  font-family: var(--tt-font-family-primary);
+  font-weight: var(--tt-font-weight-medium);
+  box-shadow: var(--tt-shadow-md);
+  transition: all 150ms ease;
+  z-index: 100;
+  
+  .dark & {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: var(--tt-border-color);
+  }
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--tt-shadow-lg);
+    
+    .dark & {
+      background: rgba(0, 0, 0, 0.9);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    bottom: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+    font-size: var(--tt-font-size-xs);
+    padding: 0.375rem 0.5rem;
+  }
+}
+
+/* =====================
+     ANIMATIONS
+     ===================== */
+
+@keyframes pageBreakSlideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+    height: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+    height: 4rem;
+  }
+}
+
+.page-break-new {
+  animation: pageBreakSlideIn 300ms ease-out;
+}
+
+/* =====================
+     RESPONSIVE DESIGN
+     ===================== */
+
+@media (max-width: 768px) {
+  .simple-editor-wrapper {
+    height: 100vh;
+  }
+  
+  .page-layout-wrapper {
+    padding: 1rem;
+  }
+  
+  .multi-page-editor {
+    gap: 1rem;
+  }
+  
+  .ProseMirror [data-type="page-break"] {
+    height: 3rem;
+    
+    &::after {
+      font-size: var(--tt-font-size-xs);
+      padding: 0.125rem 0.5rem;
+    }
+  }
+}
 

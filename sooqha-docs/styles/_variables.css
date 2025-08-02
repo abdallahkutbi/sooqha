@@ -1,0 +1,364 @@
+:root {
+  /****************** 
+  Basics
+  ******************/
+
+  overflow-wrap: break-word;
+  text-size-adjust: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /****************** 
+  Colors variables
+  ******************/
+
+  /* Gray alpha (light mode) - Blue-gray undertones */
+  --tt-gray-light-a-50: rgba(74, 92, 106, 0.04);
+  --tt-gray-light-a-100: rgba(74, 92, 106, 0.06);
+  --tt-gray-light-a-200: rgba(74, 92, 106, 0.1);
+  --tt-gray-light-a-300: rgba(74, 92, 106, 0.18);
+  --tt-gray-light-a-400: rgba(74, 92, 106, 0.35);
+  --tt-gray-light-a-500: rgba(74, 92, 106, 0.55);
+  --tt-gray-light-a-600: rgba(74, 92, 106, 0.70);
+  --tt-gray-light-a-700: rgba(74, 92, 106, 0.80);
+  --tt-gray-light-a-800: rgba(74, 92, 106, 0.90);
+  --tt-gray-light-a-900: rgba(74, 92, 106, 0.95);
+
+  /* Gray (light mode) - Blue-gray undertones */
+  --tt-gray-light-50: rgba(252, 253, 253, 1);   /* Very light blue-gray */
+  --tt-gray-light-100: rgba(247, 249, 250, 1);  /* Light blue-gray */
+  --tt-gray-light-200: rgba(235, 239, 241, 1);  /* Lighter blue-gray */
+  --tt-gray-light-300: rgba(207, 216, 220, 1);  /* Light-medium blue-gray */
+  --tt-gray-light-400: rgba(155, 171, 178, 1);  /* Medium blue-gray */
+  --tt-gray-light-500: rgba(107, 126, 135, 1);  /* Medium blue-gray */
+  --tt-gray-light-600: rgba(74, 92, 106, 1);    /* Brand-aligned blue-gray */
+  --tt-gray-light-700: rgba(55, 70, 81, 1);     /* Medium-dark blue-gray */
+  --tt-gray-light-800: rgba(37, 53, 63, 1);     /* Dark blue-gray */
+  --tt-gray-light-900: rgba(25, 39, 47, 1);     /* Very dark blue-gray */
+
+  /* Gray alpha (dark mode) - Blue-gray undertones */
+  --tt-gray-dark-a-50: rgba(204, 208, 207, 0.05);
+  --tt-gray-dark-a-100: rgba(204, 208, 207, 0.08);
+  --tt-gray-dark-a-200: rgba(204, 208, 207, 0.12);
+  --tt-gray-dark-a-300: rgba(204, 208, 207, 0.20);
+  --tt-gray-dark-a-400: rgba(204, 208, 207, 0.35);
+  --tt-gray-dark-a-500: rgba(204, 208, 207, 0.50);
+  --tt-gray-dark-a-600: rgba(204, 208, 207, 0.65);
+  --tt-gray-dark-a-700: rgba(204, 208, 207, 0.75);
+  --tt-gray-dark-a-800: rgba(204, 208, 207, 0.88);
+  --tt-gray-dark-a-900: rgba(204, 208, 207, 0.96);
+
+  /* Gray (dark mode) - Blue-gray undertones */
+  --tt-gray-dark-50: rgba(6, 20, 27, 1);      /* Very dark blue-black */
+  --tt-gray-dark-100: rgba(17, 33, 45, 1);    /* Dark blue-gray */
+  --tt-gray-dark-200: rgba(37, 55, 69, 1);    /* Medium-dark blue-gray */
+  --tt-gray-dark-300: rgba(74, 92, 106, 1);   /* Brand-aligned blue-gray */
+  --tt-gray-dark-400: rgba(103, 120, 126, 1); /* Medium blue-gray */
+  --tt-gray-dark-500: rgba(126, 142, 148, 1); /* Medium-light blue-gray */
+  --tt-gray-dark-600: rgba(155, 168, 171, 1); /* Light blue-gray */
+  --tt-gray-dark-700: rgba(184, 193, 195, 1); /* Lighter blue-gray */
+  --tt-gray-dark-800: rgba(212, 218, 219, 1); /* Very light blue-gray */
+  --tt-gray-dark-900: rgba(242, 245, 245, 1); /* Near white blue-gray */
+
+  /* Brand colors - New Blue-Gray Identity */
+  --tt-brand-color-50: #CCD0CF;   /* Very light gray */
+  --tt-brand-color-100: #B8C1C3;  /* Interpolated lighter */
+  --tt-brand-color-200: #9BA8AB;  /* Light blue-gray */
+  --tt-brand-color-300: #7E8E93;  /* Interpolated medium-light */
+  --tt-brand-color-400: #67787E;  /* Interpolated medium */
+  --tt-brand-color-500: #4A5C6A;  /* Medium blue-gray (main brand) */
+  --tt-brand-color-600: #3C4A56;  /* Interpolated medium-dark */
+  --tt-brand-color-700: #253745;  /* Medium-dark blue-gray */
+  --tt-brand-color-800: #11212D;  /* Dark navy blue-gray */
+  --tt-brand-color-900: #0A1520;  /* Interpolated very dark */
+  --tt-brand-color-950: #06141B;  /* Very dark blue-black (darkest) */
+
+  /* Old Purple Brand Colors (commented out)
+  --tt-brand-color-50: rgba(239, 238, 255, 1);
+  --tt-brand-color-100: rgba(222, 219, 255, 1);
+  --tt-brand-color-200: rgba(195, 189, 255, 1);
+  --tt-brand-color-300: rgba(157, 138, 255, 1);
+  --tt-brand-color-400: rgba(122, 82, 255, 1);
+  --tt-brand-color-500: rgba(98, 41, 255, 1);
+  --tt-brand-color-600: rgba(84, 0, 229, 1);
+  --tt-brand-color-700: rgba(75, 0, 204, 1);
+  --tt-brand-color-800: rgba(56, 0, 153, 1);
+  --tt-brand-color-900: rgba(43, 25, 102, 1);
+  --tt-brand-color-950: hsla(257, 100%, 9%, 1);
+  */
+
+  /* Green - Teal-Green for Blue-Gray Harmony */
+  --tt-color-green-inc-5: hsla(165, 85%, 97%, 1);
+  --tt-color-green-inc-4: hsla(165, 85%, 92%, 1);
+  --tt-color-green-inc-3: hsla(167, 85%, 86%, 1);
+  --tt-color-green-inc-2: hsla(169, 83%, 78%, 1);
+  --tt-color-green-inc-1: hsla(173, 84%, 70%, 1);
+  --tt-color-green-base: hsla(178, 84%, 50%, 1);
+  --tt-color-green-dec-1: hsla(178, 82%, 41%, 1);
+  --tt-color-green-dec-2: hsla(177, 83%, 32%, 1);
+  --tt-color-green-dec-3: hsla(177, 85%, 24%, 1);
+  --tt-color-green-dec-4: hsla(175, 85%, 16%, 1);
+  --tt-color-green-dec-5: hsla(173, 85%, 9%, 1);
+
+  /* Yellow - Amber-Gold for Blue-Gray Harmony */
+  --tt-color-yellow-inc-5: hsla(45, 95%, 97%, 1);
+  --tt-color-yellow-inc-4: hsla(45, 95%, 91%, 1);
+  --tt-color-yellow-inc-3: hsla(45, 95%, 84%, 1);
+  --tt-color-yellow-inc-2: hsla(45, 95%, 77%, 1);
+  --tt-color-yellow-inc-1: hsla(45, 95%, 68%, 1);
+  --tt-color-yellow-base: hsla(42, 95%, 50%, 1);
+  --tt-color-yellow-dec-1: hsla(42, 95%, 41%, 1);
+  --tt-color-yellow-dec-2: hsla(42, 95%, 32%, 1);
+  --tt-color-yellow-dec-3: hsla(42, 95%, 24%, 1);
+  --tt-color-yellow-dec-4: hsla(41, 95%, 16%, 1);
+  --tt-color-yellow-dec-5: hsla(40, 95%, 9%, 1);
+
+  /* Red - Cool-Red for Blue-Gray Harmony */
+  --tt-color-red-inc-5: hsla(355, 90%, 96%, 1);
+  --tt-color-red-inc-4: hsla(355, 90%, 88%, 1);
+  --tt-color-red-inc-3: hsla(354, 90%, 80%, 1);
+  --tt-color-red-inc-2: hsla(353, 90%, 73%, 1);
+  --tt-color-red-inc-1: hsla(351, 90%, 64%, 1);
+  --tt-color-red-base: hsla(351, 90%, 54%, 1);
+  --tt-color-red-dec-1: hsla(351, 90%, 41%, 1);
+  --tt-color-red-dec-2: hsla(349, 90%, 32%, 1);
+  --tt-color-red-dec-3: hsla(348, 90%, 24%, 1);
+  --tt-color-red-dec-4: hsla(347, 90%, 16%, 1);
+  --tt-color-red-dec-5: hsla(345, 90%, 9%, 1);
+
+  /* Basic colors */
+  --white: rgba(255, 255, 255, 1);
+  --black: rgba(14, 14, 17, 1);
+  --transparent: rgba(255, 255, 255, 0);
+
+  /****************** 
+  Shadow variables
+  ******************/
+
+  /* Shadows Light */
+  --tt-shadow-elevated-md:
+    0px 16px 48px 0px rgba(17, 24, 39, 0.04),
+    0px 12px 24px 0px rgba(17, 24, 39, 0.04),
+    0px 6px 8px 0px rgba(17, 24, 39, 0.02),
+    0px 2px 3px 0px rgba(17, 24, 39, 0.02);
+
+  /************************************************** 
+       Radius variables 
+    **************************************************/
+
+  --tt-radius-xxs: 0.125rem; /* 2px */
+  --tt-radius-xs: 0.25rem; /* 4px */
+  --tt-radius-sm: 0.375rem; /* 6px */
+  --tt-radius-md: 0.5rem; /* 8px */
+  --tt-radius-lg: 0.75rem; /* 12px */
+  --tt-radius-xl: 1rem; /* 16px */
+
+  /************************************************** 
+       Transition variables 
+    **************************************************/
+
+  --tt-transition-duration-short: 0.1s;
+  --tt-transition-duration-default: 0.2s;
+  --tt-transition-duration-long: 0.64s;
+  --tt-transition-easing-default: cubic-bezier(0.46, 0.03, 0.52, 0.96);
+  --tt-transition-easing-cubic: cubic-bezier(0.65, 0.05, 0.36, 1);
+  --tt-transition-easing-quart: cubic-bezier(0.77, 0, 0.18, 1);
+  --tt-transition-easing-circ: cubic-bezier(0.79, 0.14, 0.15, 0.86);
+  --tt-transition-easing-back: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+
+  /****************** 
+  Contrast variables
+  ******************/
+
+  --tt-accent-contrast: 8%;
+  --tt-destructive-contrast: 8%;
+  --tt-foreground-contrast: 8%;
+
+  &,
+  *,
+  ::before,
+  ::after {
+    box-sizing: border-box;
+    transition: none var(--tt-transition-duration-default)
+      var(--tt-transition-easing-default);
+  }
+}
+
+:root {
+  /************************************************** 
+      Global colors 
+  **************************************************/
+
+  /* Global colors - Light mode */
+  --tt-bg-color: var(--white);
+  --tt-border-color: var(--tt-gray-light-500);        /* Main border - consistent with AI panel */
+  --tt-border-color-tint: var(--tt-gray-light-400);   /* Subtle border - slightly lighter */
+  --tt-sidebar-bg-color: var(--tt-gray-light-100);
+  --tt-scrollbar-color: var(--tt-gray-light-a-200);
+  --tt-cursor-color: var(--tt-brand-color-500);
+  --tt-selection-color: rgba(74, 92, 106, 0.2); /* Updated for new blue-gray brand */
+  --tt-card-bg-color: var(--white);
+  --tt-card-border-color: var(--tt-border-color-tint);
+}
+
+/* Global colors - Dark mode */
+.dark {
+  --tt-bg-color: var(--black);
+  --tt-border-color: var(--tt-gray-dark-a-200);
+  --tt-border-color-tint: var(--tt-gray-dark-a-100);
+  --tt-sidebar-bg-color: var(--tt-gray-dark-100);
+  --tt-scrollbar-color: var(--tt-gray-dark-a-200);
+  --tt-cursor-color: var(--tt-brand-color-400);
+  --tt-selection-color: rgba(155, 168, 171, 0.4); /* Lighter dark grey for better visibility in dark mode */
+  --tt-card-bg-color: var(--tt-gray-dark-50);
+  --tt-card-border-color: var(--tt-gray-dark-a-50);
+
+  --tt-shadow-elevated-md:
+    0px 16px 48px 0px rgba(0, 0, 0, 0.5), 0px 12px 24px 0px rgba(0, 0, 0, 0.24),
+    0px 6px 8px 0px rgba(0, 0, 0, 0.22), 0px 2px 3px 0px rgba(0, 0, 0, 0.12);
+}
+
+/* ===== FONT VARIABLES ===== */
+/* Standardized font families for consistent typography across the application */
+
+/* Primary font for UI elements and general text */
+/* Secondary font for headings and emphasis */
+/* Monospace font for code blocks and technical content */
+/* Fallback fonts for better cross-platform compatibility */
+
+/* CSS Custom Properties for font families */
+:root {
+  --tt-font-family-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --tt-font-family-secondary: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --tt-font-family-mono: "JetBrains Mono NL", "Fira Code", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+  --tt-font-family-fallback: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ===== FONT WEIGHTS ===== */
+/* Standardized font weights for consistent typography */
+
+/* CSS Custom Properties for font weights */
+:root {
+  --tt-font-weight-light: 300;
+  --tt-font-weight-normal: 400;
+  --tt-font-weight-medium: 500;
+  --tt-font-weight-semibold: 600;
+  --tt-font-weight-bold: 700;
+  --tt-font-weight-extrabold: 800;
+}
+
+/* ===== FONT SIZES ===== */
+/* Standardized font sizes for consistent typography */
+
+/* CSS Custom Properties for font sizes */
+:root {
+  --tt-font-size-xs: 0.75rem;    /* 12px */
+  --tt-font-size-sm: 0.875rem;   /* 14px */
+  --tt-font-size-base: 1rem;     /* 16px */
+  --tt-font-size-lg: 1.125rem;   /* 18px */
+  --tt-font-size-xl: 1.25rem;    /* 20px */
+  --tt-font-size-2xl: 1.5rem;    /* 24px */
+  --tt-font-size-3xl: 1.875rem;  /* 30px */
+  --tt-font-size-4xl: 2.25rem;   /* 36px */
+}
+
+/* ===== LINE HEIGHTS ===== */
+/* Standardized line heights for consistent typography */
+
+/* CSS Custom Properties for line heights */
+:root {
+  --tt-line-height-tight: 1.25;
+  --tt-line-height-normal: 1.5;
+  --tt-line-height-relaxed: 1.75;
+}
+
+/* Text colors - Updated for Blue-Gray Brand */
+:root {
+  --tt-color-text-gray: hsl(200, 8%, 46%);
+  --tt-color-text-brown: hsl(25, 28%, 47%);
+  --tt-color-text-orange: hsl(35, 85%, 45%);
+  --tt-color-text-yellow: hsl(42, 88%, 49%);
+  --tt-color-text-green: hsl(178, 28%, 39%);
+  --tt-color-text-blue: hsl(200, 50%, 43%);
+  --tt-color-text-purple: hsl(240, 28%, 54%);
+  --tt-color-text-pink: hsl(320, 45%, 53%);
+  --tt-color-text-red: hsl(355, 58%, 55%);
+
+  --tt-color-text-gray-contrast: hsla(200, 20%, 26%, 0.15);
+  --tt-color-text-brown-contrast: hsla(25, 40%, 69%, 0.35);
+  --tt-color-text-orange-contrast: hsla(35, 70%, 55%, 0.27);
+  --tt-color-text-yellow-contrast: hsla(42, 80%, 59%, 0.39);
+  --tt-color-text-green-contrast: hsla(178, 26%, 60%, 0.27);
+  --tt-color-text-blue-contrast: hsla(200, 50%, 59%, 0.27);
+  --tt-color-text-purple-contrast: hsla(240, 34%, 64%, 0.27);
+  --tt-color-text-pink-contrast: hsla(320, 57%, 71%, 0.27);
+  --tt-color-text-red-contrast: hsla(355, 75%, 79%, 0.4);
+}
+
+.dark {
+  --tt-color-text-gray: hsl(200, 5%, 61%);
+  --tt-color-text-brown: hsl(25, 32%, 58%);
+  --tt-color-text-orange: hsl(35, 50%, 53%);
+  --tt-color-text-yellow: hsl(42, 51%, 55%);
+  --tt-color-text-green: hsl(178, 29%, 47%);
+  --tt-color-text-blue: hsl(200, 60%, 52%);
+  --tt-color-text-purple: hsl(240, 52%, 62%);
+  --tt-color-text-pink: hsl(320, 54%, 58%);
+  --tt-color-text-red: hsl(355, 66%, 60%);
+
+  --tt-color-text-gray-contrast: hsla(200, 15%, 100%, 0.09);
+  --tt-color-text-brown-contrast: hsla(25, 42%, 50%, 0.25);
+  --tt-color-text-orange-contrast: hsla(35, 79%, 53%, 0.2);
+  --tt-color-text-yellow-contrast: hsla(42, 46%, 47%, 0.2);
+  --tt-color-text-green-contrast: hsla(178, 52%, 39%, 0.2);
+  --tt-color-text-blue-contrast: hsla(200, 51%, 43%, 0.2);
+  --tt-color-text-purple-contrast: hsla(240, 53%, 60%, 0.18);
+  --tt-color-text-pink-contrast: hsla(320, 64%, 58%, 0.22);
+  --tt-color-text-red-contrast: hsla(355, 64%, 60%, 0.25);
+}
+
+/* Highlight colors - Updated for Blue-Gray Brand */
+:root {
+  --tt-color-highlight-yellow: #fef8e1;
+  --tt-color-highlight-green: #e0f7f0;
+  --tt-color-highlight-blue: #e8f4f8;
+  --tt-color-highlight-purple: #f0f0f8;
+  --tt-color-highlight-red: #fef0f0;
+  --tt-color-highlight-gray: #f8f9fa;
+  --tt-color-highlight-brown: #f5f2f0;
+  --tt-color-highlight-orange: #fef5e8;
+  --tt-color-highlight-pink: #fcf1f5;
+
+  --tt-color-highlight-yellow-contrast: #f4e04a;
+  --tt-color-highlight-green-contrast: #7dd3c0;
+  --tt-color-highlight-blue-contrast: #9ba8ab;
+  --tt-color-highlight-purple-contrast: #d0d0e0;
+  --tt-color-highlight-red-contrast: #ffb3ba;
+  --tt-color-highlight-gray-contrast: rgba(74, 92, 106, 0.15);
+  --tt-color-highlight-brown-contrast: rgba(139, 100, 78, 0.35);
+  --tt-color-highlight-orange-contrast: rgba(230, 126, 34, 0.27);
+  --tt-color-highlight-pink-contrast: rgba(231, 106, 147, 0.27);
+}
+
+.dark {
+  --tt-color-highlight-yellow: #4a4426;
+  --tt-color-highlight-green: #2d5249;
+  --tt-color-highlight-blue: #374851;
+  --tt-color-highlight-purple: #3d3d4f;
+  --tt-color-highlight-red: #4f2f32;
+  --tt-color-highlight-gray: #2f3338;
+  --tt-color-highlight-brown: #3f332d;
+  --tt-color-highlight-orange: #4a3626;
+  --tt-color-highlight-pink: #3f2d35;
+
+  --tt-color-highlight-yellow-contrast: #3d3a1f;
+  --tt-color-highlight-green-contrast: #28453c;
+  --tt-color-highlight-blue-contrast: #2f3c43;
+  --tt-color-highlight-purple-contrast: #343442;
+  --tt-color-highlight-red-contrast: #41292b;
+  --tt-color-highlight-gray-contrast: rgba(204, 208, 207, 0.094);
+  --tt-color-highlight-brown-contrast: rgba(139, 100, 78, 0.25);
+  --tt-color-highlight-orange-contrast: rgba(230, 126, 34, 0.2);
+  --tt-color-highlight-pink-contrast: rgba(231, 106, 147, 0.22);
+}

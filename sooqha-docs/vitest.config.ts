@@ -12,9 +12,7 @@ export default defineConfig({
       '@lib': path.resolve(__dirname, './lib'),
     },
   },
-  css: {
-    postcss: null,
-  },
+
   test: {
     environment: 'jsdom',
     setupFiles: './vitest.setup.ts',

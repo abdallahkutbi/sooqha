@@ -2,13 +2,14 @@
 
 import * as React from "react"
 import { useTiptapEditor } from "@/hooks/use-tiptap-editor"
-import { Button } from "@/components/tiptap-ui-primitive/button"
+import { Button, ButtonGroup } from "@/components/tiptap-ui-primitive/button"
 import { 
   DropdownMenu, 
   DropdownMenuTrigger, 
   DropdownMenuContent, 
   DropdownMenuItem 
-} from "@/components/tiptap-ui-primitive/dropdown-menu"
+} from "@/components/tiptap-ui-primitive/dropdown-menu/index"
+import { Card, CardBody } from "@/components/tiptap-ui-primitive/card"
 import {
   ChevronDown as ChevronDownIcon,
   AlignJustify as SpacingIcon,
@@ -96,30 +97,64 @@ export function SpacingDropdown({ portal = false, className }: SpacingDropdownPr
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         <Button
+          type="button"
           data-style="ghost"
+          role="button"
+          tabIndex={-1}
+          aria-label="Line spacing"
+          tooltip="Line spacing"
           className={className}
-          title="Line spacing"
         >
           <SpacingIcon className="tiptap-button-icon" />
-          <ChevronDownIcon className="tiptap-button-icon" />
+          <span className="tiptap-button-text">{currentSpacing}</span>
+          <ChevronDownIcon className="tiptap-button-dropdown-small" />
         </Button>
       </DropdownMenuTrigger>
       
-      <DropdownMenuContent portal={portal} className="spacing-dropdown-content">
-        {SPACING_OPTIONS.map((spacing) => (
-          <DropdownMenuItem 
-            key={spacing.value}
-            onClick={() => setSpacing(spacing.value)}
-          >
-            <span className="spacing-option">
-              {spacing.label}
-            </span>
-          </DropdownMenuItem>
-        ))}
-        
-        <DropdownMenuItem onClick={unsetSpacing}>
-          <span className="spacing-option">Default</span>
-        </DropdownMenuItem>
+      <DropdownMenuContent portal={portal} style={{ 
+        width: "fit-content",
+        background: "transparent",
+        border: "none",
+        boxShadow: "none",
+        padding: "0"
+      }}>
+        <Card style={{ width: "fit-content" }}>
+          <CardBody>
+            <ButtonGroup>
+              {SPACING_OPTIONS.map((spacing) => (
+                <DropdownMenuItem key={spacing.value} asChild>
+                  <Button
+                    type="button"
+                    data-style="ghost"
+                    onClick={() => setSpacing(spacing.value)}
+                    data-active={currentSpacing === spacing.value}
+                    style={{
+                      textAlign: "center",
+                      justifyContent: "center",
+                      minWidth: "100px"
+                    }}
+                  >
+                    <span>{spacing.label}</span>
+                  </Button>
+                </DropdownMenuItem>
+              ))}
+              
+              <DropdownMenuItem onClick={unsetSpacing} asChild>
+                <Button
+                  type="button"
+                  data-style="ghost"
+                  style={{
+                    textAlign: "center",
+                    justifyContent: "center",
+                    minWidth: "100px"
+                  }}
+                >
+                  <span>Default</span>
+                </Button>
+              </DropdownMenuItem>
+            </ButtonGroup>
+          </CardBody>
+        </Card>
       </DropdownMenuContent>
     </DropdownMenu>
   )

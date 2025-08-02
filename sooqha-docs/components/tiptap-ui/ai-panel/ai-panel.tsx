@@ -9,6 +9,7 @@ import { useTiptapEditor } from "@/hooks/use-tiptap-editor"
 
 // --- UI ---
 import type { Editor } from "@tiptap/react"
+import { cn } from "@/lib/utils"
 
 // --- Components ---
 import { AiPanelContent } from "./ai-panel-content"
@@ -29,9 +30,7 @@ export interface AgentCommand {
   icon: React.ComponentType<{ className?: string }>
 }
 
-export type AiPanelVariant = "side" | "full-height" | "attached" | "compact"
-
-export interface AiPanelProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect"> {
+export interface AiPanelProps {
   editor?: Editor | null
   messages?: AiMessage[]
   agents?: AgentCommand[]
@@ -45,84 +44,77 @@ export interface AiPanelProps extends Omit<React.HTMLAttributes<HTMLDivElement>,
   panelClassName?: string
   height?: string
   width?: string
-  variant?: AiPanelVariant
+  variant?: "side" | "full-height" | "attached" | "compact"
   isProcessing?: boolean
   currentPrompt?: string
   onPromptSubmit?: (prompt: string) => void
 }
 
-export const AiPanel = React.forwardRef<HTMLDivElement, AiPanelProps>(
-  (
-    {
-      editor: providedEditor,
-      messages = [],
-      agents = [],
-      onAgent,
-      onSelectMessage,
-      onInsert,
-      onReplace,
-      onRetry,
-      hideWhenUnavailable = false,
-      onAction,
-      panelClassName,
-      height,
-      width,
-      variant = "side",
-      isProcessing = false,
-      currentPrompt,
-      onPromptSubmit,
-      ...props
-    },
-    ref
-  ) => {
-    const { editor } = useTiptapEditor(providedEditor)
-    const {
-      isVisible,
-      aiMessages,
-      aiAgents,
-      handleAgent,
-      handleInsert,
-      handleReplace,
-      handleRetry,
-      handlePromptSubmit,
-    } = useAiPanel({
-      editor,
-      messages,
-      agents,
-      onAgent,
-      onInsert,
-      onReplace,
-      onRetry,
-      hideWhenUnavailable,
-      onAction,
-      onPromptSubmit,
-    })
+export const AiPanel: React.FC<AiPanelProps> = ({
+  editor: providedEditor,
+  messages = [],
+  agents = [],
+  onAgent,
+  onSelectMessage,
+  onInsert,
+  onReplace,
+  onRetry,
+  hideWhenUnavailable = false,
+  onAction,
+  panelClassName,
+  height,
+  width,
+  variant = "side",
+  isProcessing = false,
+  currentPrompt,
+  onPromptSubmit,
+  ...props
+}) => {
+  const { editor } = useTiptapEditor(providedEditor)
+  const {
+    isVisible,
+    aiMessages,
+    aiAgents,
+    handleAgent,
+    handleInsert,
+    handleReplace,
+    handleRetry,
+    handlePromptSubmit,
+  } = useAiPanel({
+    editor,
+    messages,
+    agents,
+    onAgent,
+    onInsert,
+    onReplace,
+    onRetry,
+    hideWhenUnavailable,
+    onAction,
+    onPromptSubmit,
+  })
 
-    if (!isVisible) {
-      return null
-    }
-
-    return (
-      <div ref={ref} {...props}>
-        <AiPanelContent
-          messages={aiMessages}
-          agents={aiAgents}
-          onSelectMessage={onSelectMessage}
-          onInsert={handleInsert}
-          onReplace={handleReplace}
-          onRetry={handleRetry}
-          onAgent={handleAgent}
-          panelClassName={panelClassName}
-          height={height}
-          width={width}
-          variant={variant}
-          isProcessing={isProcessing}
-          currentPrompt={currentPrompt}
-          onPromptSubmit={handlePromptSubmit}
-        />
-      </div>
-    )
+  if (!isVisible) {
+    return null
   }
-)
 
-AiPanel.displayName = "AiPanel"
+  return (
+    <div className={cn("tt-ai-panel", panelClassName)} {...props}>
+      <AiPanelContent
+        messages={aiMessages}
+        agents={aiAgents}
+        onSelectMessage={onSelectMessage}
+        onInsert={handleInsert}
+        onReplace={handleReplace}
+        onRetry={handleRetry}
+        onAgent={handleAgent}
+        panelClassName={panelClassName}
+        height={height}
+        width={width}
+        variant={variant}
+        isProcessing={isProcessing}
+        currentPrompt={currentPrompt}
+        onPromptSubmit={handlePromptSubmit}
+      />
+    </div>
+  )
+}

@@ -18,6 +18,57 @@
   outline: none;
   transform-origin: var(--radix-dropdown-menu-content-transform-origin);
   max-height: var(--radix-dropdown-menu-content-available-height);
+  
+  /* Standardized dropdown content styling */
+  min-width: 200px;
+  padding: 0.5rem;
+  background-color: var(--tt-dropdown-menu-bg-color);
+  border: 1px solid var(--tt-dropdown-menu-border-color);
+  border-radius: var(--tt-radius-md);
+  box-shadow: var(--tt-shadow-lg);
+  
+  /* Standardized dropdown item styling */
+  [data-radix-dropdown-menu-item] {
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--tt-radius-sm);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--tt-dropdown-menu-text-color);
+    cursor: pointer;
+    transition: all 150ms ease;
+    
+    &:hover {
+      background-color: var(--tt-gray-light-100);
+      color: var(--tt-gray-light-900);
+      
+      .dark & {
+        background-color: var(--tt-gray-dark-100);
+        color: var(--tt-gray-dark-900);
+      }
+    }
+    
+    &:focus {
+      outline: none;
+      background-color: var(--tt-brand-color-100);
+      color: var(--tt-brand-color-900);
+      
+      .dark & {
+        background-color: var(--tt-brand-color-800);
+        color: var(--tt-brand-color-100);
+      }
+    }
+    
+    &[data-active="true"] {
+      background-color: var(--tt-brand-color-100);
+      color: var(--tt-brand-color-900);
+      font-weight: 500;
+      
+      .dark & {
+        background-color: var(--tt-brand-color-800);
+        color: var(--tt-brand-color-100);
+      }
+    }
+  }
 
   > * {
     max-height: var(--radix-dropdown-menu-content-available-height);

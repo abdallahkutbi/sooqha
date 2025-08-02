@@ -13,7 +13,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/tiptap-ui-primitive/dropdown-menu"
+} from "@/components/tiptap-ui-primitive/dropdown-menu/index"
 import { Card, CardBody } from "@/components/tiptap-ui-primitive/card"
 
 const PAGE_SIZES = [
@@ -89,16 +89,33 @@ export const PageSizeButton = React.forwardRef<
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="start" portal={portal}>
-          <Card>
+        <DropdownMenuContent align="start" portal={portal} style={{ 
+          width: "fit-content",
+          background: "transparent",
+          border: "none",
+          boxShadow: "none",
+          padding: "0"
+        }}>
+          <Card style={{ width: "fit-content" }}>
             <CardBody>
               <ButtonGroup>
                 {PAGE_SIZES.map((size) => (
                   <DropdownMenuItem 
                     key={size.size}
                     onClick={() => onSizeChange(size.size)}
+                    asChild
                   >
-                    {size.name}
+                    <Button
+                      type="button"
+                      data-style="ghost"
+                      style={{
+                        textAlign: "center",
+                        justifyContent: "center",
+                        minWidth: "100px"
+                      }}
+                    >
+                      {size.name}
+                    </Button>
                   </DropdownMenuItem>
                 ))}
               </ButtonGroup>

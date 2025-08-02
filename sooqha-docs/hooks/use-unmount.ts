@@ -5,8 +5,8 @@ import { useRef, useEffect } from "react"
  *
  * @param callback Function to be called on component unmount
  */
-export const useUnmount = <T extends (...args: unknown[]) => unknown>(
-  callback: (...args: Parameters<T>) => ReturnType<T>
+export const useUnmount = <T extends (...args: any[]) => any>(
+  callback: T
 ) => {
   const ref = useRef(callback)
   ref.current = callback

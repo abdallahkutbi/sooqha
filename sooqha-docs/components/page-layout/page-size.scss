@@ -1,0 +1,451 @@
+/*
+ * PAGE SIZE LAYOUT STYLES
+ * =======================
+ * 
+ * Styling for page layout and paper size emulation.
+ * Features:
+ * - Paper-like appearance with shadows and borders
+ * - Multiple page size support (A4, Letter, Legal, etc.)
+ * - Responsive design for different screen sizes
+ * - Print-friendly styling
+ * 
+ * Typography:
+ * - Uses standardized font variables for consistency
+ * - Primary font for content
+ * - Secondary font for headings
+ * - Monospace font for technical elements
+ */
+
+/* =====================
+     PAGE LAYOUT WRAPPER
+     ===================== */
+
+.page-layout-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100%;
+  padding: 2rem;
+  background: var(--tt-bg-color);
+  font-family: var(--tt-font-family-primary);
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+/* =====================
+     EDITOR CONTENT
+     ===================== */
+
+.simple-editor-content {
+  background: white;
+  box-shadow: var(--tt-shadow-lg);
+  border: 1px solid var(--tt-border-color);
+  border-radius: var(--tt-radius-md);
+  margin: 0 auto;
+  position: relative;
+  font-family: var(--tt-font-family-primary);
+  
+  .dark & {
+    background: var(--tt-bg-color);
+    border-color: var(--tt-border-color);
+  }
+  
+  /* Print styles */
+  @media print {
+    box-shadow: none;
+    border: none;
+    margin: 0;
+    border-radius: 0;
+  }
+}
+
+/* =====================
+     PAGE SIZE VARIATIONS
+     ===================== */
+
+/* A4 Size */
+.page-size-a4 {
+  width: 8.27in;
+  min-height: 11.69in;
+  padding: 1in;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    min-height: auto;
+    padding: 0.5in;
+  }
+  
+  @media print {
+    width: 8.27in;
+    min-height: 11.69in;
+    padding: 1in;
+  }
+}
+
+/* Letter Size */
+.page-size-letter {
+  width: 8.5in;
+  min-height: 11in;
+  padding: 1in;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    min-height: auto;
+    padding: 0.5in;
+  }
+  
+  @media print {
+    width: 8.5in;
+    min-height: 11in;
+    padding: 1in;
+  }
+}
+
+/* Legal Size */
+.page-size-legal {
+  width: 8.5in;
+  min-height: 14in;
+  padding: 1in;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    min-height: auto;
+    padding: 0.5in;
+  }
+  
+  @media print {
+    width: 8.5in;
+    min-height: 14in;
+    padding: 1in;
+  }
+}
+
+/* Tabloid Size */
+.page-size-tabloid {
+  width: 11in;
+  min-height: 17in;
+  padding: 1in;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    min-height: auto;
+    padding: 0.5in;
+  }
+  
+  @media print {
+    width: 11in;
+    min-height: 17in;
+    padding: 1in;
+  }
+}
+
+/* Executive Size */
+.page-size-executive {
+  width: 7.25in;
+  min-height: 10.5in;
+  padding: 1in;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    min-height: auto;
+    padding: 0.5in;
+  }
+  
+  @media print {
+    width: 7.25in;
+    min-height: 10.5in;
+    padding: 1in;
+  }
+}
+
+/* A3 Size */
+.page-size-a3 {
+  width: 11.69in;
+  min-height: 16.54in;
+  padding: 1in;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    min-height: auto;
+    padding: 0.5in;
+  }
+  
+  @media print {
+    width: 11.69in;
+    min-height: 16.54in;
+    padding: 1in;
+  }
+}
+
+/* A5 Size */
+.page-size-a5 {
+  width: 5.83in;
+  min-height: 8.27in;
+  padding: 0.75in;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    min-height: auto;
+    padding: 0.5in;
+  }
+  
+  @media print {
+    width: 5.83in;
+    min-height: 8.27in;
+    padding: 0.75in;
+  }
+}
+
+/* =====================
+     EDITOR CONTENT TYPOGRAPHY
+     ===================== */
+
+.simple-editor-content {
+  /* Base typography */
+  font-family: var(--tt-font-family-primary);
+  font-size: var(--tt-font-size-base);
+  line-height: var(--tt-line-height-normal);
+  color: var(--tt-text-primary);
+  
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--tt-font-family-secondary);
+    font-weight: var(--tt-font-weight-semibold);
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    line-height: var(--tt-line-height-tight);
+  }
+  
+  h1 {
+    font-size: var(--tt-font-size-3xl);
+    font-weight: var(--tt-font-weight-bold);
+  }
+  
+  h2 {
+    font-size: var(--tt-font-size-2xl);
+    font-weight: var(--tt-font-weight-bold);
+  }
+  
+  h3 {
+    font-size: var(--tt-font-size-xl);
+  }
+  
+  h4 {
+    font-size: var(--tt-font-size-lg);
+  }
+  
+  h5 {
+    font-size: var(--tt-font-size-base);
+  }
+  
+  h6 {
+    font-size: var(--tt-font-size-sm);
+  }
+  
+  /* Paragraphs */
+  p {
+    margin-bottom: 1em;
+    line-height: var(--tt-line-height-normal);
+  }
+  
+  /* Lists */
+  ul, ol {
+    margin-bottom: 1em;
+    padding-left: 1.5em;
+  }
+  
+  li {
+    margin-bottom: 0.25em;
+  }
+  
+  /* Code blocks */
+  pre {
+    font-family: var(--tt-font-family-mono);
+    font-size: var(--tt-font-size-sm);
+    line-height: var(--tt-line-height-normal);
+  }
+  
+  /* Inline code */
+  code {
+    font-family: var(--tt-font-family-mono);
+    font-size: 0.875em;
+  }
+  
+  /* Blockquotes */
+  blockquote {
+    border-left: 4px solid var(--tt-brand-color-500);
+    padding-left: 1rem;
+    margin: 1em 0;
+    font-style: italic;
+    color: var(--tt-text-muted);
+    
+    .dark & {
+      border-left-color: var(--tt-brand-color-400);
+    }
+  }
+  
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+    font-size: var(--tt-font-size-sm);
+  }
+  
+  th, td {
+    border: 1px solid var(--tt-border-color);
+    padding: 0.5rem;
+    text-align: left;
+  }
+  
+  th {
+    background: var(--tt-gray-light-50);
+    font-weight: var(--tt-font-weight-semibold);
+    
+    .dark & {
+      background: var(--tt-gray-dark-100);
+    }
+  }
+  
+  /* Links */
+  a {
+    color: var(--tt-brand-color-600);
+    text-decoration: underline;
+    
+    &:hover {
+      color: var(--tt-brand-color-700);
+    }
+    
+    .dark & {
+      color: var(--tt-brand-color-400);
+      
+      &:hover {
+        color: var(--tt-brand-color-300);
+      }
+    }
+  }
+  
+  /* Images */
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--tt-radius-sm);
+  }
+}
+
+/* =====================
+     PAGE SEPARATOR
+     ===================== */
+
+.page-separator {
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--tt-gray-light-300) 0px,
+    var(--tt-gray-light-300) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  margin: 2rem 0;
+  display: block;
+  
+  .dark & {
+    background: repeating-linear-gradient(
+      90deg,
+      var(--tt-gray-dark-400) 0px,
+      var(--tt-gray-dark-400) 8px,
+      transparent 8px,
+      transparent 16px
+    );
+  }
+  
+  &::before,
+  &::after {
+    display: none;
+  }
+}
+
+/* =====================
+     PRINT STYLES
+     ===================== */
+
+@media print {
+  .page-layout-wrapper {
+    padding: 0;
+    background: white;
+  }
+  
+  .simple-editor-content {
+    box-shadow: none;
+    border: none;
+    margin: 0;
+    border-radius: 0;
+    background: white;
+  }
+  
+  /* Ensure proper page breaks */
+  .page-break {
+    page-break-before: always;
+  }
+  
+  /* Hide non-printable elements */
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* =====================
+     ACCESSIBILITY
+     ===================== */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .simple-editor-content {
+    border: 2px solid black;
+    
+    .dark & {
+      border-color: white;
+    }
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .simple-editor-content {
+    transition: none;
+  }
+}
+
+/* =====================
+     RESPONSIVE DESIGN
+     ===================== */
+
+@media (max-width: 768px) {
+  .page-layout-wrapper {
+    padding: 0.5rem;
+  }
+  
+  .simple-editor-content {
+    border-radius: var(--tt-radius-sm);
+    box-shadow: var(--tt-shadow-md);
+  }
+  
+  /* Adjust typography for mobile */
+  .simple-editor-content {
+    font-size: var(--tt-font-size-sm);
+    
+    h1 {
+      font-size: var(--tt-font-size-2xl);
+    }
+    
+    h2 {
+      font-size: var(--tt-font-size-xl);
+    }
+    
+    h3 {
+      font-size: var(--tt-font-size-lg);
+    }
+  }
+} 

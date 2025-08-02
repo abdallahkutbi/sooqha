@@ -2,13 +2,14 @@
 
 import * as React from "react"
 import { useTiptapEditor } from "@/hooks/use-tiptap-editor"
-import { Button } from "@/components/tiptap-ui-primitive/button"
+import { Button, ButtonGroup } from "@/components/tiptap-ui-primitive/button"
 import { 
   DropdownMenu, 
   DropdownMenuTrigger, 
   DropdownMenuContent, 
   DropdownMenuItem 
-} from "@/components/tiptap-ui-primitive/dropdown-menu"
+} from "@/components/tiptap-ui-primitive/dropdown-menu/index"
+import { Card, CardBody } from "@/components/tiptap-ui-primitive/card"
 import { ChevronDown as ChevronDownIcon, Type as TypeIcon } from "lucide-react"
 
 // ===== STYLING =====
@@ -48,7 +49,9 @@ const FONT_SIZES = [
 export function FontSizeDropdown({ portal = false, className }: FontSizeDropdownProps) {
   const { editor } = useTiptapEditor()
   const [isOpen, setIsOpen] = React.useState(false)
-  const [customSize, setCustomSize] = React.useState("")
+  const [isEditing, setIsEditing] = React.useState(false)
+  const [inputValue, setInputValue] = React.useState("")
+  const inputRef = React.useRef<HTMLInputElement>(null)
   
   // Get current font size from editor
   const currentFontSize = React.useMemo(() => {
@@ -74,6 +77,30 @@ export function FontSizeDropdown({ portal = false, className }: FontSizeDropdown
       }
     }
     
+    // If no font size mark, try to detect the computed font size
+    try {
+      const selection = window.getSelection()
+      if (selection && selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0)
+        const element = range.startContainer.nodeType === Node.TEXT_NODE 
+          ? range.startContainer.parentElement 
+          : (range.startContainer as Element)
+        
+        if (element) {
+          const computedStyle = window.getComputedStyle(element)
+          const fontSize = computedStyle.fontSize
+          
+          // Extract the numeric value
+          const size = parseInt(fontSize)
+          if (!isNaN(size)) {
+            return size.toString()
+          }
+        }
+      }
+    } catch (error) {
+      console.warn('Error detecting font size:', error)
+    }
+    
     return "14" // Default size
   }, [editor])
 
@@ -89,6 +116,48 @@ export function FontSizeDropdown({ portal = false, className }: FontSizeDropdown
     setIsOpen(false)
   }, [editor])
 
+  const handleInputChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setInputValue(value)
+  }, [])
+
+  const handleInputKeyDown = React.useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      const value = parseInt(inputValue)
+      if (!isNaN(value) && value > 0 && value <= 288) {
+        setFontSize(`${value}px`)
+        setIsEditing(false)
+      }
+    } else if (e.key === 'Escape') {
+      setIsEditing(false)
+      setInputValue("")
+    }
+  }, [inputValue, setFontSize])
+
+  const handleInputBlur = React.useCallback(() => {
+    const value = parseInt(inputValue)
+    if (!isNaN(value) && value > 0 && value <= 288) {
+      setFontSize(`${value}px`)
+    }
+    setIsEditing(false)
+    setInputValue("")
+  }, [inputValue, setFontSize])
+
+  const findNearestFontSize = React.useCallback((targetSize: number) => {
+    const sizes = FONT_SIZES.map(s => parseInt(s.value))
+    return sizes.reduce((prev, curr) => 
+      Math.abs(curr - targetSize) < Math.abs(prev - targetSize) ? curr : prev
+    )
+  }, [])
+
+  // Focus input when editing starts
+  React.useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus()
+      inputRef.current.select()
+    }
+  }, [isEditing])
+
   const unsetFontSize = React.useCallback(() => {
     if (!editor) return
 
@@ -101,90 +170,95 @@ export function FontSizeDropdown({ portal = false, className }: FontSizeDropdown
     setIsOpen(false)
   }, [editor])
 
-  const handleCustomSizeSubmit = React.useCallback(() => {
-    if (!editor || !customSize) return
-    
-    const size = parseInt(customSize)
-    if (size >= 8 && size <= 72) {
-      setFontSize(`${size}px`)
-      setCustomSize("")
-    }
-  }, [editor, customSize, setFontSize])
-
   if (!editor) return null
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         <Button
+          type="button"
           data-style="ghost"
+          role="button"
+          tabIndex={-1}
+          aria-label="Font size"
+          tooltip={`Font size: ${currentFontSize}px`}
           className={className}
-          title="Font size"
+          onDoubleClick={() => setIsEditing(true)}
         >
-          <span className="tiptap-button-icon font-size-display">
-            {currentFontSize}
-          </span>
-          <ChevronDownIcon className="tiptap-button-icon" />
+          {isEditing ? (
+            <input
+              ref={inputRef}
+              type="text"
+              value={inputValue}
+              onChange={handleInputChange}
+              onKeyDown={handleInputKeyDown}
+              onBlur={handleInputBlur}
+              style={{
+                width: '30px',
+                border: 'none',
+                background: 'transparent',
+                textAlign: 'center',
+                fontSize: 'inherit',
+                color: 'inherit',
+                marginRight: '4px'
+              }}
+              autoFocus
+              onClick={(e) => e.stopPropagation()}
+            />
+          ) : (
+            <span 
+              className="tiptap-button-text dark:bg-gray-dark-100 dark:border-gray-dark-300 dark:text-gray-dark-900"
+              style={{
+                display: 'inline-block',
+                minWidth: '24px',
+                textAlign: 'center',
+                padding: '2px 4px',
+                borderRadius: '3px',
+                backgroundColor: 'var(--tt-gray-light-100)',
+                border: '1px solid var(--tt-gray-light-300)',
+                fontSize: '0.75rem',
+                lineHeight: '1',
+                color: 'var(--tt-gray-light-900)'
+              }}
+            >
+              {currentFontSize}
+            </span>
+          )}
+          <ChevronDownIcon className="tiptap-button-dropdown-small" />
         </Button>
       </DropdownMenuTrigger>
       
-      <DropdownMenuContent portal={portal} className="font-size-dropdown-content">
-        {/* Custom size input */}
-        <div className="font-size-custom-input">
-          <input
-            type="number"
-            value={customSize}
-            onChange={(e) => setCustomSize(e.target.value)}
-            placeholder="Custom size"
-            min="8"
-            max="72"
-            className="font-size-input"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleCustomSizeSubmit()
-              }
-            }}
-          />
-          <button 
-            onClick={handleCustomSizeSubmit}
-            className="font-size-submit-btn"
-            disabled={!customSize}
-          >
-            Set
-          </button>
-        </div>
-        
-        {/* Preset sizes - show only 3 with scroll */}
-        <div className="font-size-presets">
-          {FONT_SIZES.slice(0, 3).map((size) => (
-            <DropdownMenuItem 
-              key={size.value}
-              onClick={() => setFontSize(size.value)}
-            >
-              <span className="font-size-option">
-                {size.label}
-              </span>
-            </DropdownMenuItem>
-          ))}
-        </div>
-        
-        {/* Scrollable section for more sizes */}
-        <div className="font-size-scrollable">
-          {FONT_SIZES.slice(3).map((size) => (
-            <DropdownMenuItem 
-              key={size.value}
-              onClick={() => setFontSize(size.value)}
-            >
-              <span className="font-size-option">
-                {size.label}
-              </span>
-            </DropdownMenuItem>
-          ))}
-        </div>
-        
-        <DropdownMenuItem onClick={unsetFontSize}>
-          <span className="font-size-option">Default</span>
-        </DropdownMenuItem>
+      <DropdownMenuContent align="center" sideOffset={0} portal={portal} style={{ 
+        width: "fit-content",
+        background: "transparent",
+        border: "none",
+        boxShadow: "none",
+        padding: "0"
+      }}>
+        <Card style={{ width: "fit-content" }}>
+          <CardBody style={{ padding: "0.25rem" }}>
+            <ButtonGroup style={{ justifyContent: "center" }}>
+              {FONT_SIZES.map((size) => (
+                <DropdownMenuItem key={size.value} asChild>
+                  <Button
+                    type="button"
+                    data-style="ghost"
+                    onClick={() => setFontSize(size.value)}
+                    data-active={currentFontSize === size.label}
+                    style={{
+                      textAlign: "center",
+                      justifyContent: "center",
+                      minWidth: "40px",
+                      width: "40px"
+                    }}
+                  >
+                    <span>{size.label}</span>
+                  </Button>
+                </DropdownMenuItem>
+              ))}
+            </ButtonGroup>
+          </CardBody>
+        </Card>
       </DropdownMenuContent>
     </DropdownMenu>
   )

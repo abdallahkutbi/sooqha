@@ -219,6 +219,60 @@
     0px 6px 8px 0px rgba(0, 0, 0, 0.22), 0px 2px 3px 0px rgba(0, 0, 0, 0.12);
 }
 
+/* ===== FONT VARIABLES ===== */
+/* Standardized font families for consistent typography across the application */
+
+/* Primary font for UI elements and general text */
+/* Secondary font for headings and emphasis */
+/* Monospace font for code blocks and technical content */
+/* Fallback fonts for better cross-platform compatibility */
+
+/* CSS Custom Properties for font families */
+:root {
+  --tt-font-family-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --tt-font-family-secondary: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --tt-font-family-mono: "JetBrains Mono NL", "Fira Code", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+  --tt-font-family-fallback: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ===== FONT WEIGHTS ===== */
+/* Standardized font weights for consistent typography */
+
+/* CSS Custom Properties for font weights */
+:root {
+  --tt-font-weight-light: 300;
+  --tt-font-weight-normal: 400;
+  --tt-font-weight-medium: 500;
+  --tt-font-weight-semibold: 600;
+  --tt-font-weight-bold: 700;
+  --tt-font-weight-extrabold: 800;
+}
+
+/* ===== FONT SIZES ===== */
+/* Standardized font sizes for consistent typography */
+
+/* CSS Custom Properties for font sizes */
+:root {
+  --tt-font-size-xs: 0.75rem;    /* 12px */
+  --tt-font-size-sm: 0.875rem;   /* 14px */
+  --tt-font-size-base: 1rem;     /* 16px */
+  --tt-font-size-lg: 1.125rem;   /* 18px */
+  --tt-font-size-xl: 1.25rem;    /* 20px */
+  --tt-font-size-2xl: 1.5rem;    /* 24px */
+  --tt-font-size-3xl: 1.875rem;  /* 30px */
+  --tt-font-size-4xl: 2.25rem;   /* 36px */
+}
+
+/* ===== LINE HEIGHTS ===== */
+/* Standardized line heights for consistent typography */
+
+/* CSS Custom Properties for line heights */
+:root {
+  --tt-line-height-tight: 1.25;
+  --tt-line-height-normal: 1.5;
+  --tt-line-height-relaxed: 1.75;
+}
+
 /* Text colors - Updated for Blue-Gray Brand */
 :root {
   --tt-color-text-gray: hsl(200, 8%, 46%);

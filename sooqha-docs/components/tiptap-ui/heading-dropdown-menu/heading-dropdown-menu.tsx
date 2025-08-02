@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "@/components/tiptap-ui-primitive/dropdown-menu"
+} from "@/components/tiptap-ui-primitive/dropdown-menu/index"
 import { Card, CardBody } from "@/components/tiptap-ui-primitive/card"
 
 export interface HeadingDropdownMenuProps
@@ -101,7 +101,12 @@ export const HeadingDropdownMenu = React.forwardRef<
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="start" portal={portal}>
+        <DropdownMenuContent align="start" portal={portal} style={{ 
+          background: "transparent",
+          border: "none",
+          boxShadow: "none",
+          padding: "0"
+        }}>
           <Card>
             <CardBody>
               <ButtonGroup>

@@ -24,6 +24,11 @@ const AiMessageItem: React.FC<AiMessageItemProps> = ({
   isSelected,
 }) => {
   const [copied, setCopied] = React.useState(false)
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const handleCopy = async () => {
     try {
@@ -60,14 +65,12 @@ const AiMessageItem: React.FC<AiMessageItemProps> = ({
             {message.type === "user" ? "You" : "AI"}
           </span>
           <span className="tt-ai-panel-message-time">
-            {message.timestamp.toLocaleTimeString()}
+            {mounted ? message.timestamp.toLocaleTimeString() : ""}
           </span>
         </div>
         {message.type === "assistant" && (
           <div className="tt-ai-panel-message-actions">
             <Button
-              size="small"
-              variant="ghost"
               onClick={(e) => {
                 e.stopPropagation()
                 handleCopy()
@@ -78,8 +81,6 @@ const AiMessageItem: React.FC<AiMessageItemProps> = ({
             </Button>
             {onInsert && (
               <Button
-                size="small"
-                variant="ghost"
                 onClick={(e) => {
                   e.stopPropagation()
                   onInsert(message.content)
@@ -91,8 +92,6 @@ const AiMessageItem: React.FC<AiMessageItemProps> = ({
             )}
             {onReplace && (
               <Button
-                size="small"
-                variant="ghost"
                 onClick={(e) => {
                   e.stopPropagation()
                   onReplace(message.content)
@@ -104,8 +103,6 @@ const AiMessageItem: React.FC<AiMessageItemProps> = ({
             )}
             {onRetry && (
               <Button
-                size="small"
-                variant="ghost"
                 onClick={(e) => {
                   e.stopPropagation()
                   onRetry()
@@ -154,6 +151,17 @@ export const AiMessageList: React.FC<AiMessageListProps> = ({
   onReplace,
   onRetry,
 }) => {
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Don't render until mounted
+  if (!mounted) {
+    return <div className="tt-ai-panel-messages" />
+  }
+
   return (
     <div className="tt-ai-panel-messages">
       {messages.length > 0 ? (

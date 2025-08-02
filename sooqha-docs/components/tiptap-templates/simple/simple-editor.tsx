@@ -31,7 +31,7 @@
 
 // ===== REACT & CORE IMPORTS =====
 import * as React from "react"
-import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
+import { EditorContent, EditorContext, useEditor, Editor } from "@tiptap/react"
 
 // ===== TIPTAP CORE EXTENSIONS =====
 // These provide the fundamental editing capabilities
@@ -75,6 +75,7 @@ import {
 // Custom node extensions for enhanced functionality
 import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension" // Drag & drop image uploads
 import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension" // HR dividers
+import { PageBreak } from "@/components/tiptap-node/page-break-node/page-break-node-extension" // Page break functionality
 
 // ===== NODE STYLING IMPORTS =====
 // SCSS imports for custom node appearance
@@ -86,6 +87,7 @@ import "@/components/tiptap-node/image-node/image-node.scss" // Image styling
 import "@/components/tiptap-node/heading-node/heading-node.scss" // Heading styling
 import "@/components/tiptap-node/paragraph-node/paragraph-node.scss" // Paragraph styling
 import "@/components/tiptap-node/table-node/table-node.scss" // Table styling
+import "@/components/tiptap-node/page-break-node/page-break-node.scss" // Page break styling
 
 // ===== TIPTAP UI COMPONENTS =====
 // High-level UI components that combine primitives for specific editor functionality
@@ -95,6 +97,14 @@ import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button" /
 import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu" // List type selector
 import { BlockquoteButton } from "@/components/tiptap-ui/blockquote-button" // Quote formatting
 import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button" // Code block creation
+
+// AI components
+import { AiPanel } from "@/components/tiptap-ui/ai-panel" // AI assistant panel
+import { AiMenu } from "@/components/tiptap-ui/ai-panel/ai-menu" // AI menu component
+
+// Page layout components
+import { PageLayoutWrapper } from "@/components/page-layout/PageLayoutWrapper" // Page layout wrapper
+import { PageSizeSelector } from "@/components/page-layout/PageSizeSelector" // Page size selector
 
 // Color highlighting components with desktop/mobile variants
 import {
@@ -120,6 +130,7 @@ import { TableControls } from "@/components/tiptap-ui/table-controls" // Table s
 
 // ===== FONT SIZE UI COMPONENTS =====
 import { FontSizeDropdown } from "@/components/tiptap-ui/font-size-dropdown" // Font size selection
+import { FontColorButton } from "@/components/tiptap-ui/font-color-button/font-color-button" // Font color selector
 
 // ===== SPACING UI COMPONENTS =====
 import { SpacingDropdown } from "@/components/tiptap-ui/spacing-dropdown" // Line spacing selection
@@ -129,7 +140,6 @@ import { FontFamilyDropdown } from "@/components/tiptap-ui/font-family-dropdown"
 
 // ===== TOOLBAR FEATURE COMPONENTS =====
 import { ExportButton } from "@/components/tiptap-ui/export-button/export-button" // Document export functionality
-import { PageSizeButton } from "@/components/tiptap-ui/page-size-button/page-size-button" // Page size controls (A4, Letter, etc.)
 // AI toggle button will be added here when ready
 import { FileExplorerButton, FileExplorerPanel } from "@/components/tiptap-ui/file-explorer-panel" // File explorer toggle and panel
 
@@ -148,6 +158,7 @@ import { useIsMobile } from "@/hooks/use-mobile" // Mobile device detection
 import { useWindowSize } from "@/hooks/use-window-size" // Window dimensions tracking
 import { useCursorVisibility } from "@/hooks/use-cursor-visibility" // Cursor position for mobile toolbar
 import { useScrolling } from "@/hooks/use-scrolling" // Scroll state detection
+import { usePageBreak } from "@/hooks/use-page-break" // Page break detection and handling
 
 // ===== TEMPLATE-SPECIFIC COMPONENTS =====
 import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle" // Light/dark mode toggle
@@ -155,9 +166,7 @@ import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle" 
 // ===== AI INTEGRATION =====
 import {
   Ai,
-  AiMenu,
   AiPanelButton,
-  AiPanel,
   useAiPanel,
 } from "@/components/tiptap-ui/ai-panel" // AI assistant panel
 
@@ -198,6 +207,7 @@ const MainToolbarContent = ({
   onAIToggle,          // AI panel toggle handler
   isFileExplorerOpen,  // File explorer panel open state
   onFileExplorerToggle, // File explorer panel toggle handler
+  editor,              // Editor instance for page operations
 }: {
   onHighlighterClick: () => void
   onLinkClick: () => void
@@ -208,6 +218,7 @@ const MainToolbarContent = ({
   onAIToggle: () => void
   isFileExplorerOpen: boolean
   onFileExplorerToggle: () => void
+  editor: Editor | null
 }) => {
   return (
     <>
@@ -224,15 +235,13 @@ const MainToolbarContent = ({
       
       <ToolbarSeparator />
 
-      {/* === PAGE LAYOUT GROUP === */}
+      {/* === PAGE SIZE SELECTOR === */}
       <ToolbarGroup>
-        <PageSizeButton 
-          currentSize={pageSize}
-          onSizeChange={onPageSizeChange}
-        /> {/* A4, Letter, Legal page size selection */}
+        <PageSizeSelector
+          currentPageSize={pageSize}
+          onPageSizeChange={onPageSizeChange}
+        />
       </ToolbarGroup>
-
-      <ToolbarSeparator />
 
       {/* === HISTORY NAVIGATION GROUP === */}
       <ToolbarGroup>
@@ -249,6 +258,7 @@ const MainToolbarContent = ({
         
         <FontSizeDropdown portal={isMobile} /> {/* Font size selection */}
         <FontFamilyDropdown portal={isMobile} /> {/* Font family selection */}
+        <FontColorButton editor={editor} />
         
         {/* List type selector (bullets, numbers, tasks) */}
         <ListDropdownMenu
@@ -415,7 +425,6 @@ export function SimpleEditor() {
   // ===== DOCUMENT SETTINGS STATE =====
   const [pageSize, setPageSize] = React.useState("a4")        // Document page size (A4, Letter, etc.)
   const [isAIOpen, setIsAIOpen] = React.useState(false)       // AI assistant panel visibility
-  const ai = useAiPanel({ editor })                           // Shared AI panel state
   const [isFileExplorerOpen, setIsFileExplorerOpen] = React.useState(false) // File explorer panel visibility
   const [isDragging, setIsDragging] = React.useState(false)   // Track drag state for z-index management
   
@@ -464,6 +473,7 @@ export function SimpleEditor() {
       
       // ===== CUSTOM NODES =====
       HorizontalRule,              // Custom horizontal rule implementation
+      PageBreak,                   // Custom page break implementation
       
       // ===== TEXT FORMATTING =====
       TextAlign.configure({ 
@@ -516,12 +526,89 @@ export function SimpleEditor() {
       
       // ===== EDITOR ENHANCEMENTS =====
       Selection,                   // Selection management and events
-      Ai,                          // AI extension
     ],
     
     // ===== INITIAL CONTENT =====
     content, // Load default content from JSON file
   })
+
+  // ===== AI PANEL STATE =====
+  // Initialize AI panel after editor is created
+  const ai = useAiPanel({ editor })
+
+  // ===== PAGE BREAK HANDLING =====
+  // Handle automatic page breaks and smooth transitions
+  const { checkAndInsertPageBreak } = usePageBreak({
+    editor,
+    pageSize,
+    onPageBreak: () => {
+      // Smooth scroll to the new page break
+      setTimeout(() => {
+        const pageBreaks = document.querySelectorAll('[data-type="page-break"]')
+        const lastPageBreak = pageBreaks[pageBreaks.length - 1]
+        if (lastPageBreak) {
+          lastPageBreak.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+          })
+          // Add animation class
+          lastPageBreak.classList.add('page-break-new')
+          setTimeout(() => {
+            lastPageBreak.classList.remove('page-break-new')
+          }, 500)
+        }
+      }, 100)
+    }
+  })
+
+  // ===== MULTI-PAGE FEATURES =====
+  // Enhanced page break detection and visual separation
+  const [pageCount, setPageCount] = React.useState(1)
+  const [currentPage, setCurrentPage] = React.useState(1)
+  const [wordCount, setWordCount] = React.useState(0)
+
+  // Monitor page breaks and update page count
+  React.useEffect(() => {
+    if (!editor) return
+
+    const updatePageCount = () => {
+      const pageBreaks = document.querySelectorAll('[data-type="page-break"]')
+      setPageCount(pageBreaks.length + 1)
+    }
+
+    // Listen for editor updates
+    editor.on('update', updatePageCount)
+    
+    // Initial count
+    updatePageCount()
+
+    return () => {
+      editor.off('update', updatePageCount)
+    }
+  }, [editor])
+
+  // Monitor word count
+  React.useEffect(() => {
+    if (!editor) return
+
+    const updateWordCount = () => {
+      const { state } = editor
+      const { doc } = state
+      const text = doc.textBetween(0, doc.content.size, ' ')
+      const words = text.trim().split(/\s+/).filter(word => word.length > 0)
+      setWordCount(words.length)
+    }
+
+    // Listen for editor updates
+    editor.on('update', updateWordCount)
+    
+    // Initial count
+    updateWordCount()
+
+    return () => {
+      editor.off('update', updateWordCount)
+    }
+  }, [editor])
 
   // ===== UI BEHAVIOR HOOKS =====
   const isScrolling = useScrolling()   // Track scroll state for mobile toolbar hiding
@@ -576,6 +663,7 @@ export function SimpleEditor() {
               onAIToggle={() => setIsAIOpen(!isAIOpen)}
               isFileExplorerOpen={isFileExplorerOpen}
               onFileExplorerToggle={() => setIsFileExplorerOpen(!isFileExplorerOpen)}
+              editor={editor}
             />
           ) : (
             // Mobile context-specific toolbar (highlighter or link)
@@ -586,12 +674,45 @@ export function SimpleEditor() {
           )}
         </Toolbar>
 
-        {/* === MAIN EDITOR CONTENT === */}
-        <EditorContent
-          editor={editor}
-          role="presentation" // Accessibility role
-          className={`simple-editor-content page-size-${pageSize}`} // Dynamic page size class
-        />
+        {/* === PAGE LAYOUT WRAPPER === */}
+        <PageLayoutWrapper pageSize={pageSize}>
+          {/* === MAIN EDITOR CONTENT === */}
+          <EditorContent
+            editor={editor}
+            role="presentation" // Accessibility role
+            className={`simple-editor-content page-size-${pageSize}`} // Dynamic page size class
+          />
+          
+          {/* === PAGE SEPARATOR (for multi-page support) === */}
+          <div className="page-separator" style={{ display: 'none' }} />
+        </PageLayoutWrapper>
+
+        {/* === STATUS BAR (BOTTOM LEFT) === */}
+        <div 
+          className="status-bar"
+          style={{
+            position: 'fixed',
+            bottom: '1rem',
+            left: '1rem',
+            zIndex: 50,
+            background: 'var(--tt-bg-color)',
+            border: '1px solid var(--tt-border-color)',
+            borderRadius: '0.5rem',
+            padding: '0.5rem 0.75rem',
+            fontSize: '0.75rem',
+            color: 'var(--tt-text-color-muted)',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+            display: 'flex',
+            gap: '1rem',
+            alignItems: 'center'
+          }}
+        >
+          <span>Pages: {pageCount}</span>
+          <span style={{ opacity: 0.5 }}>|</span>
+          <span>Words: {wordCount}</span>
+        </div>
+
+        {/* === AI MENU (QUICK ACTIONS) === */}
         <AiMenu
           editor={editor}
           items={ai.aiAgents.map(agent => ({
@@ -633,7 +754,6 @@ export function SimpleEditor() {
           />
         </div>
 
-        {/* === AI ASSISTANT PANEL === */}
         {/* === AI ASSISTANT PANEL === */}
         <div 
           className={`fixed right-0 top-0 transition-transform duration-300 ease-out ${

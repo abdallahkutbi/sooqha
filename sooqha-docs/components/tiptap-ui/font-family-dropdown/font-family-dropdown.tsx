@@ -2,13 +2,14 @@
 
 import * as React from "react"
 import { useTiptapEditor } from "@/hooks/use-tiptap-editor"
-import { Button } from "@/components/tiptap-ui-primitive/button"
+import { Button, ButtonGroup } from "@/components/tiptap-ui-primitive/button"
 import { 
   DropdownMenu, 
   DropdownMenuTrigger, 
   DropdownMenuContent, 
   DropdownMenuItem 
-} from "@/components/tiptap-ui-primitive/dropdown-menu"
+} from "@/components/tiptap-ui-primitive/dropdown-menu/index"
+import { Card, CardBody } from "@/components/tiptap-ui-primitive/card"
 import { ChevronDown as ChevronDownIcon, Type as FontIcon } from "lucide-react"
 
 interface FontFamilyDropdownProps {
@@ -24,7 +25,6 @@ interface FontFamilyDropdownProps {
 }
 
 const FONT_FAMILIES = [
-  { label: "Default", value: "inherit" },
   { label: "Arial", value: "Arial, sans-serif" },
   { label: "Times New Roman", value: "Times New Roman, serif" },
   { label: "Courier New", value: "Courier New, monospace" },
@@ -45,6 +45,7 @@ const FONT_FAMILIES = [
 export function FontFamilyDropdown({ portal = false, className }: FontFamilyDropdownProps) {
   const { editor } = useTiptapEditor()
   const [isOpen, setIsOpen] = React.useState(false)
+  const [isHovered, setIsHovered] = React.useState(false)
   
   // Get current font family from editor
   const currentFontFamily = React.useMemo(() => {
@@ -62,21 +63,66 @@ export function FontFamilyDropdown({ portal = false, className }: FontFamilyDrop
       if (fontFamily) {
         // Find the label for this font family
         const fontOption = FONT_FAMILIES.find(font => font.value === fontFamily)
-        return fontOption ? fontOption.label : "Default"
+        return fontOption ? fontOption.label : fontFamily
       }
     }
     
-    return "Default" // Default font
+    // If no font family mark, try to detect the computed font family
+    // This will show the actual font being used (e.g., "Times New Roman")
+    try {
+      const selection = window.getSelection()
+      if (selection && selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0)
+        const element = range.startContainer.nodeType === Node.TEXT_NODE 
+          ? range.startContainer.parentElement 
+          : (range.startContainer as Element)
+        
+        if (element) {
+          const computedStyle = window.getComputedStyle(element)
+          const fontFamily = computedStyle.fontFamily
+          
+          // Extract the first font family (before the comma)
+          const firstFont = fontFamily.split(',')[0].trim().replace(/['"]/g, '')
+          
+          // Find if this matches any of our predefined fonts
+          const fontOption = FONT_FAMILIES.find(font => 
+            font.value.includes(firstFont) || firstFont.includes(font.label)
+          )
+          
+          if (fontOption) {
+            return fontOption.label
+          }
+          
+          // If no match found, return the actual font name
+          return firstFont
+        }
+      }
+    } catch (error) {
+      console.warn('Error detecting font family:', error)
+    }
+    
+    // Fallback to showing the first font family from our list
+    return FONT_FAMILIES[0].label // "Arial" as default
   }, [editor])
 
   const setFontFamily = React.useCallback((fontFamily: string) => {
     if (!editor) return
 
-    editor
-      .chain()
-      .focus()
-      .setMark('fontFamily', { fontFamily })
-      .run()
+    // If the same font is already applied, unset it
+    const currentFont = editor.getAttributes('fontFamily').fontFamily
+    if (currentFont === fontFamily) {
+      editor
+        .chain()
+        .focus()
+        .unsetMark('fontFamily')
+        .run()
+    } else {
+      editor
+        .chain()
+        .focus()
+        .setMark('fontFamily', { fontFamily })
+        .run()
+    }
     
     setIsOpen(false)
   }, [editor])
@@ -99,30 +145,51 @@ export function FontFamilyDropdown({ portal = false, className }: FontFamilyDrop
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         <Button
+          type="button"
           data-style="ghost"
+          role="button"
+          tabIndex={-1}
+          aria-label="Font family"
+          tooltip={`Font family: ${currentFontFamily}`}
           className={className}
-          title="Font style"
         >
-          <FontIcon className="tiptap-button-icon" />
-          <ChevronDownIcon className="tiptap-button-icon" />
+          <FontIcon className="tiptap-button-icon w-3 h-3" />
+          <span className="tiptap-button-text">{currentFontFamily}</span>
+          <ChevronDownIcon className="tiptap-button-dropdown-small" />
         </Button>
       </DropdownMenuTrigger>
       
-      <DropdownMenuContent portal={portal} className="font-family-dropdown-content">
-        {FONT_FAMILIES.map((font) => (
-          <DropdownMenuItem 
-            key={font.value}
-            onClick={() => setFontFamily(font.value)}
-          >
-            <span className="font-family-option" style={{ fontFamily: font.value }}>
-              {font.label}
-            </span>
-          </DropdownMenuItem>
-        ))}
-        
-        <DropdownMenuItem onClick={unsetFontFamily}>
-          <span className="font-family-option">Reset</span>
-        </DropdownMenuItem>
+            <DropdownMenuContent align="center" sideOffset={8} portal={portal} style={{
+        width: "fit-content",
+        background: "transparent",
+        border: "none",
+        boxShadow: "none",
+        padding: "0"
+      }}>
+        <Card style={{ width: "fit-content" }}>
+          <CardBody>
+            <ButtonGroup>
+              {FONT_FAMILIES.map((font) => (
+                <DropdownMenuItem key={font.value} asChild>
+                  <Button
+                    type="button"
+                    data-style="ghost"
+                    onClick={() => setFontFamily(font.value)}
+                    data-active={currentFontFamily === font.label}
+                    style={{
+                      fontFamily: font.value,
+                      textAlign: "center",
+                      justifyContent: "center",
+                      minWidth: "120px"
+                    }}
+                  >
+                    <span>{font.label}</span>
+                  </Button>
+                </DropdownMenuItem>
+              ))}
+            </ButtonGroup>
+          </CardBody>
+        </Card>
       </DropdownMenuContent>
     </DropdownMenu>
   )

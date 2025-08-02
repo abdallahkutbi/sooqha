@@ -2,13 +2,14 @@
 
 import * as React from "react"
 import { useTiptapEditor } from "@/hooks/use-tiptap-editor"
-import { Button } from "@/components/tiptap-ui-primitive/button"
+import { Button, ButtonGroup } from "@/components/tiptap-ui-primitive/button"
 import { 
   DropdownMenu, 
   DropdownMenuTrigger, 
   DropdownMenuContent, 
   DropdownMenuItem 
-} from "@/components/tiptap-ui-primitive/dropdown-menu"
+} from "@/components/tiptap-ui-primitive/dropdown-menu/index"
+import { Card, CardBody } from "@/components/tiptap-ui-primitive/card"
 import { Table as TableIcon, ChevronDown as ChevronDownIcon } from "lucide-react"
 
 interface TableDropdownMenuProps {
@@ -54,35 +55,94 @@ export function TableDropdownMenu({ portal = false, className }: TableDropdownMe
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         <Button
+          type="button"
           data-style="ghost"
+          role="button"
+          tabIndex={-1}
+          aria-label="Insert table"
+          tooltip="Insert table"
           className={className}
-          title="Insert table"
         >
           <TableIcon className="tiptap-button-icon" />
-          <ChevronDownIcon className="tiptap-button-icon" />
+          <ChevronDownIcon className="tiptap-button-dropdown-small" />
         </Button>
       </DropdownMenuTrigger>
       
-      <DropdownMenuContent portal={portal}>
-        <DropdownMenuItem onClick={() => insertTable(2, 2)}>
-          <TableIcon className="tiptap-button-icon" />
-          <span>2×2 Table</span>
-        </DropdownMenuItem>
-        
-        <DropdownMenuItem onClick={() => insertTable(3, 3)}>
-          <TableIcon className="tiptap-button-icon" />
-          <span>3×3 Table</span>
-        </DropdownMenuItem>
-        
-        <DropdownMenuItem onClick={() => insertTable(4, 4)}>
-          <TableIcon className="tiptap-button-icon" />
-          <span>4×4 Table</span>
-        </DropdownMenuItem>
-        
-        <DropdownMenuItem onClick={() => insertTable(3, 3, false)}>
-          <TableIcon className="tiptap-button-icon" />
-          <span>3×3 Table (no header)</span>
-        </DropdownMenuItem>
+      <DropdownMenuContent portal={portal} style={{ 
+        background: "transparent",
+        border: "none",
+        boxShadow: "none",
+        padding: "0"
+      }}>
+        <Card>
+          <CardBody>
+            <ButtonGroup>
+              <DropdownMenuItem onClick={() => insertTable(2, 2)} asChild>
+                <Button
+                  type="button"
+                  data-style="ghost"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    minWidth: "140px"
+                  }}
+                >
+                  <TableIcon className="tiptap-button-icon" />
+                  <span>2×2 Table</span>
+                </Button>
+              </DropdownMenuItem>
+              
+              <DropdownMenuItem onClick={() => insertTable(3, 3)} asChild>
+                <Button
+                  type="button"
+                  data-style="ghost"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    minWidth: "140px"
+                  }}
+                >
+                  <TableIcon className="tiptap-button-icon" />
+                  <span>3×3 Table</span>
+                </Button>
+              </DropdownMenuItem>
+              
+              <DropdownMenuItem onClick={() => insertTable(4, 4)} asChild>
+                <Button
+                  type="button"
+                  data-style="ghost"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    minWidth: "140px"
+                  }}
+                >
+                  <TableIcon className="tiptap-button-icon" />
+                  <span>4×4 Table</span>
+                </Button>
+              </DropdownMenuItem>
+              
+              <DropdownMenuItem onClick={() => insertTable(3, 3, false)} asChild>
+                <Button
+                  type="button"
+                  data-style="ghost"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    minWidth: "140px"
+                  }}
+                >
+                  <TableIcon className="tiptap-button-icon" />
+                  <span>3×3 Table (no header)</span>
+                </Button>
+              </DropdownMenuItem>
+            </ButtonGroup>
+          </CardBody>
+        </Card>
       </DropdownMenuContent>
     </DropdownMenu>
   )
