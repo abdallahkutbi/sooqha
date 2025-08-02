@@ -301,7 +301,7 @@ const ATTR_WHITESPACE =
 export function isAllowedUri(
   uri: string | undefined,
   protocols?: ProtocolConfig
-) {
+): boolean {
   const allowedProtocols: string[] = [
     "http",
     "https",
@@ -326,16 +326,15 @@ export function isAllowedUri(
     })
   }
 
-  return (
-    !uri ||
-    uri.replace(ATTR_WHITESPACE, "").match(
-      new RegExp(
-        // eslint-disable-next-line no-useless-escape
-        `^(?:(?:${allowedProtocols.join("|")}):|[^a-z]|[a-z0-9+.\-]+(?:[^a-z+.\-:]|$))`,
-        "i"
-      )
-    )
+  if (!uri) return true
+
+  const pattern = new RegExp(
+    // eslint-disable-next-line no-useless-escape
+    `^(?:(?:${allowedProtocols.join("|")}):|[^a-z]|[a-z0-9+.-]+(?:[^a-z+.-:]|$))`,
+    "i"
   )
+
+  return pattern.test(uri.replace(ATTR_WHITESPACE, ""))
 }
 
 export function sanitizeUrl(
