@@ -58,7 +58,11 @@ export const ChatInput: React.FC<ChatInputProps> = ({
             <span className="tt-ai-panel-chat-input-action-text">Attach</span>
           </button>
 
-          <button className="tt-ai-panel-chat-input-action-button tt-ai-panel-chat-input-action-button--disabled">
+          <button
+            className="tt-ai-panel-chat-input-action-button"
+            disabled
+            aria-disabled="true"
+          >
             <Globe className="tt-ai-panel-chat-input-action-icon" />
             <span className="tt-ai-panel-chat-input-action-text">Browse</span>
           </button>
