@@ -9,8 +9,10 @@ import {
   DropdownMenuContent, 
   DropdownMenuItem 
 } from "@/components/tiptap-ui-primitive/dropdown-menu"
-import { ChevronDownIcon } from "@/components/tiptap-icons/chevron-down-icon"
-import { SpacingIcon } from "@/components/tiptap-icons/spacing-icon"
+import {
+  ChevronDown as ChevronDownIcon,
+  AlignJustify as SpacingIcon,
+} from "lucide-react"
 
 interface SpacingDropdownProps {
   /**
