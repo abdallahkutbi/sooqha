@@ -70,47 +70,55 @@ export function useCursorVisibility({
     }
   }, [updateRect])
 
-  React.useEffect(() => {
-    const ensureCursorVisibility = () => {
-      if (!editor) return
+  const ensureCursorVisibility = React.useCallback(() => {
+    if (!editor) return
 
-      const { state, view } = editor
+    const { state, view } = editor
 
-      if (!view.hasFocus()) return
+    if (!view.hasFocus()) return
 
-      // Get current cursor position coordinates
-      const { from } = state.selection
-      const cursorCoords = view.coordsAtPos(from)
+    // Get current cursor position coordinates
+    const { from } = state.selection
+    const cursorCoords = view.coordsAtPos(from)
 
-      if (windowHeight < rect.height) {
-        if (cursorCoords) {
-          // Check if there's enough space between cursor and bottom of window
-          const availableSpace = windowHeight - cursorCoords.top
+    if (windowHeight < rect.height && cursorCoords) {
+      // Check if there's enough space between cursor and bottom of window
+      const availableSpace = windowHeight - cursorCoords.top
 
-          // If not enough space, scroll to position cursor in the middle of viewport
-          if (availableSpace < overlayHeight) {
-            // Calculate target scroll position to center cursor in viewport
-            // Account for overlay height to ensure cursor is not hidden
-            const targetCursorY = Math.max(windowHeight / 2, overlayHeight)
+      // If not enough space, scroll to position cursor in the middle of viewport
+      if (availableSpace < overlayHeight) {
+        // Calculate target scroll position to center cursor in viewport
+        // Account for overlay height to ensure cursor is not hidden
+        const targetCursorY = Math.max(windowHeight / 2, overlayHeight)
 
-            // Get current scroll position and cursor's absolute position
-            const currentScrollY = window.scrollY
-            const cursorAbsoluteY = cursorCoords.top + currentScrollY
+        // Get current scroll position and cursor's absolute position
+        const currentScrollY = window.scrollY
+        const cursorAbsoluteY = cursorCoords.top + currentScrollY
 
-            // Calculate new scroll position
-            const newScrollY = cursorAbsoluteY - targetCursorY
+        // Calculate new scroll position
+        const newScrollY = cursorAbsoluteY - targetCursorY
 
-            window.scrollTo({
-              top: Math.max(0, newScrollY),
-              behavior: "smooth",
-            })
-          }
-        }
+        window.scrollTo({
+          top: Math.max(0, newScrollY),
+          behavior: "smooth",
+        })
       }
     }
+  }, [editor, overlayHeight, windowHeight, rect.height])
+
+  React.useEffect(() => {
+    if (!editor) return
+
+    editor.on("selectionUpdate", ensureCursorVisibility)
+    editor.on("transaction", ensureCursorVisibility)
 
     ensureCursorVisibility()
-  }, [editor, overlayHeight, windowHeight, rect.height])
+
+    return () => {
+      editor.off("selectionUpdate", ensureCursorVisibility)
+      editor.off("transaction", ensureCursorVisibility)
+    }
+  }, [editor, ensureCursorVisibility])
 
   return rect
 }
