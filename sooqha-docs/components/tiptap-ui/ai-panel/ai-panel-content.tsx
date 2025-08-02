@@ -36,7 +36,7 @@ export const AiPanelContent: React.FC<AiPanelContentProps> = ({
   onAgent,
   panelClassName,
   height = "auto",
-  width = "320px",
+  width = "100%",
   variant = "side",
   isProcessing,
   currentPrompt,
