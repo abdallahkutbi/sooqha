@@ -3,4 +3,6 @@ export type { AiPanelProps, AiMessage, AgentCommand, AiPanelVariant } from "./ai
 export { AiPanelButton } from "./ai-panel-button"
 export type { AiPanelButtonProps } from "./ai-panel-button"
 export { useAiPanel } from "./use-ai-panel"
-export type { UseAiPanelConfig } from "./use-ai-panel" 
+export type { UseAiPanelConfig } from "./use-ai-panel"
+export { Ai } from "./ai"
+export { AiMenu } from "./ai-menu"

@@ -153,7 +153,13 @@ import { useScrolling } from "@/hooks/use-scrolling" // Scroll state detection
 import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle" // Light/dark mode toggle
 
 // ===== AI INTEGRATION =====
-import { AiPanelButton, AiPanel } from "@/components/tiptap-ui/ai-panel" // AI assistant panel
+import {
+  Ai,
+  AiMenu,
+  AiPanelButton,
+  AiPanel,
+  useAiPanel,
+} from "@/components/tiptap-ui/ai-panel" // AI assistant panel
 
 // ===== UTILITY FUNCTIONS =====
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils" // Image upload handling
@@ -409,6 +415,7 @@ export function SimpleEditor() {
   // ===== DOCUMENT SETTINGS STATE =====
   const [pageSize, setPageSize] = React.useState("a4")        // Document page size (A4, Letter, etc.)
   const [isAIOpen, setIsAIOpen] = React.useState(false)       // AI assistant panel visibility
+  const ai = useAiPanel({ editor })                           // Shared AI panel state
   const [isFileExplorerOpen, setIsFileExplorerOpen] = React.useState(false) // File explorer panel visibility
   const [isDragging, setIsDragging] = React.useState(false)   // Track drag state for z-index management
   
@@ -493,10 +500,10 @@ export function SimpleEditor() {
       
       // ===== LINE SPACING =====
       LineSpacing,                // Line spacing functionality
-      
+
       // ===== FONT FAMILY =====
       FontFamily,                 // Font family functionality
-      
+
       // ===== MEDIA =====
       Image,                       // Basic image support
       ImageUploadNode.configure({  // Enhanced image upload with drag & drop
@@ -509,6 +516,7 @@ export function SimpleEditor() {
       
       // ===== EDITOR ENHANCEMENTS =====
       Selection,                   // Selection management and events
+      Ai,                          // AI extension
     ],
     
     // ===== INITIAL CONTENT =====
@@ -584,6 +592,16 @@ export function SimpleEditor() {
           role="presentation" // Accessibility role
           className={`simple-editor-content page-size-${pageSize}`} // Dynamic page size class
         />
+        <AiMenu
+          editor={editor}
+          items={ai.aiAgents.map(agent => ({
+            title: agent.name,
+            onAction: () => {
+              ai.handleAgent(agent)
+              setIsAIOpen(true)
+            },
+          }))}
+        />
 
         {/* === FILE EXPLORER PANEL (OVERLAY) === */}
         <div 
@@ -633,26 +651,13 @@ export function SimpleEditor() {
             height="100%"             // Full height
             width="100%"              // Fill container width
             panelClassName="tt-ai-panel--attached" // Attach to right edge
-            onAgent={(agent) => {
-              console.log('Agent action executed:', agent.name);
-              // You can add Agent action logic here
-            }}
-            onInsert={(content) => {
-              console.log('Inserting AI content:', content);
-              // Content is automatically inserted by the hook
-            }}
-            onReplace={(content) => {
-              console.log('Replacing with AI content:', content);
-              // Content is automatically replaced by the hook
-            }}
-            onRetry={() => {
-              console.log('Retrying AI request');
-              // You can add retry logic here
-            }}
-            onPromptSubmit={(prompt) => {
-              console.log('AI prompt submitted:', prompt);
-              // You can add AI prompt handling here
-            }}
+            messages={ai.aiMessages}
+            agents={ai.aiAgents}
+            onAgent={ai.handleAgent}
+            onInsert={ai.handleInsert}
+            onReplace={ai.handleReplace}
+            onRetry={ai.handleRetry}
+            onPromptSubmit={ai.handlePromptSubmit}
           />
         </div>
       </EditorContext.Provider>
