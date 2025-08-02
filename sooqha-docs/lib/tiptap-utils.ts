@@ -188,9 +188,7 @@ export function findNodePosition(props: {
     let foundNode: TiptapNode | null = null
 
     editor.state.doc.descendants((currentNode, pos) => {
-      // TODO: Needed?
-      // if (currentNode.type && currentNode.type.name === node!.type.name) {
-      if (currentNode === node) {
+      if (currentNode.eq(node!)) {
         foundPos = pos
         foundNode = currentNode
         return false
