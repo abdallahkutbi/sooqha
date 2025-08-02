@@ -36,7 +36,7 @@ export const AiPanelContent: React.FC<AiPanelContentProps> = ({
   onAgent,
   panelClassName,
   height = "auto",
-  width = "320px",
+  width = "clamp(320px, 50vw, 600px)",
   variant = "side",
   isProcessing,
   currentPrompt,
@@ -58,7 +58,7 @@ export const AiPanelContent: React.FC<AiPanelContentProps> = ({
         variant && `tt-ai-panel--${variant}`,
         panelClassName
       )}
-      style={{ height, width }}
+      style={{ height, width, maxWidth: "100%" }}
     >
       <div className="tt-ai-panel-header">
         <div className="tt-ai-panel-header-left">
