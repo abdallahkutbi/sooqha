@@ -682,7 +682,7 @@
     }
   }
 
-  &--disabled {
+  &:disabled {
     opacity: 0.1;
     cursor: not-allowed;
 
