@@ -3,9 +3,11 @@
 import * as React from "react"
 import { useTiptapEditor } from "@/hooks/use-tiptap-editor"
 import { Button } from "@/components/tiptap-ui-primitive/button"
-import { ChevronDownIcon } from "@/components/tiptap-icons/chevron-down-icon"
-import { PlusIcon } from "@/components/tiptap-icons/plus-icon"
-import { MinusIcon } from "@/components/tiptap-icons/minus-icon"
+import {
+  ChevronDown as ChevronDownIcon,
+  Plus as PlusIcon,
+  Minus as MinusIcon,
+} from "lucide-react"
 
 interface TableControlsProps {
   /**

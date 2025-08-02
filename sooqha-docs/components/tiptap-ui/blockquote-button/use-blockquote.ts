@@ -10,7 +10,7 @@ import { useTiptapEditor } from "@/hooks/use-tiptap-editor"
 import { useIsMobile } from "@/hooks/use-mobile"
 
 // --- Icons ---
-import { BlockquoteIcon } from "@/components/tiptap-icons/blockquote-icon"
+import { TextQuote as BlockquoteIcon } from "lucide-react"
 
 // --- UI Utils ---
 import {

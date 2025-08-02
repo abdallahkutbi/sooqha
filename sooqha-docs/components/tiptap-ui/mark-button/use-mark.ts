@@ -12,13 +12,15 @@ import { useIsMobile } from "@/hooks/use-mobile"
 import { isMarkInSchema, isNodeTypeSelected } from "@/lib/tiptap-utils"
 
 // --- Icons ---
-import { BoldIcon } from "@/components/tiptap-icons/bold-icon"
-import { Code2Icon } from "@/components/tiptap-icons/code2-icon"
-import { ItalicIcon } from "@/components/tiptap-icons/italic-icon"
-import { StrikeIcon } from "@/components/tiptap-icons/strike-icon"
-import { SubscriptIcon } from "@/components/tiptap-icons/subscript-icon"
-import { SuperscriptIcon } from "@/components/tiptap-icons/superscript-icon"
-import { UnderlineIcon } from "@/components/tiptap-icons/underline-icon"
+import {
+  Bold as BoldIcon,
+  Code2 as Code2Icon,
+  Italic as ItalicIcon,
+  Strikethrough as StrikeIcon,
+  Subscript as SubscriptIcon,
+  Superscript as SuperscriptIcon,
+  Underline as UnderlineIcon,
+} from "lucide-react"
 
 export type Mark =
   | "bold"

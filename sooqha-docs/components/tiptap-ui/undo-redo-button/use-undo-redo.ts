@@ -12,8 +12,7 @@ import { useIsMobile } from "@/hooks/use-mobile"
 import { isNodeTypeSelected } from "@/lib/tiptap-utils"
 
 // --- Icons ---
-import { Redo2Icon } from "@/components/tiptap-icons/redo2-icon"
-import { Undo2Icon } from "@/components/tiptap-icons/undo2-icon"
+import { Redo2 as Redo2Icon, Undo2 as Undo2Icon } from "lucide-react"
 
 export type UndoRedoAction = "undo" | "redo"
 

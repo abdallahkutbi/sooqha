@@ -10,9 +10,11 @@ import { useTiptapEditor } from "@/hooks/use-tiptap-editor"
 import { useIsMobile } from "@/hooks/use-mobile"
 
 // --- Icons ---
-import { ListIcon } from "@/components/tiptap-icons/list-icon"
-import { ListOrderedIcon } from "@/components/tiptap-icons/list-ordered-icon"
-import { ListTodoIcon } from "@/components/tiptap-icons/list-todo-icon"
+import {
+  List as ListIcon,
+  ListOrdered as ListOrderedIcon,
+  ListTodo as ListTodoIcon,
+} from "lucide-react"
 
 // --- Lib ---
 import {

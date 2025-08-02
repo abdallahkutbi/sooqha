@@ -136,9 +136,11 @@ import { FileExplorerButton, FileExplorerPanel } from "@/components/tiptap-ui/fi
 
 // ===== ICON COMPONENTS =====
 // SVG icon components for mobile toolbar navigation
-import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon" // Back navigation
-import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon" // Highlight tool indicator
-import { LinkIcon } from "@/components/tiptap-icons/link-icon" // Link tool indicator
+import {
+  ArrowLeft as ArrowLeftIcon,
+  Highlighter as HighlighterIcon,
+  Link as LinkIcon,
+} from "lucide-react" // Icons
 
 // ===== CUSTOM HOOKS =====
 // React hooks for responsive behavior and editor state

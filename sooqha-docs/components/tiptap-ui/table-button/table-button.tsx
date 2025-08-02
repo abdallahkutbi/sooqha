@@ -3,7 +3,7 @@
 import * as React from "react"
 import { useTiptapEditor } from "@/hooks/use-tiptap-editor"
 import { Button } from "@/components/tiptap-ui-primitive/button"
-import { TableIcon } from "@/components/tiptap-icons/table-icon"
+import { Table as TableIcon } from "lucide-react"
 
 interface TableButtonProps {
   /**

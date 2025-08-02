@@ -3,8 +3,10 @@
 import * as React from "react"
 
 // --- Icons ---
-import { ChevronDownIcon } from "@/components/tiptap-icons/chevron-down-icon"
-import { ExportIcon } from "@/components/tiptap-icons/export-icon"
+import {
+  ChevronDown as ChevronDownIcon,
+  ArrowDownToLine as ExportIcon,
+} from "lucide-react"
 
 // --- UI Primitives ---
 import type { ButtonProps } from "@/components/tiptap-ui-primitive/button"

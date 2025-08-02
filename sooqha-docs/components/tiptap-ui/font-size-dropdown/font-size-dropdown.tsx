@@ -9,8 +9,7 @@ import {
   DropdownMenuContent, 
   DropdownMenuItem 
 } from "@/components/tiptap-ui-primitive/dropdown-menu"
-import { ChevronDownIcon } from "@/components/tiptap-icons/chevron-down-icon"
-import { TypeIcon } from "@/components/tiptap-icons/type-icon"
+import { ChevronDown as ChevronDownIcon, Type as TypeIcon } from "lucide-react"
 
 // ===== STYLING =====
 import "@/components/tiptap-ui/font-size-dropdown/font-size-dropdown.scss"

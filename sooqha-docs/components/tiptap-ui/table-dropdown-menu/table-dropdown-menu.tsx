@@ -9,8 +9,7 @@ import {
   DropdownMenuContent, 
   DropdownMenuItem 
 } from "@/components/tiptap-ui-primitive/dropdown-menu"
-import { TableIcon } from "@/components/tiptap-icons/table-icon"
-import { ChevronDownIcon } from "@/components/tiptap-icons/chevron-down-icon"
+import { Table as TableIcon, ChevronDown as ChevronDownIcon } from "lucide-react"
 
 interface TableDropdownMenuProps {
   /**
