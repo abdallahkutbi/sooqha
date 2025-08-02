@@ -3,6 +3,14 @@ import type { Editor } from "@tiptap/react"
 import type { AiMessage, AgentCommand } from "./ai-panel"
 import { Sparkles, Wand2, Check, Lightbulb } from "lucide-react"
 
+const logger = {
+  info: (message: string, meta?: Record<string, unknown>) => {
+    if (process.env.NODE_ENV !== "production") {
+      console.info(message, meta)
+    }
+  },
+}
+
 // Default Agent commands for demonstration
 const defaultAgentCommands: AgentCommand[] = [
   {
@@ -134,7 +142,7 @@ export function useAiPanel(config: UseAiPanelConfig) {
   // Handle Agent action execution
   const handleAgent = React.useCallback(
     (agent: AgentCommand) => {
-      console.log('Agent action executed:', agent.name)
+      logger.info('Agent action executed', { agent: agent.name })
       onAgent?.(agent)
       onAction?.()
     },
@@ -144,7 +152,7 @@ export function useAiPanel(config: UseAiPanelConfig) {
   // Handle message insertion
   const handleInsert = React.useCallback(
     (content: string) => {
-      console.log('Inserting AI content:', content)
+      logger.info('Inserting AI content', { content })
       if (editor) {
         editor.chain().focus().insertContent(content).run()
       }
@@ -157,7 +165,7 @@ export function useAiPanel(config: UseAiPanelConfig) {
   // Handle message replacement
   const handleReplace = React.useCallback(
     (content: string) => {
-      console.log('Replacing content with AI response:', content)
+      logger.info('Replacing content with AI response', { content })
       if (editor) {
         const { from, to } = editor.state.selection
         editor.chain().focus().deleteRange({ from, to }).insertContent(content).run()
@@ -170,7 +178,7 @@ export function useAiPanel(config: UseAiPanelConfig) {
 
   // Handle retry
   const handleRetry = React.useCallback(() => {
-    console.log('Retrying AI request')
+    logger.info('Retrying AI request')
     onRetry?.()
     onAction?.()
   }, [onRetry, onAction])
@@ -178,7 +186,7 @@ export function useAiPanel(config: UseAiPanelConfig) {
   // Handle prompt submission
   const handlePromptSubmit = React.useCallback(
     (prompt: string) => {
-      console.log('Submitting AI prompt:', prompt)
+      logger.info('Submitting AI prompt', { prompt })
       onPromptSubmit?.(prompt)
       onAction?.()
     },
