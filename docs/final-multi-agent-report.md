@@ -161,7 +161,8 @@ Sooqha Docs is an AI-native markdown document editor aiming to be the fastest an
      invalid API key, rate limits)?
    * Tiptap Performance with Large Documents: While Tiptap is generally performant, how will it handle extremely large markdown documents, especially when
      combined with real-time AI interactions?
-   * Browser Compatibility: What specific browser versions and platforms will be officially supported and tested for the MVP?Sooqha Docs' UI/UX design direction will be rooted in its core principles: AI-native, markdown-first, blazing fast, and minimal. The design will
+   * Browser Compatibility: What specific browser versions and platforms will be officially supported and tested for the MVP?
+  Sooqha Docs' UI/UX design direction will be rooted in its core principles: AI-native, markdown-first, blazing fast, and minimal. The design will
   prioritize a focused writing experience, seamlessly integrating AI capabilities without introducing bloat.
 
   Core Layout and UX Flow
