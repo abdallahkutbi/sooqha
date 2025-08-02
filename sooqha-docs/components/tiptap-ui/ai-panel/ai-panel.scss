@@ -239,9 +239,9 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  min-height: 100;
+  min-height: 100%;
   position: relative;
-  margin-top: -1.5rem; /* Move up by 8px */
+  margin-top: -0.5rem; /* Move up by ~8px */
 }
 
 .tt-ai-panel-chat {
