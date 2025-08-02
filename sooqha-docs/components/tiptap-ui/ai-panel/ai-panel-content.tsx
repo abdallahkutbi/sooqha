@@ -46,6 +46,22 @@ export const AiPanelContent: React.FC<AiPanelContentProps> = ({
   const [promptInput, setPromptInput] = React.useState(currentPrompt || "")
   const [activeTab, setActiveTab] = React.useState<"chat" | "agent">("chat")
 
+  const chatTabRef = React.useRef<HTMLButtonElement>(null)
+  const agentTabRef = React.useRef<HTMLButtonElement>(null)
+
+  const handleTabKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+      event.preventDefault()
+      const nextTab = activeTab === "chat" ? "agent" : "chat"
+      setActiveTab(nextTab)
+      if (nextTab === "chat") {
+        chatTabRef.current?.focus()
+      } else {
+        agentTabRef.current?.focus()
+      }
+    }
+  }
+
   const handleSelectMessage = (message: AiMessage) => {
     setSelectedMessageId(message.id)
     onSelectMessage?.(message)
@@ -65,29 +81,46 @@ export const AiPanelContent: React.FC<AiPanelContentProps> = ({
           <h3 className="tt-ai-panel-title">AI Assistant</h3>
         </div>
         <div className="tt-ai-panel-header-center">
-          <div className="tt-ai-panel-tabs">
+          <div className="tt-ai-panel-tabs" role="tablist">
             <button
+              id="tt-ai-panel-tab-chat"
+              ref={chatTabRef}
+              role="tab"
+              aria-selected={activeTab === "chat"}
+              aria-controls="tt-ai-panel-chat"
+              tabIndex={activeTab === "chat" ? 0 : -1}
               className={cn(
                 "tt-ai-panel-tab",
                 activeTab === "chat" && "tt-ai-panel-tab--active"
               )}
               onClick={() => setActiveTab("chat")}
+              onKeyDown={handleTabKeyDown}
             >
               Chat
             </button>
             <button
+              id="tt-ai-panel-tab-agent"
+              ref={agentTabRef}
+              role="tab"
+              aria-selected={activeTab === "agent"}
+              aria-controls="tt-ai-panel-agent"
+              tabIndex={activeTab === "agent" ? 0 : -1}
               className={cn(
                 "tt-ai-panel-tab",
                 activeTab === "agent" && "tt-ai-panel-tab--active"
               )}
               onClick={() => setActiveTab("agent")}
+              onKeyDown={handleTabKeyDown}
             >
               Agent
             </button>
           </div>
         </div>
         <div className="tt-ai-panel-header-right">
-          <button className="tt-ai-panel-settings-button">
+          <button
+            className="tt-ai-panel-settings-button"
+            aria-label="Settings"
+          >
             <Settings className="tt-ai-panel-settings-icon" />
           </button>
         </div>
@@ -95,7 +128,12 @@ export const AiPanelContent: React.FC<AiPanelContentProps> = ({
       <Separator className="tt-ai-panel-separator" />
       <div className="tt-ai-panel-content">
         {activeTab === "chat" ? (
-          <div className="tt-ai-panel-chat">
+          <div
+            className="tt-ai-panel-chat"
+            role="tabpanel"
+            id="tt-ai-panel-chat"
+            aria-labelledby="tt-ai-panel-tab-chat"
+          >
             <AiMessageList
               messages={messages}
               selectedId={selectedMessageId}
@@ -120,7 +158,16 @@ export const AiPanelContent: React.FC<AiPanelContentProps> = ({
             </div>
           </div>
         ) : (
-          <AgentList agents={agents} onAgent={(agent) => onAgent?.(agent)} />
+          <div
+            role="tabpanel"
+            id="tt-ai-panel-agent"
+            aria-labelledby="tt-ai-panel-tab-agent"
+          >
+            <AgentList
+              agents={agents}
+              onAgent={(agent) => onAgent?.(agent)}
+            />
+          </div>
         )}
       </div>
     </div>
