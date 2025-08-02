@@ -45,6 +45,22 @@ import { Subscript } from "@tiptap/extension-subscript" // Subscript text
 import { Superscript } from "@tiptap/extension-superscript" // Superscript text
 import { Selection } from "@tiptap/extensions" // Selection management
 
+// ===== TABLE EXTENSIONS =====
+import { Table } from "@tiptap/extension-table" // Table functionality
+import { TableRow } from "@tiptap/extension-table-row" // Table row management
+import { TableCell } from "@tiptap/extension-table-cell" // Table cell management
+import { TableHeader } from "@tiptap/extension-table-header" // Table header cells
+
+// ===== FONT SIZE EXTENSIONS =====
+import { TextStyle } from "@tiptap/extension-text-style" // Text styling foundation
+import { FontSize } from "@tiptap/extension-text-style" // Font size functionality
+
+// ===== LINE SPACING EXTENSIONS =====
+import { LineSpacing } from "@/components/tiptap-node/line-spacing-node/line-spacing-node-extension" // Line spacing functionality
+
+// ===== FONT FAMILY EXTENSIONS =====
+import { FontFamily } from "@/components/tiptap-node/font-family-node/font-family-node-extension" // Font family functionality
+
 // ===== UI PRIMITIVE COMPONENTS =====
 // Base UI building blocks for the editor interface
 import { Button } from "@/components/tiptap-ui-primitive/button" // Styled buttons
@@ -69,6 +85,7 @@ import "@/components/tiptap-node/list-node/list-node.scss" // List styling (bull
 import "@/components/tiptap-node/image-node/image-node.scss" // Image styling
 import "@/components/tiptap-node/heading-node/heading-node.scss" // Heading styling
 import "@/components/tiptap-node/paragraph-node/paragraph-node.scss" // Paragraph styling
+import "@/components/tiptap-node/table-node/table-node.scss" // Table styling
 
 // ===== TIPTAP UI COMPONENTS =====
 // High-level UI components that combine primitives for specific editor functionality
@@ -96,6 +113,19 @@ import {
 import { MarkButton } from "@/components/tiptap-ui/mark-button" // Text formatting (bold, italic, etc.)
 import { TextAlignButton } from "@/components/tiptap-ui/text-align-button" // Text alignment controls
 import { UndoRedoButton } from "@/components/tiptap-ui/undo-redo-button" // History navigation
+
+// ===== TABLE UI COMPONENTS =====
+import { TableDropdownMenu } from "@/components/tiptap-ui/table-dropdown-menu" // Table insertion with options
+import { TableControls } from "@/components/tiptap-ui/table-controls" // Table structure management
+
+// ===== FONT SIZE UI COMPONENTS =====
+import { FontSizeDropdown } from "@/components/tiptap-ui/font-size-dropdown" // Font size selection
+
+// ===== SPACING UI COMPONENTS =====
+import { SpacingDropdown } from "@/components/tiptap-ui/spacing-dropdown" // Line spacing selection
+
+// ===== FONT FAMILY UI COMPONENTS =====
+import { FontFamilyDropdown } from "@/components/tiptap-ui/font-family-dropdown" // Font family selection
 
 // ===== TOOLBAR FEATURE COMPONENTS =====
 import { ExportButton } from "@/components/tiptap-ui/export-button/export-button" // Document export functionality
@@ -209,14 +239,17 @@ const MainToolbarContent = ({
         {/* Heading level selector (H1-H4) */}
         <HeadingDropdownMenu levels={[1, 2, 3, 4]} portal={isMobile} />
         
+        <FontSizeDropdown portal={isMobile} /> {/* Font size selection */}
+        <FontFamilyDropdown portal={isMobile} /> {/* Font family selection */}
+        
         {/* List type selector (bullets, numbers, tasks) */}
         <ListDropdownMenu
           types={["bulletList", "orderedList", "taskList"]}
           portal={isMobile}
         />
         
-        <BlockquoteButton />  {/* Quote block formatting */}
         <CodeBlockButton />   {/* Code block creation */}
+        <TableDropdownMenu portal={isMobile} /> {/* Table insertion with options */}
       </ToolbarGroup>
 
       <ToolbarSeparator />
@@ -227,7 +260,6 @@ const MainToolbarContent = ({
         <MarkButton type="bold" />      {/* **Bold** text */}
         <MarkButton type="italic" />    {/* *Italic* text */}
         <MarkButton type="strike" />    {/* ~~Strikethrough~~ text */}
-        <MarkButton type="code" />      {/* `Inline code` */}
         <MarkButton type="underline" /> {/* Underlined text */}
         
         {/* Advanced formatting with desktop/mobile variants */}
@@ -259,7 +291,7 @@ const MainToolbarContent = ({
         <TextAlignButton align="left" />    {/* Left-align text */}
         <TextAlignButton align="center" />  {/* Center-align text */}
         <TextAlignButton align="right" />   {/* Right-align text */}
-        <TextAlignButton align="justify" /> {/* Justify text */}
+        <SpacingDropdown portal={isMobile} /> {/* Line spacing selection */}
       </ToolbarGroup>
 
       <ToolbarSeparator />
@@ -441,6 +473,28 @@ export function SimpleEditor() {
         nested: true               // Allow nested task items
       }),
       
+      // ===== TABLES =====
+      Table.configure({
+        resizable: true,           // Allow column resizing
+        handleWidth: 5,            // Width of resize handle
+        cellMinWidth: 100,         // Minimum cell width
+      }),
+      TableRow,                    // Table row management
+      TableCell,                   // Table cell management
+      TableHeader,                 // Table header cells
+      
+      // ===== FONT SIZE =====
+      TextStyle,                   // Text styling foundation
+      FontSize.configure({
+        types: ['textStyle'],      // Apply to textStyle marks
+      }),
+      
+      // ===== LINE SPACING =====
+      LineSpacing,                // Line spacing functionality
+      
+      // ===== FONT FAMILY =====
+      FontFamily,                 // Font family functionality
+      
       // ===== MEDIA =====
       Image,                       // Basic image support
       ImageUploadNode.configure({  // Enhanced image upload with drag & drop
@@ -544,7 +598,7 @@ export function SimpleEditor() {
           <FileExplorerPanel
             editor={editor}           // Pass editor for integration
             height="100%"             // Full height
-            width="100%"              // Fill container width
+            width="90%"              // Fill container width
             panelClassName="tt-file-explorer-panel--attached" // Attach to left edge
             onSelect={(node) => {
               console.log('Selected file:', node);
@@ -562,7 +616,7 @@ export function SimpleEditor() {
         {/* === AI ASSISTANT PANEL === */}
         {/* === AI ASSISTANT PANEL === */}
         <div 
-          className={`fixed right-0 transition-transform duration-300 ease-out ${
+          className={`fixed right-0 top-0 transition-transform duration-300 ease-out ${
             isAIOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
           style={{ 
@@ -577,9 +631,9 @@ export function SimpleEditor() {
             height="100%"             // Full height
             width="100%"              // Fill container width
             panelClassName="tt-ai-panel--attached" // Attach to right edge
-            onCommand={(command) => {
-              console.log('AI command executed:', command.name);
-              // You can add AI command logic here
+            onAgent={(agent) => {
+              console.log('Agent action executed:', agent.name);
+              // You can add Agent action logic here
             }}
             onInsert={(content) => {
               console.log('Inserting AI content:', content);

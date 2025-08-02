@@ -1,0 +1,166 @@
+/*
+ * FONT SIZE DROPDOWN STYLES
+ * =========================
+ * 
+ * Consistent font styling for font size dropdown component.
+ * Ensures proper font family and sizing across the project.
+ */
+
+/* Font size button styling */
+.tiptap-button {
+  .font-size-display {
+    font-family: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    font-size: 14px !important;
+    min-width: 2rem;
+    text-align: center;
+  }
+}
+
+/* Font size dropdown content styling */
+.font-size-dropdown-content {
+  min-width: 200px;
+  padding: 0.5rem;
+  
+  .font-size-option {
+    font-family: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    font-size: 14px !important;
+    
+    /* Ensure consistent spacing */
+    display: inline-block;
+    min-width: 2rem;
+    text-align: center;
+  }
+}
+
+/* Custom input section */
+.font-size-custom-input {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--tt-gray-light-200);
+  margin-bottom: 0.5rem;
+  
+  .dark & {
+    border-bottom-color: var(--tt-gray-dark-200);
+  }
+  
+  .font-size-input {
+    flex: 1;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--tt-gray-light-300);
+    border-radius: var(--tt-radius-sm);
+    font-size: 0.875rem;
+    background: var(--tt-gray-light-50);
+    
+    .dark & {
+      border-color: var(--tt-gray-dark-300);
+      background: var(--tt-gray-dark-100);
+      color: var(--tt-gray-dark-800);
+    }
+    
+    &:focus {
+      outline: none;
+      border-color: var(--tt-brand-color-500);
+      
+      .dark & {
+        border-color: var(--tt-brand-color-400);
+      }
+    }
+  }
+  
+  .font-size-submit-btn {
+    padding: 0.25rem 0.5rem;
+    background: var(--tt-brand-color-500);
+    color: white;
+    border: none;
+    border-radius: var(--tt-radius-sm);
+    font-size: 0.875rem;
+    cursor: pointer;
+    
+    &:hover:not(:disabled) {
+      background: var(--tt-brand-color-600);
+    }
+    
+    &:disabled {
+      background: var(--tt-gray-light-300);
+      cursor: not-allowed;
+      
+      .dark & {
+        background: var(--tt-gray-dark-300);
+      }
+    }
+    
+    .dark & {
+      background: var(--tt-brand-color-400);
+      
+      &:hover:not(:disabled) {
+        background: var(--tt-brand-color-500);
+      }
+    }
+  }
+}
+
+/* Preset sizes section */
+.font-size-presets {
+  margin-bottom: 0.5rem;
+}
+
+/* Scrollable section */
+.font-size-scrollable {
+  max-height: 120px;
+  overflow-y: auto;
+  border-top: 1px solid var(--tt-gray-light-200);
+  padding-top: 0.5rem;
+  
+  .dark & {
+    border-top-color: var(--tt-gray-dark-200);
+  }
+  
+  /* Custom scrollbar */
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: var(--tt-gray-light-200);
+    border-radius: 2px;
+    
+    .dark & {
+      background: var(--tt-gray-dark-300);
+    }
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--tt-gray-light-400);
+    border-radius: 2px;
+    
+    &:hover {
+      background: var(--tt-gray-light-500);
+    }
+    
+    .dark & {
+      background: var(--tt-gray-dark-400);
+      
+      &:hover {
+        background: var(--tt-gray-dark-500);
+      }
+    }
+  }
+}
+
+/* Ensure dropdown items maintain consistent styling */
+.tiptap-dropdown-menu [data-radix-dropdown-menu-item] {
+  .font-size-option {
+    font-family: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+    font-size: 14px !important;
+  }
+} 

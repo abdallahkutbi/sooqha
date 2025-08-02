@@ -1,0 +1,205 @@
+/*
+ * TABLE NODE STYLES
+ * =================
+ * 
+ * Professional table styling for TipTap editor.
+ * Features:
+ * - Clean, modern table appearance
+ * - Responsive design
+ * - Proper spacing and borders
+ * - Header row styling
+ * - Hover effects
+ */
+
+/* Table Container */
+.ProseMirror table {
+  border-collapse: collapse;
+  margin: 0;
+  overflow: hidden;
+  table-layout: fixed;
+  width: 100%;
+  border-radius: var(--tt-radius-md);
+  border: 1px solid var(--tt-gray-light-300);
+  background-color: var(--tt-gray-light-50);
+  
+  .dark & {
+    border-color: var(--tt-gray-dark-300);
+    background-color: var(--tt-gray-dark-100);
+  }
+}
+
+/* Table Header */
+.ProseMirror th {
+  background-color: var(--tt-gray-light-100);
+  border-bottom: 2px solid var(--tt-gray-light-300);
+  border-right: 1px solid var(--tt-gray-light-300);
+  font-weight: 600;
+  padding: 0.75rem;
+  position: relative;
+  text-align: left;
+  vertical-align: top;
+  
+  .dark & {
+    background-color: var(--tt-gray-dark-200);
+    border-bottom-color: var(--tt-gray-dark-300);
+    border-right-color: var(--tt-gray-dark-300);
+  }
+  
+  &:last-child {
+    border-right: none;
+  }
+}
+
+/* Table Cells */
+.ProseMirror td {
+  border-bottom: 1px solid var(--tt-gray-light-300);
+  border-right: 1px solid var(--tt-gray-light-300);
+  padding: 0.75rem;
+  position: relative;
+  vertical-align: top;
+  
+  .dark & {
+    border-bottom-color: var(--tt-gray-dark-300);
+    border-right-color: var(--tt-gray-dark-300);
+  }
+  
+  &:last-child {
+    border-right: none;
+  }
+}
+
+/* Last row cells - no bottom border */
+.ProseMirror tr:last-child td,
+.ProseMirror tr:last-child th {
+  border-bottom: none;
+}
+
+/* Table Row Hover Effect */
+.ProseMirror tr:hover {
+  background-color: var(--tt-gray-light-100);
+  
+  .dark & {
+    background-color: var(--tt-gray-dark-200);
+  }
+}
+
+/* Selected Cell Styling */
+.ProseMirror .selectedCell {
+  background-color: var(--tt-brand-color-100);
+  border: 2px solid var(--tt-brand-color-500);
+  
+  .dark & {
+    background-color: var(--tt-brand-color-900);
+    border-color: var(--tt-brand-color-400);
+  }
+}
+
+/* Table Controls (when table is selected) */
+.ProseMirror .tableWrapper {
+  position: relative;
+  
+  /* Table controls overlay */
+  &::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 2px solid var(--tt-brand-color-500);
+    border-radius: var(--tt-radius-md);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--tt-transition-duration-default) var(--tt-transition-easing-default);
+  }
+  
+  &.selected::after {
+    opacity: 1;
+  }
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  .ProseMirror table {
+    font-size: 0.875rem;
+  }
+  
+  .ProseMirror th,
+  .ProseMirror td {
+    padding: 0.5rem;
+  }
+}
+
+/* Table with horizontal scroll for small screens */
+.ProseMirror .tableWrapper {
+  overflow-x: auto;
+  margin: 1rem 0;
+  
+  /* Custom scrollbar for table */
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: var(--tt-gray-light-200);
+    border-radius: 3px;
+    
+    .dark & {
+      background: var(--tt-gray-dark-300);
+    }
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--tt-gray-light-400);
+    border-radius: 3px;
+    
+    &:hover {
+      background: var(--tt-gray-light-500);
+    }
+    
+    .dark & {
+      background: var(--tt-gray-dark-400);
+      
+      &:hover {
+        background: var(--tt-gray-dark-500);
+      }
+    }
+  }
+}
+
+/* Table resize handles */
+.ProseMirror .column-resize-handle {
+  background-color: var(--tt-brand-color-500);
+  bottom: -2px;
+  position: absolute;
+  right: -2px;
+  pointer-events: none;
+  top: 0;
+  width: 4px;
+  
+  .dark & {
+    background-color: var(--tt-brand-color-400);
+  }
+}
+
+/* Table cell selection */
+.ProseMirror .cell-selection {
+  background-color: var(--tt-brand-color-100);
+  border: 2px solid var(--tt-brand-color-500);
+  
+  .dark & {
+    background-color: var(--tt-brand-color-900);
+    border-color: var(--tt-brand-color-400);
+  }
+}
+
+/* Empty table cell placeholder */
+.ProseMirror td:empty::before {
+  content: 'Enter text...';
+  color: var(--tt-gray-light-400);
+  font-style: italic;
+  
+  .dark & {
+    color: var(--tt-gray-dark-400);
+  }
+} 

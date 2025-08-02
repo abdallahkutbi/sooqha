@@ -27,6 +27,10 @@ import {
   Check,
   Loader2,
   AlertCircle,
+  Paperclip,
+  Globe,
+  Mic,
+  Settings,
 } from "lucide-react"
 
 // --- Utils ---
@@ -40,7 +44,7 @@ export interface AiMessage {
   status?: "loading" | "error" | "success"
 }
 
-export interface AiCommand {
+export interface AgentCommand {
   id: string
   name: string
   description: string
@@ -60,13 +64,13 @@ export interface AiPanelProps extends Omit<React.HTMLAttributes<HTMLDivElement>,
    */
   messages?: AiMessage[]
   /**
-   * Available AI commands
+   * Available Agent actions
    */
-  commands?: AiCommand[]
+  agents?: AgentCommand[]
   /**
-   * Callback when an AI command is executed
+   * Callback when an Agent action is executed
    */
-  onCommand?: (command: AiCommand) => void
+  onAgent?: (agent: AgentCommand) => void
   /**
    * Callback when a message is selected
    */
@@ -256,41 +260,117 @@ const AiMessageItem: React.FC<AiMessageItemProps> = ({
   )
 }
 
-const AiCommandItem: React.FC<{
-  command: AiCommand
-  onExecute: (command: AiCommand) => void
+const AgentActionItem: React.FC<{
+  agent: AgentCommand
+  onExecute: (agent: AgentCommand) => void
   isSelected?: boolean
-}> = ({ command, onExecute, isSelected }) => {
-  const Icon = command.icon
+}> = ({ agent, onExecute, isSelected }) => {
+  const Icon = agent.icon
 
   return (
     <div
       className={cn(
-        "tt-ai-panel-command",
-        isSelected && "tt-ai-panel-command--selected"
+        "tt-ai-panel-agent",
+        isSelected && "tt-ai-panel-agent--selected"
       )}
-      onClick={() => onExecute(command)}
+      onClick={() => onExecute(agent)}
     >
-      <Icon className="tt-ai-panel-command-icon" />
-      <div className="tt-ai-panel-command-content">
-        <div className="tt-ai-panel-command-name">{command.name}</div>
-        <div className="tt-ai-panel-command-description">{command.description}</div>
+      <Icon className="tt-ai-panel-agent-icon" />
+      <div className="tt-ai-panel-agent-content">
+        <div className="tt-ai-panel-agent-name">{agent.name}</div>
+        <div className="tt-ai-panel-agent-description">{agent.description}</div>
       </div>
-      {command.shortcut && (
-        <div className="tt-ai-panel-command-shortcut">{command.shortcut}</div>
+      {agent.shortcut && (
+        <div className="tt-ai-panel-agent-shortcut">{agent.shortcut}</div>
       )}
+    </div>
+  )
+}
+
+const ChatInput: React.FC<{
+  value: string
+  onChange: (value: string) => void
+  onSubmit: () => void
+  isProcessing?: boolean
+  placeholder?: string
+}> = ({ value, onChange, onSubmit, isProcessing = false, placeholder = "Message..." }) => {
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null)
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (value.trim() && !isProcessing) {
+      onSubmit()
+    }
+  }
+
+  // Auto-resize textarea
+  React.useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto'
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+    }
+  }, [value])
+
+  return (
+    <div className="tt-ai-panel-chat-input">
+      <textarea
+        ref={textareaRef}
+        className="tt-ai-panel-chat-input-field"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        disabled={isProcessing}
+        rows={1}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault()
+            handleSubmit(e)
+          }
+        }}
+      />
+      
+      <div className="tt-ai-panel-chat-input-actions">
+        <div className="tt-ai-panel-chat-input-action-group">
+          <button className="tt-ai-panel-chat-input-action-button">
+            <Paperclip className="tt-ai-panel-chat-input-action-icon" />
+            <span className="tt-ai-panel-chat-input-action-text">Attach</span>
+          </button>
+          
+          <button className="tt-ai-panel-chat-input-action-button tt-ai-panel-chat-input-action-button--disabled">
+            <Globe className="tt-ai-panel-chat-input-action-icon" />
+            <span className="tt-ai-panel-chat-input-action-text">Browse</span>
+          </button>
+          
+          <button className="tt-ai-panel-chat-input-action-button">
+            <Lightbulb className="tt-ai-panel-chat-input-action-icon" />
+            <span className="tt-ai-panel-chat-input-action-text">Suggest</span>
+          </button>
+        </div>
+        
+        <button
+          className="tt-ai-panel-chat-input-send-button"
+          onClick={handleSubmit}
+          disabled={!value.trim() || isProcessing}
+        >
+          {isProcessing ? (
+            <Loader2 className="tt-ai-panel-chat-input-send-button-icon animate-spin" />
+          ) : (
+            <Send className="tt-ai-panel-chat-input-send-button-icon" />
+          )}
+        </button>
+      </div>
     </div>
   )
 }
 
 const AiPanelContent: React.FC<{
   messages: AiMessage[]
-  commands: AiCommand[]
+  agents: AgentCommand[]
   onSelectMessage?: (message: AiMessage) => void
   onInsert?: (content: string) => void
   onReplace?: (content: string) => void
   onRetry?: () => void
-  onCommand?: (command: AiCommand) => void
+  onAgent?: (agent: AgentCommand) => void
   panelClassName?: string
   height?: string
   width?: string
@@ -300,12 +380,12 @@ const AiPanelContent: React.FC<{
   onPromptSubmit?: (prompt: string) => void
 }> = ({
   messages,
-  commands,
+  agents,
   onSelectMessage,
   onInsert,
   onReplace,
   onRetry,
-  onCommand,
+  onAgent,
   panelClassName,
   height = "auto",
   width = "320px",
@@ -316,7 +396,7 @@ const AiPanelContent: React.FC<{
 }) => {
   const [selectedMessageId, setSelectedMessageId] = React.useState<string>()
   const [promptInput, setPromptInput] = React.useState(currentPrompt || "")
-  const [activeTab, setActiveTab] = React.useState<"chat" | "commands">("chat")
+  const [activeTab, setActiveTab] = React.useState<"chat" | "agent">("chat")
 
   const handleSelectMessage = (message: AiMessage) => {
     setSelectedMessageId(message.id)
@@ -341,8 +421,10 @@ const AiPanelContent: React.FC<{
       style={{ height, width }}
     >
       <div className="tt-ai-panel-header">
-        <h3 className="tt-ai-panel-title">AI Assistant</h3>
-        <div className="tt-ai-panel-header-actions">
+        <div className="tt-ai-panel-header-left">
+          <h3 className="tt-ai-panel-title">AI Assistant</h3>
+        </div>
+        <div className="tt-ai-panel-header-center">
           <div className="tt-ai-panel-tabs">
             <button
               className={cn(
@@ -356,13 +438,18 @@ const AiPanelContent: React.FC<{
             <button
               className={cn(
                 "tt-ai-panel-tab",
-                activeTab === "commands" && "tt-ai-panel-tab--active"
+                activeTab === "agent" && "tt-ai-panel-tab--active"
               )}
-              onClick={() => setActiveTab("commands")}
+              onClick={() => setActiveTab("agent")}
             >
-              Commands
+              Agent
             </button>
           </div>
+        </div>
+        <div className="tt-ai-panel-header-right">
+          <button className="tt-ai-panel-settings-button">
+            <Settings className="tt-ai-panel-settings-icon" />
+          </button>
         </div>
       </div>
       <Separator className="tt-ai-panel-separator" />
@@ -390,37 +477,27 @@ const AiPanelContent: React.FC<{
               )}
             </div>
             <div className="tt-ai-panel-prompt">
-              <form onSubmit={handlePromptSubmit} className="tt-ai-panel-prompt-form">
-                <Input
-                  type="text"
-                  placeholder="Ask AI anything..."
-                  value={promptInput}
-                  onChange={(e) => setPromptInput(e.target.value)}
-                  className="tt-ai-panel-prompt-input"
-                  disabled={isProcessing}
-                />
-                <Button
-                  type="submit"
-                  size="small"
-                  disabled={!promptInput.trim() || isProcessing}
-                  className="tt-ai-panel-prompt-submit"
-                >
-                  {isProcessing ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Send className="w-4 h-4" />
-                  )}
-                </Button>
-              </form>
+              <ChatInput
+                value={promptInput}
+                onChange={setPromptInput}
+                onSubmit={() => {
+                  if (promptInput.trim() && onPromptSubmit) {
+                    onPromptSubmit(promptInput.trim())
+                    setPromptInput("")
+                  }
+                }}
+                isProcessing={isProcessing}
+                placeholder="Enter your message..."
+              />
             </div>
           </div>
         ) : (
-          <div className="tt-ai-panel-commands">
-            {commands.map((command) => (
-              <AiCommandItem
-                key={command.id}
-                command={command}
-                onExecute={onCommand!}
+          <div className="tt-ai-panel-agents">
+            {agents.map((agent) => (
+              <AgentActionItem
+                key={agent.id}
+                agent={agent}
+                onExecute={onAgent!}
               />
             ))}
           </div>
@@ -443,8 +520,8 @@ export const AiPanel = React.forwardRef<
     {
       editor: providedEditor,
       messages = [],
-      commands = [],
-      onCommand,
+      agents = [],
+      onAgent,
       onSelectMessage,
       onInsert,
       onReplace,
@@ -466,8 +543,8 @@ export const AiPanel = React.forwardRef<
     const {
       isVisible,
       aiMessages,
-      aiCommands,
-      handleCommand,
+      aiAgents,
+      handleAgent,
       handleInsert,
       handleReplace,
       handleRetry,
@@ -475,8 +552,8 @@ export const AiPanel = React.forwardRef<
     } = useAiPanel({
       editor,
       messages,
-      commands,
-      onCommand,
+      agents,
+      onAgent,
       onInsert,
       onReplace,
       onRetry,
@@ -493,12 +570,12 @@ export const AiPanel = React.forwardRef<
       <div ref={ref} {...props}>
         <AiPanelContent
           messages={aiMessages}
-          commands={aiCommands}
+          agents={aiAgents}
           onSelectMessage={onSelectMessage}
           onInsert={handleInsert}
           onReplace={handleReplace}
           onRetry={handleRetry}
-          onCommand={handleCommand}
+          onAgent={handleAgent}
           panelClassName={panelClassName}
           height={height}
           width={width}

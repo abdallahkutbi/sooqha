@@ -1,10 +1,10 @@
 import * as React from "react"
 import type { Editor } from "@tiptap/react"
-import type { AiMessage, AiCommand } from "./ai-panel"
+import type { AiMessage, AgentCommand } from "./ai-panel"
 import { Sparkles, Wand2, Check, Lightbulb } from "lucide-react"
 
-// Default AI commands for demonstration
-const defaultAiCommands: AiCommand[] = [
+// Default Agent commands for demonstration
+const defaultAgentCommands: AgentCommand[] = [
   {
     id: "summarize",
     name: "Summarize",
@@ -45,13 +45,13 @@ export interface UseAiPanelConfig {
    */
   messages?: AiMessage[]
   /**
-   * Available AI commands
+   * Available Agent actions
    */
-  commands?: AiCommand[]
+  agents?: AgentCommand[]
   /**
-   * Callback when an AI command is executed
+   * Callback when an Agent action is executed
    */
-  onCommand?: (command: AiCommand) => void
+  onAgent?: (agent: AgentCommand) => void
   /**
    * Callback when AI response is inserted
    */
@@ -92,8 +92,8 @@ export function useAiPanel(config: UseAiPanelConfig) {
   const {
     editor,
     messages = [],
-    commands = defaultAiCommands,
-    onCommand,
+    agents = defaultAgentCommands,
+    onAgent,
     onInsert,
     onReplace,
     onRetry,
@@ -103,12 +103,25 @@ export function useAiPanel(config: UseAiPanelConfig) {
   } = config
 
   // AI messages state management
-  const [aiMessages, setAiMessages] = React.useState<AiMessage[]>(messages)
+  const [aiMessages, setAiMessages] = React.useState<AiMessage[]>(() => {
+    try {
+      return Array.isArray(messages) ? messages : []
+    } catch (error) {
+      console.warn('Error initializing AI messages:', error)
+      return []
+    }
+  })
 
   // Update messages when prop changes
   React.useEffect(() => {
-    setAiMessages(messages)
-  }, [messages])
+    try {
+      if (messages && Array.isArray(messages) && messages.length !== aiMessages.length) {
+        setAiMessages(messages)
+      }
+    } catch (error) {
+      console.warn('Error updating AI messages:', error)
+    }
+  }, [messages, aiMessages.length])
 
   // Panel visibility logic
   const isVisible = React.useMemo(() => {
@@ -118,14 +131,14 @@ export function useAiPanel(config: UseAiPanelConfig) {
     return true
   }, [editor, hideWhenUnavailable])
 
-  // Handle AI command execution
-  const handleCommand = React.useCallback(
-    (command: AiCommand) => {
-      console.log('AI command executed:', command.name)
-      onCommand?.(command)
+  // Handle Agent action execution
+  const handleAgent = React.useCallback(
+    (agent: AgentCommand) => {
+      console.log('Agent action executed:', agent.name)
+      onAgent?.(agent)
       onAction?.()
     },
-    [onCommand, onAction]
+    [onAgent, onAction]
   )
 
   // Handle message insertion
@@ -234,14 +247,14 @@ export function useAiPanel(config: UseAiPanelConfig) {
     aiMessages,
 
     /**
-     * Available AI commands
+     * Available AI agents
      */
-    aiCommands: commands,
+    aiAgents: agents,
 
     /**
-     * Handle AI command execution
+     * Handle AI agent execution
      */
-    handleCommand,
+    handleAgent,
 
     /**
      * Handle message insertion
