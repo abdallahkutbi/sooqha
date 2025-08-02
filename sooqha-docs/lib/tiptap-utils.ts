@@ -1,6 +1,9 @@
 import type { Node as TiptapNode } from "@tiptap/pm/model"
 import { NodeSelection } from "@tiptap/pm/state"
 import type { Editor } from "@tiptap/react"
+import { cn } from "@/lib/utils"
+
+export { cn }
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
@@ -12,11 +15,6 @@ export const MAC_SYMBOLS: Record<string, string> = {
   backspace: "Del",
 } as const
 
-export function cn(
-  ...classes: (string | boolean | undefined | null)[]
-): string {
-  return classes.filter(Boolean).join(" ")
-}
 
 /**
  * Determines if the current platform is macOS
