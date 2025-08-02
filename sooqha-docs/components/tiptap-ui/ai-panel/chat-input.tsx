@@ -74,9 +74,11 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         </div>
 
         <button
+          type="button"
           className="tt-ai-panel-chat-input-send-button"
           onClick={handleSubmit}
           disabled={!value.trim() || isProcessing}
+          aria-label="Send message"
         >
           {isProcessing ? (
             <Loader2 className="tt-ai-panel-chat-input-send-button-icon animate-spin" />
