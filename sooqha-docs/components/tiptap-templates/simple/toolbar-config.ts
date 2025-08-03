@@ -97,6 +97,9 @@ export const STORAGE_KEY = "tiptap-toolbar-order"
 
 export function saveToolbarOrder(items: ToolbarItem[]): void {
   try {
+    // Only run on client side
+    if (typeof window === 'undefined') return
+    
     const order = items.map(item => item.id)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(order))
   } catch (error) {
@@ -106,6 +109,9 @@ export function saveToolbarOrder(items: ToolbarItem[]): void {
 
 export function loadToolbarOrder(): string[] | null {
   try {
+    // Only run on client side
+    if (typeof window === 'undefined') return null
+    
     const saved = localStorage.getItem(STORAGE_KEY)
     if (!saved) return null
     
@@ -120,7 +126,8 @@ export function loadToolbarOrder(): string[] | null {
 }
 
 export function getToolbarItems(): ToolbarItem[] {
-  const savedOrder = loadToolbarOrder()
+  // Only try to load saved order on client side
+  const savedOrder = typeof window !== 'undefined' ? loadToolbarOrder() : null
   
   if (!savedOrder) {
     return DEFAULT_TOOLBAR

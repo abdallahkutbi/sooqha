@@ -14,14 +14,12 @@ import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable"
 import {
   useSortable,
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import { GripVertical } from "lucide-react"
 
 import { ToolbarGroup, ToolbarSeparator } from "@/components/tiptap-ui-primitive/toolbar"
 import { Spacer } from "@/components/tiptap-ui-primitive/spacer"
@@ -92,11 +90,31 @@ function SortableToolbarItem({ item, props }: SortableToolbarItemProps) {
     return null
   }
 
-  // Build component props
+  // Build component props - filter out custom props
   const componentProps: Record<string, any> = {
     ...item.props,
-    ...props,
     portal: props.isMobile,
+  }
+
+  // Add editor prop if it exists
+  if (props.editor) {
+    componentProps.editor = props.editor
+  }
+
+  // Add specific props that certain components need
+  if (item.id === "file-explorer") {
+    componentProps.isOpen = props.isFileExplorerOpen
+    componentProps.onToggle = props.onFileExplorerToggle
+  }
+
+  if (item.id === "ai-toggle") {
+    componentProps.isOpen = props.isAIOpen
+    componentProps.onToggle = props.onAIToggle
+  }
+
+  if (item.id === "page-size") {
+    componentProps.currentPageSize = props.pageSize
+    componentProps.onPageSizeChange = props.onPageSizeChange
   }
 
   // Handle mobile-specific props
@@ -116,31 +134,27 @@ function SortableToolbarItem({ item, props }: SortableToolbarItemProps) {
     })
   }
 
+  // Add mobile-specific props that components expect
+  if (props.isMobile) {
+    componentProps.portal = true
+  }
+
   return (
     <div
       ref={setNodeRef}
       style={style}
       {...attributes}
-      className="relative group"
+      {...listeners}
+      className="cursor-grab active:cursor-grabbing"
     >
       <Component {...componentProps} />
-      
-      {/* Drag handle - only visible on hover */}
-      <div
-        {...listeners}
-        className="absolute -left-1 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing p-1 rounded"
-        style={{ zIndex: 10 }}
-      >
-        <GripVertical className="w-3 h-3 text-gray-400" />
-      </div>
     </div>
   )
 }
 
 export function DraggableToolbar(props: DraggableToolbarProps) {
-  const [toolbarItems, setToolbarItems] = React.useState<ToolbarItem[]>(() => 
-    getToolbarItems()
-  )
+  const [mounted, setMounted] = React.useState(false)
+  const [toolbarItems, setToolbarItems] = React.useState<ToolbarItem[]>([])
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -152,6 +166,12 @@ export function DraggableToolbar(props: DraggableToolbarProps) {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   )
+
+  // Ensure we only render on the client side to prevent hydration errors
+  React.useEffect(() => {
+    setMounted(true)
+    setToolbarItems(getToolbarItems())
+  }, [])
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
@@ -171,6 +191,18 @@ export function DraggableToolbar(props: DraggableToolbarProps) {
     }
   }
 
+  // Don't render until mounted to prevent hydration errors
+  if (!mounted) {
+    return (
+      <ToolbarGroup style={{ gap: '0.5rem' }}>
+        {/* Render a simple placeholder while mounting */}
+        {getToolbarItems().slice(0, 5).map((item) => (
+          <div key={item.id} style={{ width: '32px', height: '32px', background: 'var(--tt-gray-light-200)', borderRadius: '4px' }} />
+        ))}
+      </ToolbarGroup>
+    )
+  }
+
   return (
     <DndContext
       sensors={sensors}
@@ -181,7 +213,7 @@ export function DraggableToolbar(props: DraggableToolbarProps) {
         items={toolbarItems.map(item => item.id)}
         strategy={horizontalListSortingStrategy}
       >
-        <ToolbarGroup>
+        <ToolbarGroup style={{ gap: '0.5rem' }}>
           {toolbarItems.map((item) => (
             <SortableToolbarItem
               key={item.id}
