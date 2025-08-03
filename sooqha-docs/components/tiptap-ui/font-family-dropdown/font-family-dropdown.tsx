@@ -47,63 +47,22 @@ export function FontFamilyDropdown({ portal = false, className }: FontFamilyDrop
   const [isOpen, setIsOpen] = React.useState(false)
   const [isHovered, setIsHovered] = React.useState(false)
   
-  // Get current font family from editor
+  // Get current font family from editor state
   const currentFontFamily = React.useMemo(() => {
-    if (!editor) return "Default"
+    if (!editor) return "Arial"
     
-    const { state } = editor
-    const { selection } = state
-    const { from, to } = selection
+    // Get font family from editor attributes
+    const fontFamily = editor.getAttributes('fontFamily').fontFamily
     
-    // Check if there's a font family mark in the current selection
-    const fontFamilyMark = state.doc.rangeHasMark(from, to, state.schema.marks.fontFamily)
-    if (fontFamilyMark) {
-      // Extract font family from the mark
-      const fontFamily = editor.getAttributes('fontFamily').fontFamily
-      if (fontFamily) {
-        // Find the label for this font family
-        const fontOption = FONT_FAMILIES.find(font => font.value === fontFamily)
-        return fontOption ? fontOption.label : fontFamily
-      }
+    if (fontFamily) {
+      // Find the label for this font family
+      const fontOption = FONT_FAMILIES.find(font => font.value === fontFamily)
+      return fontOption ? fontOption.label : fontFamily
     }
     
-    // If no font family mark, try to detect the computed font family
-    // This will show the actual font being used (e.g., "Times New Roman")
-    try {
-      const selection = window.getSelection()
-      if (selection && selection.rangeCount > 0) {
-        const range = selection.getRangeAt(0)
-        const element = range.startContainer.nodeType === Node.TEXT_NODE 
-          ? range.startContainer.parentElement 
-          : (range.startContainer as Element)
-        
-        if (element) {
-          const computedStyle = window.getComputedStyle(element)
-          const fontFamily = computedStyle.fontFamily
-          
-          // Extract the first font family (before the comma)
-          const firstFont = fontFamily.split(',')[0].trim().replace(/['"]/g, '')
-          
-          // Find if this matches any of our predefined fonts
-          const fontOption = FONT_FAMILIES.find(font => 
-            font.value.includes(firstFont) || firstFont.includes(font.label)
-          )
-          
-          if (fontOption) {
-            return fontOption.label
-          }
-          
-          // If no match found, return the actual font name
-          return firstFont
-        }
-      }
-    } catch (error) {
-      console.warn('Error detecting font family:', error)
-    }
-    
-    // Fallback to showing the first font family from our list
-    return FONT_FAMILIES[0].label // "Arial" as default
-  }, [editor])
+    // If no font family is set, return default
+    return "Arial"
+  }, [editor, editor?.state.selection, editor?.state.doc])
 
   const setFontFamily = React.useCallback((fontFamily: string) => {
     if (!editor) return
@@ -159,7 +118,7 @@ export function FontFamilyDropdown({ portal = false, className }: FontFamilyDrop
         </Button>
       </DropdownMenuTrigger>
       
-            <DropdownMenuContent align="center" sideOffset={8} portal={portal} style={{
+            <DropdownMenuContent align="start" sideOffset={8} portal={portal} style={{
         width: "fit-content",
         background: "transparent",
         border: "none",

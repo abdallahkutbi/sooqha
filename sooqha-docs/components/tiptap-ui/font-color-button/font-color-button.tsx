@@ -4,7 +4,7 @@ import { Button } from '@/components/tiptap-ui-primitive/button'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/tiptap-ui-primitive/dropdown-menu/index'
 import { Card, CardBody } from '@/components/tiptap-ui-primitive/card'
 import { ButtonGroup } from '@/components/tiptap-ui-primitive/button'
-import { Type, ChevronDown as ChevronDownIcon } from 'lucide-react'
+import { Text, ChevronDown as ChevronDownIcon } from 'lucide-react'
 
 interface FontColorButtonProps {
   editor: Editor | null
@@ -54,6 +54,9 @@ export function FontColorButton({
   if (!editor) return null
 
   const isActive = editor.isActive('textStyle', { color: true })
+  
+  // Get the currently selected color for the underline
+  const currentColor = isActive ? editor.getAttributes('textStyle').color : '#000000'
 
   const setColor = (color: string) => {
     editor.chain().focus().setMark('textStyle', { color }).run()
@@ -77,8 +80,13 @@ export function FontColorButton({
           aria-label="Font color"
           tooltip="Font color"
           disabled={disabled}
+          className="relative"
         >
-          <Type className="tiptap-button-icon" />
+          <Text className="tiptap-button-icon" />
+          <div 
+            className="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-sm"
+            style={{ backgroundColor: currentColor }}
+          />
           <ChevronDownIcon className="tiptap-button-dropdown-small" />
         </Button>
       </DropdownMenuTrigger>

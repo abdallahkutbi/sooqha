@@ -4,8 +4,7 @@ import * as React from "react"
 
 // --- Icons ---
 import {
-  ChevronDown as ChevronDownIcon,
-  ArrowDownToLine as ExportIcon,
+  Upload as UploadIcon,
   FileText as FileTextIcon,
   FileDown as FileDownIcon,
 } from "lucide-react"
@@ -21,7 +20,7 @@ import {
 } from "@/components/tiptap-ui-primitive/dropdown-menu/index"
 import { Card, CardBody } from "@/components/tiptap-ui-primitive/card"
 
-export interface ExportButtonProps extends Omit<ButtonProps, "type"> {
+export interface ImportButtonProps extends Omit<ButtonProps, "type"> {
   /**
    * Whether to render the dropdown menu in a portal
    * @default false
@@ -38,11 +37,11 @@ export interface ExportButtonProps extends Omit<ButtonProps, "type"> {
 }
 
 /**
- * Dropdown menu component for exporting documents using Tiptap Pro Export extension.
+ * Dropdown menu component for importing documents using Tiptap Pro Import extension.
  */
-export const ExportButton = React.forwardRef<
+export const ImportButton = React.forwardRef<
   HTMLButtonElement,
-  ExportButtonProps
+  ImportButtonProps
 >(
   (
     {
@@ -55,28 +54,25 @@ export const ExportButton = React.forwardRef<
   ) => {
     const [isOpen, setIsOpen] = React.useState(false)
 
-    const handleExport = (format: string) => {
+    const handleImport = (format: string) => {
       if (!editor) return
       
       try {
         switch (format) {
-          case 'pdf':
-            editor.commands.exportPdf?.()
-            break
           case 'docx':
-            editor.commands.exportDocx?.()
+            editor.commands.importDocx?.()
             break
           case 'html':
-            editor.commands.exportHtml?.()
+            editor.commands.importHtml?.()
             break
           case 'markdown':
-            editor.commands.exportMarkdown?.()
+            editor.commands.importMarkdown?.()
             break
           default:
-            console.warn(`Export format ${format} not supported`)
+            console.warn(`Import format ${format} not supported`)
         }
       } catch (error) {
-        console.error(`Export failed for ${format}:`, error)
+        console.error(`Import failed for ${format}:`, error)
       }
     };
 
@@ -96,13 +92,12 @@ export const ExportButton = React.forwardRef<
             data-style="ghost"
             role="button"
             tabIndex={-1}
-            aria-label="Export document"
-            tooltip="Export"
+            aria-label="Import document"
+            tooltip="Import"
             {...buttonProps}
             ref={ref}
           >
-            <ExportIcon className="tiptap-button-icon" />
-            <ChevronDownIcon className="tiptap-button-dropdown-small" />
+            <UploadIcon className="tiptap-button-icon" />
           </Button>
         </DropdownMenuTrigger>
 
@@ -115,21 +110,17 @@ export const ExportButton = React.forwardRef<
           <Card>
             <CardBody>
               <ButtonGroup>
-                <DropdownMenuItem onClick={() => handleExport('pdf')}>
-                  <FileTextIcon className="tiptap-button-icon" />
-                  Export as PDF
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleExport('docx')}>
+                <DropdownMenuItem onClick={() => handleImport('docx')}>
                   <FileDownIcon className="tiptap-button-icon" />
-                  Export as Word
+                  Import from Word
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleExport('html')}>
+                <DropdownMenuItem onClick={() => handleImport('html')}>
                   <FileTextIcon className="tiptap-button-icon" />
-                  Export as HTML
+                  Import from HTML
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleExport('markdown')}>
+                <DropdownMenuItem onClick={() => handleImport('markdown')}>
                   <FileTextIcon className="tiptap-button-icon" />
-                  Export as Markdown
+                  Import from Markdown
                 </DropdownMenuItem>
               </ButtonGroup>
             </CardBody>
@@ -140,4 +131,4 @@ export const ExportButton = React.forwardRef<
   }
 )
 
-ExportButton.displayName = "ExportButton"
+ImportButton.displayName = "ImportButton" 

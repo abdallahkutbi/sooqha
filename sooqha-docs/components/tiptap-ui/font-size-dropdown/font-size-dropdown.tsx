@@ -228,7 +228,7 @@ export function FontSizeDropdown({ portal = false, className }: FontSizeDropdown
         </Button>
       </DropdownMenuTrigger>
       
-      <DropdownMenuContent align="center" sideOffset={0} portal={portal} style={{ 
+      <DropdownMenuContent align="start" sideOffset={8} portal={portal} style={{ 
         width: "fit-content",
         background: "transparent",
         border: "none",

@@ -1,0 +1,491 @@
+/*
+ * AI CONTENT PANEL STYLES
+ * =======================
+ * 
+ * Styling for the AI Content Panel that integrates with Tiptap's Content AI extension system.
+ * Features:
+ * - Side panel layout with collapse/expand functionality
+ * - Real-time AI response streaming
+ * - AI suggestion management
+ * - Interactive buttons for accept/reject/regenerate
+ * - Clean, minimal UI inspired by Notion and Linear
+ */
+
+/* =====================
+     AI CONTENT PANEL CONTAINER
+     ===================== */
+
+.ai-content-panel {
+  position: fixed;
+  top: var(--tt-toolbar-height, 100px);
+  right: 0;
+  width: 300px;
+  height: calc(100vh - var(--tt-toolbar-height, 100px));
+  background: var(--tt-bg-color);
+  border-left: 1px solid var(--tt-border-color);
+  z-index: 1000;
+  font-family: var(--tt-font-family-primary);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    top: 0;
+    height: 100vh;
+  }
+}
+
+/* =====================
+     AI PANEL HEADER
+     ===================== */
+
+.ai-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid var(--tt-border-color);
+  background: var(--tt-bg-color);
+  min-height: 60px;
+  
+  .ai-panel-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: var(--tt-font-weight-semibold);
+    font-size: var(--tt-font-size-lg);
+    color: var(--tt-text-primary);
+    
+    .ai-panel-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      color: var(--tt-brand-color-500);
+    }
+  }
+}
+
+/* =====================
+     AI PANEL CONTENT
+     ===================== */
+
+.ai-panel-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  
+  /* Scrollbar styling */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--tt-gray-light-300);
+    border-radius: 3px;
+    
+    .dark & {
+      background: var(--tt-gray-dark-300);
+    }
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--tt-gray-light-400);
+    
+    .dark & {
+      background: var(--tt-gray-dark-400);
+    }
+  }
+}
+
+/* =====================
+     AI ACTIONS CARD
+     ===================== */
+
+.ai-actions-card {
+  .ai-section-title {
+    font-size: var(--tt-font-size-sm);
+    font-weight: var(--tt-font-weight-semibold);
+    color: var(--tt-text-primary);
+    margin-bottom: 0.75rem;
+  }
+  
+  .ai-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.5rem;
+    
+    .ai-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      font-size: var(--tt-font-size-sm);
+      transition: all 150ms ease;
+      
+      .ai-action-icon {
+        width: 1rem;
+        height: 1rem;
+      }
+      
+      &:hover {
+        background: var(--tt-brand-color-50);
+        color: var(--tt-brand-color-700);
+        
+        .dark & {
+          background: var(--tt-brand-color-900);
+          color: var(--tt-brand-color-300);
+        }
+      }
+    }
+  }
+}
+
+/* =====================
+     AI RESPONSE CARD
+     ===================== */
+
+.ai-response-card {
+  .ai-section-title {
+    font-size: var(--tt-font-size-sm);
+    font-weight: var(--tt-font-weight-semibold);
+    color: var(--tt-text-primary);
+    margin-bottom: 0.75rem;
+  }
+  
+  .ai-loading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    color: var(--tt-text-muted);
+    font-size: var(--tt-font-size-sm);
+    
+    .ai-loading-spinner {
+      width: 1rem;
+      height: 1rem;
+      animation: spin 1s linear infinite;
+    }
+  }
+  
+  .ai-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    color: var(--tt-red-600);
+    font-size: var(--tt-font-size-sm);
+    background: var(--tt-red-50);
+    border-radius: var(--tt-radius-sm);
+    
+    .dark & {
+      background: var(--tt-red-900);
+      color: var(--tt-red-300);
+    }
+    
+    .ai-error-icon {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+  
+  .ai-response-content {
+    .ai-response-text {
+      padding: 1rem;
+      background: var(--tt-gray-light-50);
+      border-radius: var(--tt-radius-sm);
+      font-size: var(--tt-font-size-sm);
+      line-height: 1.5;
+      color: var(--tt-text-primary);
+      margin-bottom: 1rem;
+      white-space: pre-wrap;
+      
+      .dark & {
+        background: var(--tt-gray-dark-50);
+      }
+    }
+    
+    .ai-response-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      
+      .ai-accept-btn {
+        background: var(--tt-green-50);
+        color: var(--tt-green-700);
+        border: 1px solid var(--tt-green-200);
+        
+        &:hover {
+          background: var(--tt-green-100);
+        }
+        
+        .dark & {
+          background: var(--tt-green-900);
+          color: var(--tt-green-300);
+          border-color: var(--tt-green-700);
+          
+          &:hover {
+            background: var(--tt-green-800);
+          }
+        }
+      }
+      
+      .ai-reject-btn {
+        background: var(--tt-red-50);
+        color: var(--tt-red-700);
+        border: 1px solid var(--tt-red-200);
+        
+        &:hover {
+          background: var(--tt-red-100);
+        }
+        
+        .dark & {
+          background: var(--tt-red-900);
+          color: var(--tt-red-300);
+          border-color: var(--tt-red-700);
+          
+          &:hover {
+            background: var(--tt-red-800);
+          }
+        }
+      }
+      
+      .ai-regenerate-btn {
+        background: var(--tt-blue-50);
+        color: var(--tt-blue-700);
+        border: 1px solid var(--tt-blue-200);
+        
+        &:hover {
+          background: var(--tt-blue-100);
+        }
+        
+        .dark & {
+          background: var(--tt-blue-900);
+          color: var(--tt-blue-300);
+          border-color: var(--tt-blue-700);
+          
+          &:hover {
+            background: var(--tt-blue-800);
+          }
+        }
+      }
+    }
+  }
+}
+
+/* =====================
+     AI SUGGESTIONS CARD
+     ===================== */
+
+.ai-suggestions-card {
+  .ai-section-title {
+    font-size: var(--tt-font-size-sm);
+    font-weight: var(--tt-font-weight-semibold);
+    color: var(--tt-text-primary);
+    margin-bottom: 0.75rem;
+  }
+  
+  .ai-suggestions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .ai-suggestion-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      border: 1px solid var(--tt-border-color);
+      border-radius: var(--tt-radius-sm);
+      background: var(--tt-bg-color);
+      transition: all 150ms ease;
+      
+      &:hover {
+        border-color: var(--tt-brand-color-300);
+        background: var(--tt-brand-color-50);
+        
+        .dark & {
+          background: var(--tt-brand-color-900);
+          border-color: var(--tt-brand-color-600);
+        }
+      }
+      
+      .ai-suggestion-content {
+        flex: 1;
+        min-width: 0;
+        
+        .ai-suggestion-rule {
+          font-size: var(--tt-font-size-xs);
+          font-weight: var(--tt-font-weight-medium);
+          color: var(--tt-brand-color-600);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          margin-bottom: 0.25rem;
+          
+          .dark & {
+            color: var(--tt-brand-color-400);
+          }
+        }
+        
+        .ai-suggestion-text {
+          font-size: var(--tt-font-size-sm);
+          color: var(--tt-text-primary);
+          line-height: 1.4;
+          margin-bottom: 0.25rem;
+        }
+        
+        .ai-suggestion-message {
+          font-size: var(--tt-font-size-xs);
+          color: var(--tt-text-muted);
+          font-style: italic;
+        }
+      }
+      
+      .ai-suggestion-actions {
+        display: flex;
+        gap: 0.25rem;
+        flex-shrink: 0;
+        
+        .ai-suggestion-accept-btn {
+          background: var(--tt-green-50);
+          color: var(--tt-green-600);
+          border: 1px solid var(--tt-green-200);
+          
+          &:hover {
+            background: var(--tt-green-100);
+          }
+          
+          .dark & {
+            background: var(--tt-green-900);
+            color: var(--tt-green-300);
+            border-color: var(--tt-green-700);
+            
+            &:hover {
+              background: var(--tt-green-800);
+            }
+          }
+        }
+        
+        .ai-suggestion-reject-btn {
+          background: var(--tt-red-50);
+          color: var(--tt-red-600);
+          border: 1px solid var(--tt-red-200);
+          
+          &:hover {
+            background: var(--tt-red-100);
+          }
+          
+          .dark & {
+            background: var(--tt-red-900);
+            color: var(--tt-red-300);
+            border-color: var(--tt-red-700);
+            
+            &:hover {
+              background: var(--tt-red-800);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* =====================
+     AI EMPTY STATE
+     ===================== */
+
+.ai-empty-card {
+  .ai-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--tt-text-muted);
+    
+    .ai-empty-icon {
+      width: 3rem;
+      height: 3rem;
+      color: var(--tt-brand-color-400);
+      margin-bottom: 1rem;
+    }
+    
+    h3 {
+      font-size: var(--tt-font-size-lg);
+      font-weight: var(--tt-font-weight-semibold);
+      color: var(--tt-text-primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    p {
+      font-size: var(--tt-font-size-sm);
+      line-height: 1.5;
+    }
+  }
+}
+
+/* =====================
+     ANIMATIONS
+     ===================== */
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =====================
+     RESPONSIVE DESIGN
+     ===================== */
+
+@media (max-width: 768px) {
+  .ai-content-panel {
+    transform: translateX(100%);
+    
+    &.open {
+      transform: translateX(0);
+    }
+  }
+  
+  .ai-actions-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ai-response-actions {
+    flex-direction: column;
+    
+    .ai-accept-btn,
+    .ai-reject-btn,
+    .ai-regenerate-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
+
+/* =====================
+     DARK MODE SUPPORT
+     ===================== */
+
+.dark .ai-content-panel {
+  background: var(--tt-gray-dark-50);
+  border-left-color: var(--tt-gray-dark-200);
+}
+
+.dark .ai-panel-header {
+  background: var(--tt-gray-dark-50);
+  border-bottom-color: var(--tt-gray-dark-200);
+}
+
+.dark .ai-panel-content {
+  background: var(--tt-gray-dark-50);
+} 
